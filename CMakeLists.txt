@@ -37,10 +37,28 @@ file(GLOB_RECURSE LIB_FILES     "PathTracing/lib/glad/*.c"
 )
 file(GLOB_RECURSE SOURCE_FILES  "PathTracing/src/*.cpp")
 file(GLOB_RECURSE HEADER_FILES  "PathTracing/src/*.h")
+file(GLOB_RECURSE SHADER_FILES  "PathTracing/shaders/*.vert"
+                                "PathTracing/shaders/*.frag")
+
+message("Source files")
+foreach(line IN LISTS SOURCE_FILES)
+    message("${line}")
+endforeach()
+
+message("Header files")
+foreach(line IN LISTS HEADER_FILES)
+    message("${line}")
+endforeach()
+
+message("Shader files")
+foreach(line IN LISTS SHADER_FILES)
+    message("${line}")
+endforeach()
 
 source_group("header"   FILES ${HEADER_FILES})
 source_group("sources"  FILES ${SOURCE_FILES})
 source_group("lib"      FILES ${LIB_FILES})
+source_group("shaders"  FILES ${SHADER_FILES})
 
 add_definitions(-DGLFW_INCLUDE_NONE)
 add_executable(
