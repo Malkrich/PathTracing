@@ -1,3 +1,6 @@
 [submodule "PathTracing/lib/glfw"]
 	path = PathTracing/lib/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "PathTracing/lib/imgui"]
+	path = PathTracing/lib/imgui
+	url = git@github.com:ocornut/imgui.git
