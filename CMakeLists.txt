@@ -11,15 +11,16 @@ find_package(OpenGL REQUIRED)
 include_directories(
     PathTracing/src/
     PathTracing/lib/glad/include/
+    PathTracing/lib/glm/
 )
 
-file(GLOB_RECURSE LIB_FILES    "PathTracing/lib/glad/src/glad.c")
-file(GLOB_RECURSE SOURCE_FILES "PathTracing/src/*.cpp")
-file(GLOB_RECURSE HEADER_FILES "PathTracing/src/*.h")
+file(GLOB_RECURSE LIB_FILES     "PathTracing/lib/glad/*.c")
+file(GLOB_RECURSE SOURCE_FILES  "PathTracing/src/*.cpp")
+file(GLOB_RECURSE HEADER_FILES  "PathTracing/src/*.h")
 
-source_group("header" FILES ${HEADER_FILES})
-source_group("sources" FILES ${SOURCE_FILES})
-source_group("lib" FILES ${LIB_FILES})
+source_group("header"   FILES ${HEADER_FILES})
+source_group("sources"  FILES ${SOURCE_FILES})
+source_group("lib"      FILES ${LIB_FILES})
 
 add_definitions(-DGLFW_INCLUDE_NONE)
 add_executable(
