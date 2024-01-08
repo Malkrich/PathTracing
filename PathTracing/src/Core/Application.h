@@ -1,4 +1,7 @@
 #include <string>
+#include <memory>
+
+#include "Renderer/ImGuiRenderer.h"
 
 struct GLFWwindow;
 
@@ -9,8 +12,11 @@ class Application
 {
 public:
     Application(const std::string& appName);
-
     ~Application();
+
+    static Application* get() { return s_instance; }
+
+    GLFWwindow* getWindow() { return m_window; }
 
     void run();
 
@@ -20,9 +26,9 @@ private:
 private:
     bool m_running = true;
 
-    float m_time;
-
     GLFWwindow* m_window;
+
+    std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
 
     // singleton instance
     static Application* s_instance;
