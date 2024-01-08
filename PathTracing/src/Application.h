@@ -1,5 +1,7 @@
 #include <string>
 
+struct GLFWwindow;
+
 namespace PathTracing
 {
 
@@ -11,10 +13,12 @@ public:
     void run();
 
 private:
-    void initialize();
+    void initialize(const std::string& appName);
 
 private:
     bool m_running = true;
+
+    GLFWwindow* m_window;
 
     // singleton instance
     static Application* s_instance;
