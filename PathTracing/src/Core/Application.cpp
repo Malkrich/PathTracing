@@ -32,6 +32,7 @@ void Application::run()
         /* Render here */
        glClear(GL_COLOR_BUFFER_BIT);
 
+       // GUI RENDER
        m_imGuiRenderer->OnNewFrame();
 
        ImGui::Begin("Test window");
