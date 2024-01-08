@@ -5,6 +5,10 @@
 
 struct GLFWwindow;
 
+//https://blog.nobel-joergensen.com/2013/01/29/debugging-opengl-using-glgeterror/
+void _check_gl_error(const char *file, int line);
+#define CHECK_GL_ERROR() _check_gl_error(__FILE__,__LINE__)
+
 namespace PathTracing
 {
 
@@ -29,6 +33,11 @@ private:
     GLFWwindow* m_window;
 
     std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
+
+    // buffer IDs
+    unsigned int m_vao, m_vbo, m_ebo;
+    // shader program ID
+    unsigned int m_programId;
 
     // singleton instance
     static Application* s_instance;
