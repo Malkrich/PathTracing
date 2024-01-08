@@ -12,9 +12,29 @@ include_directories(
     PathTracing/src/
     PathTracing/lib/glad/include/
     PathTracing/lib/glm/
+    PathTracing/lib/imgui/
 )
 
-file(GLOB_RECURSE LIB_FILES     "PathTracing/lib/glad/*.c")
+file(GLOB_RECURSE LIB_FILES     "PathTracing/lib/glad/*.c"
+#--------------------------------- IMGUI ---------------------#
+                                "PathTracing/lib/imgui/imconfig.h"
+                                "PathTracing/lib/imgui/imgui.cpp"
+                                "PathTracing/lib/imgui/imgui.h"
+                                "PathTracing/lib/imgui/imgui_demo.cpp"
+                                "PathTracing/lib/imgui/imgui_draw.cpp"
+                                "PathTracing/lib/imgui/imgui_internal.h"
+                                "PathTracing/lib/imgui/imgui_tables.cpp"
+                                "PathTracing/lib/imgui/imgui_widgets.cpp"
+                                "PathTracing/lib/imgui/imstb_rectpack.h"
+                                "PathTracing/lib/imgui/imstb_textedit.h"
+                                "PathTracing/lib/imgui/imstb_truetype.h"
+
+                                "PathTracing/lib/imgui/backends/imgui_impl_opengl3.cpp"
+                                "PathTracing/lib/imgui/backends/imgui_impl_opengl3.h"
+                                "PathTracing/lib/imgui/backends/imgui_impl_glfw.cpp"
+                                "PathTracing/lib/imgui/backends/imgui_impl_glfw.h"
+#-------------------------------------------------------------#
+)
 file(GLOB_RECURSE SOURCE_FILES  "PathTracing/src/*.cpp")
 file(GLOB_RECURSE HEADER_FILES  "PathTracing/src/*.h")
 
