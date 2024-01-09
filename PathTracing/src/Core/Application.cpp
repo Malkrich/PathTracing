@@ -2,12 +2,11 @@
 
 #include <iostream>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Base.h"
 #include "Renderer/Image.h"
 
 namespace PathTracing
@@ -20,6 +19,8 @@ Application::Application(const std::string& appName)
     s_instance = this;
 
     initialize(appName);
+
+    m_window->setEventCallbackFunction(BIND_EVENT_FN(Application::onEvent));
 }
 
 Application::~Application()
@@ -29,11 +30,11 @@ Application::~Application()
 void Application::run()
 {
     const glm::vec3 clearColor = {0.2f, 0.2f, 0.2f};
-    while(!glfwWindowShouldClose(m_window->getWindowPtr()))
+    while(m_running)
     {
         // GUI RENDER
         m_renderer->begin(clearColor);
-//        m_renderer->submit(scene);
+//        m_renderer->pathTrace();
         m_renderer->draw();
 
         m_imGuiRenderer->OnNewFrame();
@@ -48,8 +49,25 @@ void Application::run()
 
         m_window->onUpdate();
     }
+}
 
-    glfwTerminate();
+void Application::onEvent(Event& e)
+{
+    EventDispatcher dispatcher(e);
+    dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::onWindowClose));
+    dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::onWindowResize));
+}
+
+bool Application::onWindowClose(const WindowCloseEvent& e)
+{
+    m_running = false;
+    return true;
+}
+
+bool Application::onWindowResize(const WindowResizeEvent& e)
+{
+    std::cout << e.getWidth() << ", " << e.getHeight() << std::endl;
+    return true;
 }
 
 void Application::initialize(const std::string& appName)

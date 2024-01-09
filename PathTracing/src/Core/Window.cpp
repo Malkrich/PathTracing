@@ -14,6 +14,11 @@ Window::Window(const WindowSpec& windowSpec)
     initialize();
 }
 
+Window::~Window()
+{
+    glfwTerminate();
+}
+
 void Window::onUpdate()
 {
     /* Swap front and back buffers */
@@ -46,6 +51,27 @@ void Window::initialize()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return;
     }
+
+    glfwSetWindowUserPointer(m_window, &m_windowData);
+
+    glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
+    {
+        WindowSpec* wSpec = (WindowSpec*)glfwGetWindowUserPointer(window);
+
+        WindowCloseEvent e;
+        wSpec->callbackFn(e);
+    });
+
+    glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
+    {
+        WindowSpec* wSpec = (WindowSpec*)glfwGetWindowUserPointer(window);
+
+        wSpec->Width = width;
+        wSpec->Height = height;
+
+        WindowResizeEvent e(width, height);
+        wSpec->callbackFn(e);
+    });
 }
 
 }

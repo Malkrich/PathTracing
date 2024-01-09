@@ -3,9 +3,10 @@
 #include <string>
 #include <memory>
 
+#include "Event.h"
+#include "Window.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/ImGuiRenderer.h"
-#include "Window.h"
 
 namespace PathTracing
 {
@@ -24,6 +25,11 @@ public:
 
 private:
     void initialize(const std::string& appName);
+
+    void onEvent(Event& e);
+
+    bool onWindowClose(const WindowCloseEvent& e);
+    bool onWindowResize(const WindowResizeEvent& e);
 
 private:
     bool m_running = true;
