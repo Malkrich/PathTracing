@@ -13,14 +13,15 @@ void _check_gl_error(const char *file, int line) {
 
     while(err!=GL_NO_ERROR) {
         std::string error;
-        switch(err) {
-        case GL_INVALID_OPERATION:      error="INVALID_OPERATION";      break;
-        case GL_INVALID_ENUM:           error="INVALID_ENUM";           break;
-        case GL_INVALID_VALUE:          error="INVALID_VALUE";          break;
-        case GL_OUT_OF_MEMORY:          error="OUT_OF_MEMORY";          break;
-        case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION";  break;
-        case GL_STACK_UNDERFLOW:        error="GL_STACK_UNDERFLOW";     break;
-        case GL_STACK_OVERFLOW:         error="GL_STACK_OVERFLOW";      break;
+        switch(err)
+        {
+            case GL_INVALID_OPERATION:              error="INVALID_OPERATION";              break;
+            case GL_INVALID_ENUM:                   error="INVALID_ENUM";                   break;
+            case GL_INVALID_VALUE:                  error="INVALID_VALUE";                  break;
+            case GL_OUT_OF_MEMORY:                  error="OUT_OF_MEMORY";                  break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION";  break;
+            case GL_STACK_UNDERFLOW:                error="GL_STACK_UNDERFLOW";             break;
+            case GL_STACK_OVERFLOW:                 error="GL_STACK_OVERFLOW";              break;
         }
         std::cerr << "GL_" << error.c_str() <<" - "<<file<<":"<<line<< std::endl;
         err=glGetError();
@@ -187,9 +188,9 @@ void Renderer::initialize()
                            2, 3, 0};
 
     unsigned int vbo, ebo;
-    glGenVertexArrays(1, &m_screenVao);   // vertex array
-    glGenBuffers(1, &vbo);        // vertex buffer
-    glGenBuffers(1, &ebo);        // index buffer
+    glGenVertexArrays(1, &m_screenVao);     // vertex array
+    glGenBuffers(1, &vbo);                  // vertex buffer
+    glGenBuffers(1, &ebo);                  // index buffer
 
     glBindVertexArray(m_screenVao);                                                             CHECK_GL_ERROR();
 
