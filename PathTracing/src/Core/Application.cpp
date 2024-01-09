@@ -237,6 +237,17 @@ void Application::initialize(const std::string& appName)
     int width, height;
     glfwGetWindowSize(m_window, &width, &height);
     Image im(width, height);
+
+    for(unsigned int x = 0; x < im.getWidth(); x++)
+    {
+        for(unsigned int y = 0; y < im.getHeight(); y++)
+        {
+            im(x, y) = {(float)x / (float)im.getWidth(),
+                        (float)y / (float)im.getHeight(),
+                        0.2};
+        }
+    }
+
     glGenTextures(1, &m_textureId);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
