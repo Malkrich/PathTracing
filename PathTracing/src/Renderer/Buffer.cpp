@@ -33,6 +33,7 @@ void VertexBuffer::unbind() const
 
 
 IndexBuffer::IndexBuffer(unsigned int count, void* data)
+    : m_elementCount(count)
 {
     glGenBuffers(1, &m_bufferId);                                       CHECK_GL_ERROR();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_bufferId);                  CHECK_GL_ERROR();

@@ -22,11 +22,15 @@ public:
     IndexBuffer(unsigned int count, void* data);
     ~IndexBuffer();
 
+    unsigned int getElementCount() const { return m_elementCount; }
+
     void bind() const;
     void unbind() const;
 
 private:
     unsigned int m_bufferId;
+
+    unsigned int m_elementCount;
 };
 
 }
