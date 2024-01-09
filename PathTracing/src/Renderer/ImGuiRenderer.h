@@ -1,5 +1,4 @@
-#ifndef IMGUIRENDERER_H
-#define IMGUIRENDERER_H
+#pragma once
 
 namespace PathTracing
 {
@@ -18,5 +17,3 @@ private:
 };
 
 }
-
-#endif // IMGUIRENDERER_H
