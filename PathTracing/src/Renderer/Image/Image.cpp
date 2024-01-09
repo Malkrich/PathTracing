@@ -12,7 +12,7 @@ Image::Image(unsigned int width, unsigned int height)
 
     // initializing every pixels
     for(unsigned int i = 0; i < width*height; i++)
-        m_data[i] = {0.8f, 0.1f, 0.1f};
+        m_data[i] = {0.0f, 0.0f, 0.0f};
 }
 
 Image::~Image()
