@@ -3,13 +3,10 @@
 #include <string>
 #include <memory>
 
+#include "Event.h"
+#include "Window.h"
+#include "Renderer/Renderer.h"
 #include "Renderer/ImGuiRenderer.h"
-
-struct GLFWwindow;
-
-//https://blog.nobel-joergensen.com/2013/01/29/debugging-opengl-using-glgeterror/
-void _check_gl_error(const char *file, int line);
-#define CHECK_GL_ERROR() _check_gl_error(__FILE__,__LINE__)
 
 namespace PathTracing
 {
@@ -22,26 +19,24 @@ public:
 
     static Application* get() { return s_instance; }
 
-    GLFWwindow* getWindow() { return m_window; }
+    const std::shared_ptr<Window> getWindow() const { return m_window; }
 
     void run();
 
 private:
     void initialize(const std::string& appName);
 
+    void onEvent(Event& e);
+
+    bool onWindowClose(const WindowCloseEvent& e);
+    bool onWindowResize(const WindowResizeEvent& e);
+
 private:
     bool m_running = true;
 
-    GLFWwindow* m_window;
-
+    std::shared_ptr<Window> m_window;
+    std::unique_ptr<Renderer> m_renderer;
     std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
-
-    // buffer IDs
-    unsigned int m_vao, m_vbo, m_ebo;
-    // shader program ID
-    unsigned int m_programId;
-    // image texture ID
-    unsigned int m_textureId;
 
     // singleton instance
     static Application* s_instance;
