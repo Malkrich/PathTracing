@@ -53,6 +53,11 @@ void Screen::draw(const std::shared_ptr<Image>& image)
     glDrawElements(GL_TRIANGLES, m_vertexArray->getIndexBuffer()->getElementCount(), GL_UNSIGNED_INT, 0);    CHECK_GL_ERROR();
 }
 
+void Screen::resize(unsigned int width, unsigned int height)
+{
+    glViewport(0, 0, width, height);
+}
+
 
 
 }
