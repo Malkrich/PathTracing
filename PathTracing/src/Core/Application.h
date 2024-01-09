@@ -35,7 +35,6 @@ private:
     bool m_running = true;
 
     std::shared_ptr<Window> m_window;
-    std::unique_ptr<Renderer> m_renderer;
     std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
 
     // singleton instance

@@ -25,6 +25,7 @@ Application::Application(const std::string& appName)
 
 Application::~Application()
 {
+    Renderer::shutdown();
 }
 
 void Application::run()
@@ -33,10 +34,6 @@ void Application::run()
     while(m_running)
     {
         // GUI RENDER
-        m_renderer->begin(clearColor);
-//        m_renderer->pathTrace();
-        m_renderer->draw();
-
         m_imGuiRenderer->OnNewFrame();
 
         ImGui::Begin("Test window");
@@ -46,6 +43,11 @@ void Application::run()
         ImGui::End();
 
         m_imGuiRenderer->onRender();
+
+        // Renderer render
+        Renderer::begin(clearColor);
+        Renderer::pathTrace();
+        Renderer::draw();
 
         m_window->onUpdate();
     }
@@ -80,7 +82,7 @@ void Application::initialize(const std::string& appName)
     m_window.reset(new Window(windowSpec));
 
     // Renderer
-    m_renderer.reset(new Renderer());
+    Renderer::init();
 
     // GUI
     m_imGuiRenderer.reset(new ImGuiRenderer());
