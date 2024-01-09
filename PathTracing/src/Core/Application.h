@@ -40,6 +40,8 @@ private:
     unsigned int m_vao, m_vbo, m_ebo;
     // shader program ID
     unsigned int m_programId;
+    // image texture ID
+    unsigned int m_textureId;
 
     // singleton instance
     static Application* s_instance;

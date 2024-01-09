@@ -8,6 +8,8 @@
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 
+#include "Renderer/Image/Image.h"
+
 void _check_gl_error(const char *file, int line) {
     GLenum err (glGetError());
 
@@ -154,6 +156,7 @@ void Application::run()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(m_programId);                              CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, m_textureId);              CHECK_GL_ERROR();
         glBindVertexArray(m_vao);                               CHECK_GL_ERROR();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);    CHECK_GL_ERROR();
 
@@ -206,10 +209,10 @@ void Application::initialize(const std::string& appName)
     std::string fragmentShader  = Utils::read_file("PathTracing/shaders/PathTracerRender.frag");
     m_programId = Utils::create_program(vertexShader, fragmentShader);
 
-    float positions[] = {-1.0f, -1.0f, 0.0f,
-                          1.0f, -1.0f, 0.0f,
-                          1.0f,  1.0f, 0.0f,
-                         -1.5f,  1.0f, 0.0f};
+    float positions[] = {-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+                          1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+                          1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+                         -1.5f,  1.0f, 0.0f, 0.0f, 1.0f};
 
     int indices[] = {0, 1, 2,
                      2, 3, 0};
@@ -218,16 +221,27 @@ void Application::initialize(const std::string& appName)
     glGenBuffers(1, &m_vbo);        // vertex buffer
     glGenBuffers(1, &m_ebo);        // index buffer
 
-    glBindVertexArray(m_vao);                                                           CHECK_GL_ERROR();
+    glBindVertexArray(m_vao);                                                                   CHECK_GL_ERROR();
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);                                               CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);        CHECK_GL_ERROR();
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), nullptr);          CHECK_GL_ERROR();
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);                                                       CHECK_GL_ERROR();
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);                CHECK_GL_ERROR();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);                        CHECK_GL_ERROR();
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(3*sizeof(float))); CHECK_GL_ERROR();
+    glEnableVertexAttribArray(0);                                                               CHECK_GL_ERROR();
+    glEnableVertexAttribArray(1);                                                               CHECK_GL_ERROR();
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);                                       CHECK_GL_ERROR();
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);    CHECK_GL_ERROR();
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);                                               CHECK_GL_ERROR();
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);            CHECK_GL_ERROR();
 
-    glEnableVertexAttribArray(0);                                                       CHECK_GL_ERROR();
+    // creating image and loading it to a texture
+    int width, height;
+    glfwGetWindowSize(m_window, &width, &height);
+    Image im(width, height);
+    glGenTextures(1, &m_textureId);
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im.getWidth(), im.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, im.getBytes());
 }
 
 }
