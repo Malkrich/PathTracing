@@ -7,26 +7,7 @@
 #include <glad/glad.h>
 
 #include "Core/Application.h"
-
-void _check_gl_error(const char *file, int line) {
-    GLenum err (glGetError());
-
-    while(err!=GL_NO_ERROR) {
-        std::string error;
-        switch(err)
-        {
-            case GL_INVALID_OPERATION:              error="INVALID_OPERATION";              break;
-            case GL_INVALID_ENUM:                   error="INVALID_ENUM";                   break;
-            case GL_INVALID_VALUE:                  error="INVALID_VALUE";                  break;
-            case GL_OUT_OF_MEMORY:                  error="OUT_OF_MEMORY";                  break;
-            case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION";  break;
-            case GL_STACK_UNDERFLOW:                error="GL_STACK_UNDERFLOW";             break;
-            case GL_STACK_OVERFLOW:                 error="GL_STACK_OVERFLOW";              break;
-        }
-        std::cerr << "GL_" << error.c_str() <<" - "<<file<<":"<<line<< std::endl;
-        err=glGetError();
-    }
-}
+#include "GraphicCore.h"
 
 namespace Utils
 {
@@ -167,7 +148,7 @@ void Renderer::draw()
                  0, GL_RGB,  GL_FLOAT,
                  m_screenImage.getData());                  CHECK_GL_ERROR();
     glUseProgram(m_screenProgramId);                        CHECK_GL_ERROR();
-    glBindVertexArray(m_screenVao);                         CHECK_GL_ERROR();
+    m_vertexArray->bind();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);    CHECK_GL_ERROR();
 }
 
@@ -187,22 +168,12 @@ void Renderer::initialize()
     int screenIndices[] = {0, 1, 2,
                            2, 3, 0};
 
-    unsigned int vbo, ebo;
-    glGenVertexArrays(1, &m_screenVao);     // vertex array
-    glGenBuffers(1, &vbo);                  // vertex buffer
-    glGenBuffers(1, &ebo);                  // index buffer
-
-    glBindVertexArray(m_screenVao);                                                             CHECK_GL_ERROR();
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);                                                         CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, sizeof(screenPositions), screenPositions, GL_STATIC_DRAW);    CHECK_GL_ERROR();
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);                        CHECK_GL_ERROR();
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(3*sizeof(float))); CHECK_GL_ERROR();
-    glEnableVertexAttribArray(0);                                                               CHECK_GL_ERROR();
-    glEnableVertexAttribArray(1);                                                               CHECK_GL_ERROR();
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);                                                 CHECK_GL_ERROR();
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(screenIndices), screenIndices, GL_STATIC_DRAW);CHECK_GL_ERROR();
+    m_vertexBuffer.reset(new VertexBuffer(sizeof(screenPositions), screenPositions));
+    m_indexBuffer.reset(new IndexBuffer(sizeof(screenIndices), screenIndices));
+    m_vertexArray.reset(new VertexArray());
+    m_vertexArray->bind();
+    m_vertexArray->setVertexBuffer(m_vertexBuffer);
+    m_vertexArray->setIndexBuffer(m_indexBuffer);
 
     glGenTextures(1, &m_screenTextureId);
     glBindTexture(GL_TEXTURE_2D, m_screenTextureId);

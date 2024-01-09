@@ -1,12 +1,12 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
+#include "Buffer.h"
+#include "VertexArray.h"
 #include "Image.h"
-
-//https://blog.nobel-joergensen.com/2013/01/29/debugging-opengl-using-glgeterror/
-void _check_gl_error(const char *file, int line);
-#define CHECK_GL_ERROR() _check_gl_error(__FILE__,__LINE__)
 
 namespace PathTracing
 {
@@ -24,7 +24,9 @@ private:
 
 private:
     unsigned int m_screenProgramId;
-    unsigned int m_screenVao;
+    std::shared_ptr<VertexBuffer> m_vertexBuffer;
+    std::shared_ptr<IndexBuffer> m_indexBuffer;
+    std::shared_ptr<VertexArray> m_vertexArray;
     unsigned int m_screenTextureId;
 
     Image m_screenImage;
