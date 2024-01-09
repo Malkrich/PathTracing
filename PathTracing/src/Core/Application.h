@@ -34,6 +34,8 @@ private:
 private:
     bool m_running = true;
 
+    float m_time = 0.0f;
+
     std::shared_ptr<Window> m_window;
     std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
 
