@@ -29,7 +29,7 @@ ImGuiRenderer::ImGuiRenderer()
     }
 
     // GLFW
-    GLFWwindow* window = Application::get()->getWindow();
+    GLFWwindow* window = Application::get()->getWindow()->getWindowPtr();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 }
@@ -49,10 +49,8 @@ void ImGuiRenderer::OnNewFrame()
     ImGui::NewFrame();
 
     ImGuiIO& io = ImGui::GetIO();
-    int width, height;
-    GLFWwindow* window = Application::get()->getWindow();
-    glfwGetWindowSize(window, &width, &height);
-    io.DisplaySize = ImVec2((float)width, (float)height);
+    io.DisplaySize = ImVec2((float)Application::get()->getWindow()->getWidth(),
+                            (float)Application::get()->getWindow()->getHeight());
 
     float time = (float)glfwGetTime();
     io.DeltaTime = m_time > 0.0f ? (time - m_time) : (1.0f / 60.0f);
@@ -68,7 +66,7 @@ void ImGuiRenderer::onRender()
     ImGuiIO& io = ImGui::GetIO();
     if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        GLFWwindow* window = Application::get()->getWindow();
+        GLFWwindow* window = Application::get()->getWindow()->getWindowPtr();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(window);
