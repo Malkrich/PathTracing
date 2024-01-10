@@ -7,7 +7,9 @@
 namespace PathTracing
 {
 
-Screen::Screen()
+Screen::Screen(unsigned int width, unsigned int height)
+    : m_width(width)
+    , m_height(height)
 {
     m_screenShader.reset(new Shader("PathTracing/shaders/PathTracerRender.vert",
                                     "PathTracing/shaders/PathTracerRender.frag"));
@@ -56,6 +58,8 @@ void Screen::draw(const std::shared_ptr<Image>& image)
 void Screen::resize(unsigned int width, unsigned int height)
 {
     glViewport(0, 0, width, height);
+    m_width = width;
+    m_height = height;
 }
 
 

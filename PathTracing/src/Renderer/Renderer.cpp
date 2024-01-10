@@ -7,59 +7,48 @@
 
 #include "Core/Application.h"
 #include "GraphicCore.h"
-#include "Image.h"
 #include "Screen.h"
 
 namespace PathTracing
 {
 
-struct RenderData
-{
-    std::shared_ptr<Image> image;
-    std::unique_ptr<Screen> screen;
-};
-
-static RenderData* s_renderData = nullptr;
+static Screen* s_screen = nullptr;
 
 void Renderer::init()
 {
-    s_renderData = new RenderData();
-
-    s_renderData->image.reset(new Image(Application::get()->getWindow()->getWidth(),
-                                        Application::get()->getWindow()->getHeight()));
-    s_renderData->screen.reset(new Screen());
+    s_screen = new Screen(Application::get()->getWindow()->getWidth(),
+                          Application::get()->getWindow()->getHeight());
 }
+
+unsigned int Renderer::getViewportWidth() { return s_screen->getViewportWidth(); }
+unsigned int Renderer::getViewportHeight() { return s_screen->getViewportHeight(); }
 
 void Renderer::shutdown()
 {
-    delete s_renderData;
+    delete s_screen;
 }
 
 void Renderer::begin(const glm::vec3& clearColor)
 {
-    s_renderData->screen->clear(clearColor);
+    s_screen->clear(clearColor);
 }
 
-void Renderer::pathTrace()
+void Renderer::pathTrace(std::shared_ptr<Image> image)
 {
-    for(unsigned int x = 0; x < s_renderData->image->getWidth(); x++)
+    for(unsigned int i = 0; i < image->getWidth() * image->getHeight(); i++)
     {
-        for(unsigned int y = 0; y < s_renderData->image->getHeight(); y++)
-        {
-            (*s_renderData->image)(x, y) = {0.2f, 0.2f, 0.2f};
-        }
+        (*image)[i] = {0.2f, 0.2f, 0.2f};
     }
 }
 
-void Renderer::draw()
+void Renderer::draw(const std::shared_ptr<Image>& image)
 {
-    s_renderData->screen->draw(s_renderData->image);
+    s_screen->draw(image);
 }
 
 void Renderer::resize(unsigned int width, unsigned int height)
 {
-    s_renderData->screen->resize(width, height);
-    s_renderData->image->resize(width, height);
+    s_screen->resize(width, height);
 }
 
 }
