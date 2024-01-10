@@ -5,7 +5,7 @@
 
 #include "Event.h"
 #include "Window.h"
-#include "Renderer/Renderer.h"
+#include "Editor.h"
 #include "Renderer/ImGuiRenderer.h"
 
 namespace PathTracing
@@ -29,7 +29,6 @@ private:
     void onEvent(Event& e);
 
     bool onWindowClose(const WindowCloseEvent& e);
-    bool onWindowResize(const WindowResizeEvent& e);
 
 private:
     bool m_running = true;
@@ -38,6 +37,7 @@ private:
 
     std::shared_ptr<Window> m_window;
     std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
+    std::unique_ptr<Editor> m_editor;
 
     // singleton instance
     static Application* s_instance;
