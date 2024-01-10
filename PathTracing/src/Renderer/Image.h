@@ -23,6 +23,9 @@ public:
     glm::vec3& operator()(unsigned int x, unsigned int y);
     const glm::vec3& operator()(unsigned int x, unsigned int y) const;
 
+    glm::vec3& operator[](unsigned int i);
+    const glm::vec3& operator[](unsigned int i) const;
+
 private:
     void clearData();
 

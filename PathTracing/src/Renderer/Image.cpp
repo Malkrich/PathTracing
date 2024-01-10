@@ -43,4 +43,14 @@ const glm::vec3& Image::operator()(unsigned int x, unsigned int y) const
     return m_data[m_width*y + x];
 }
 
+glm::vec3& Image::operator[](unsigned int i)
+{
+    return m_data[i];
+}
+
+const glm::vec3& Image::operator[](unsigned int i) const
+{
+    return m_data[i];
+}
+
 }
