@@ -44,6 +44,10 @@ void Ray::offset(float const epsilon)
     p0_data += epsilon*u_data;
 }
 
+glm::vec3 Ray::getValue() {
+    return glm::vec3(1.0f,1.0f,1.0f);
+}
+
 /*
 std::ostream& operator<<(std::ostream& stream,Ray const& r)
 {
