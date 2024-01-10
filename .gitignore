@@ -8,8 +8,8 @@
 build/
 
 # Windows
-**/bin/
-**/bin-int/
+PathTracing/**/bin/
+PathTracing/**/bin-int/
 .vs/
 **.sln
 **.vcxproj
