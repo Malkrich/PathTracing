@@ -26,6 +26,8 @@ public:
     /** Offset the Ray by epsilon in the direction of the Ray */
     void offset(float const epsilon = 1e-3f);
 
+    glm::vec3 getValue();
+
 
 private:
     /** Internal initial position of the Ray */
