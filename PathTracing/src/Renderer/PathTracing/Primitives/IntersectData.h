@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <ostream>
 #include "../Pdf/Pdf.h"
+#include "../Ray.h"
 
 namespace PathTracing
 {
@@ -12,7 +13,7 @@ struct IntersectData
     IntersectData();
     IntersectData(glm::vec3 const& position_param,
                       glm::vec3 const& normal_param,
-                      float relative_param);
+                      float relative_param,Pdf* pdf);
 
     /** Set all the fields of the intersection value */
     void set(glm::vec3 const& position_param,
@@ -22,6 +23,7 @@ struct IntersectData
     void set(IntersectData const& intersection);
 
 
+
     /** 3D position of the intersection */
     glm::vec3 position;
     /** Normal of the shape at the intersection point */
@@ -29,7 +31,7 @@ struct IntersectData
     /** Relative position of the interesection along the ray
       * position = ray.p0 + relative*ray.u */
     float relative;
-
+    /*Probability density function*/
     Pdf* pdf;
 };
 
