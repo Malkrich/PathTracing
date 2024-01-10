@@ -8,6 +8,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include "Base.h"
+#include "Application.h"
 #include "Renderer/Renderer.h"
 
 namespace PathTracing
@@ -15,7 +16,11 @@ namespace PathTracing
 
 	Editor::Editor()
 	{
+		// has to be called first
 		Renderer::init();
+
+		m_image.reset(new Image(Renderer::getViewportWidth(),
+								Renderer::getViewportHeight()));
 	}
 
 	Editor::~Editor()
@@ -28,8 +33,8 @@ namespace PathTracing
 		m_deltaTime = dt;
 		// Renderer render
 		Renderer::begin(m_clearColor);
-		Renderer::pathTrace();
-		Renderer::draw();
+		Renderer::pathTrace(m_image);
+		Renderer::draw(m_image);
 	}
 
 	void Editor::onEvent(Event& e)
@@ -41,6 +46,7 @@ namespace PathTracing
 
 	bool Editor::onWindowResizeEvent(const WindowResizeEvent& e)
 	{
+		m_image->resize(e.getWidth(), e.getHeight());
 		Renderer::resize(e.getWidth(), e.getHeight());
 		return true;
 	}
