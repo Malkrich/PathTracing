@@ -16,6 +16,9 @@ public:
     /*Return normal of the plane*/
     glm::vec3 const& normal() const;
 
+    bool intersect(Ray const& ray_param,IntersectData& intersection) const override;
+
+
 private:
     glm::vec3 position_data;
     glm::vec3 normal_data;

@@ -2,6 +2,8 @@
 #define PRIMITIVE_H
 
 #include "Renderer/PathTracing/Ray.h"
+#include "IntersectData.h"
+#include "../Ray.h"
 #include "../Materials/Material.h"
 
 namespace PathTracing
@@ -14,6 +16,8 @@ public:
     virtual ~Primitive();
 
     //virtual bool intersect(Ray const& ray);
+    virtual bool intersect(Ray const& ray_param,IntersectData& intersection) const = 0;
+
 
 private:
     Material* material;
