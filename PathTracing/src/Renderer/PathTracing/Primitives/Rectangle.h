@@ -10,19 +10,23 @@ class Rectangle : public Primitive
 {
 
 public:
-    Rectangle(glm::vec3 const& p0_param,glm::vec3 const& p1_param,glm::vec3 const& normal_param);
+    Rectangle(glm::vec3 const& p_param,glm::vec3 const& v1_param,glm::vec3 const& v2_param);
 
-    /*Return the 2 points (corners) of the Rectangle*/
-    glm::vec3 const& p0() const;
-    glm::vec3 const& p1() const;
+    /*Return the point of the Rectangle*/
+    glm::vec3 const& p() const;
+
+    /*Return the two vectors*/
+    glm::vec3 const& v1() const;
+    glm::vec3 const& v2() const;
 
 
     /*Return normal of the Rectangle*/
     glm::vec3 const& normal() const;
 
 private:
-    glm::vec3 p0_data;
-    glm::vec3 p1_data;
+    glm::vec3 p_data;
+    glm::vec3 v1_data;
+    glm::vec3 v2_data;
     glm::vec3 normal_data;
 
 };

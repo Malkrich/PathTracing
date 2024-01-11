@@ -5,20 +5,25 @@
 namespace PathTracing
 {
 
-Rectangle::Rectangle(glm::vec3 const& p0,glm::vec3 const& p1,glm::vec3 const& normal_param)
-    :p0_data(p0),p1_data(p1),normal_data(normal_param)
+Rectangle::Rectangle(glm::vec3 const& p_param,glm::vec3 const& v1_param,glm::vec3 const& v2_param)
+    :p_data(p_param),v1_data(v1_param),v2_data(v2_param)
 {
-
+    normal_data = glm::normalize(glm::cross(v1_param,v2_param));
 }
 
-glm::vec3 const& Rectangle::p0() const
+glm::vec3 const& Rectangle::p() const
 {
-    return p0_data;
+    return p_data;
 }
 
-glm::vec3 const& Rectangle::p1() const
+glm::vec3 const& Rectangle::v1() const
 {
-    return p1_data;
+    return v1_data;
+}
+
+glm::vec3 const& Rectangle::v2() const
+{
+    return v2_data;
 }
 
 
