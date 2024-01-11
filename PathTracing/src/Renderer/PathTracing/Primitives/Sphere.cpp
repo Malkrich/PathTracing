@@ -37,7 +37,7 @@ float Sphere::radius() const
     return radius_data;
 }
 
-bool Sphere::intersect(ray const& ray_param,intersection_data& intersection) const
+bool Sphere::intersect(Ray const& ray_param,IntersectData& intersection) const
 {
 
 

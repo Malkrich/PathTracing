@@ -18,7 +18,8 @@ public:
     float radius() const;
 
     /** Intersection computation with a ray */
-    //bool intersect(Ray const& ray_param,intersection_data& intersection) const override;
+    bool intersect(Ray const& ray_param,IntersectData& intersection) const override;
+
 
 
 private:
