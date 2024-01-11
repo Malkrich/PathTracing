@@ -58,17 +58,16 @@ bool Sphere::intersect(Ray const& ray_param,IntersectData& intersection) const
         float t2 = (-b+sqrt(Delta))/2*a;
 
         if (t1 >= 0.0f) {
-            /*
             glm::vec3 x_inter = xs+t1*u;
             glm::vec3 n = glm::normalize(x_inter -x0);
-            intersection.set(x_inter,n,t1);*/
+            intersection.set(x_inter,n,t1);
             return true;
         }
         else if (t2 >= 0.0f) {
-            /*
+
             glm::vec3 x_inter = xs+t2*u;
             glm::vec3 n = glm::normalize(x_inter -x0);
-            intersection.set(x_inter,n,t2);*/
+            intersection.set(x_inter,n,t2);
             return true;
         }
         else {
@@ -79,10 +78,10 @@ bool Sphere::intersect(Ray const& ray_param,IntersectData& intersection) const
     else if (Delta == 0.0f){
         float t = -b/2*a;
         if (t >= 0.0f) {
-            /*
+
             glm::vec3 x_inter = xs+t*u;
             glm::vec3 n = glm::normalize(x_inter -x0);
-            intersection.set(x_inter,n,t);*/
+            intersection.set(x_inter,n,t);
             return true;
         }
         else {

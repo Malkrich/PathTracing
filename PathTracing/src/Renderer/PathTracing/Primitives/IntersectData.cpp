@@ -24,6 +24,15 @@ void IntersectData::set(glm::vec3 const& position_param,
     relative = relative_param;
 }
 
+void IntersectData::setMaterial(Material* material_param) {
+    material = material_param;
+}
+
+void IntersectData::setPdf(Pdf *pdf_param)
+{
+    pdf = pdf_param;
+}
+
 Ray IntersectData::create_ray()
 {
     glm::vec3 p0 = position;

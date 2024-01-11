@@ -32,8 +32,8 @@ bool Plane::intersect(Ray const& ray_param,IntersectData& intersection) const
     float const t=-1.0f *dot(xs-xp,np)/dot(u,np);
 
     if(t>0){
-        //glm::vec3 x_inter = xs+t*u;
-        //intersection.set(x_inter,np,t);
+        glm::vec3 x_inter = xs+t*u;
+        intersection.set(x_inter,np,t);
         return true;
     }
     else

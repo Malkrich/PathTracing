@@ -19,8 +19,6 @@ public:
     virtual bool intersect(Ray const& ray_param,IntersectData& intersection) const = 0;
 
 
-private:
-    Material* material;
 
 };
 
