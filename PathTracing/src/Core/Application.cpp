@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -24,30 +25,23 @@ Application::Application(const std::string& appName)
 }
 
 Application::~Application()
-{
-    Renderer::shutdown();
-}
+{}
 
 void Application::run()
 {
-    const glm::vec3 clearColor = {0.2f, 0.2f, 0.2f};
     while(m_running)
     {
+        // time computation
+        float time = glfwGetTime();
+        float deltaTime = time - m_time;
+        m_time = time;
+
+        m_editor->onUpdate(deltaTime);
+
         // GUI RENDER
         m_imGuiRenderer->OnNewFrame();
-
-        ImGui::Begin("Test window");
-        ImGui::Text("coucou");
-        glm::vec3 color;
-        ImGui::ColorPicker3("color", glm::value_ptr(color));
-        ImGui::End();
-
+        m_editor->onGuiRender();
         m_imGuiRenderer->onRender();
-
-        // Renderer render
-        Renderer::begin(clearColor);
-        Renderer::pathTrace();
-        Renderer::draw();
 
         m_window->onUpdate();
     }
@@ -57,18 +51,13 @@ void Application::onEvent(Event& e)
 {
     EventDispatcher dispatcher(e);
     dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::onWindowClose));
-    dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::onWindowResize));
+
+    m_editor->onEvent(e);
 }
 
 bool Application::onWindowClose(const WindowCloseEvent& e)
 {
     m_running = false;
-    return true;
-}
-
-bool Application::onWindowResize(const WindowResizeEvent& e)
-{
-    std::cout << e.getWidth() << ", " << e.getHeight() << std::endl;
     return true;
 }
 
@@ -82,7 +71,7 @@ void Application::initialize(const std::string& appName)
     m_window.reset(new Window(windowSpec));
 
     // Renderer
-    Renderer::init();
+    m_editor.reset(new Editor());
 
     // GUI
     m_imGuiRenderer.reset(new ImGuiRenderer());

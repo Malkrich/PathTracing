@@ -6,3 +6,11 @@
 
 # build files
 build/
+
+# Windows
+PathTracing/**/bin/
+PathTracing/**/bin-int/
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.*

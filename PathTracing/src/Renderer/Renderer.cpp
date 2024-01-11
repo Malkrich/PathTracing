@@ -7,58 +7,51 @@
 
 #include "Core/Application.h"
 #include "GraphicCore.h"
-#include "Image.h"
 #include "Screen.h"
 
 namespace PathTracing
 {
 
-struct RenderData
-{
-    std::shared_ptr<Image> image;
-    std::unique_ptr<Screen> screen;
-};
-
-static RenderData* s_renderData = nullptr;
+static Screen* s_screen = nullptr;
 
 void Renderer::init()
 {
-    s_renderData = new RenderData();
-
-    s_renderData->image.reset(new Image(Application::get()->getWindow()->getWidth(),
-                                        Application::get()->getWindow()->getHeight()));
-    s_renderData->screen.reset(new Screen());
+    s_screen = new Screen(Application::get()->getWindow()->getWidth(),
+                          Application::get()->getWindow()->getHeight());
 }
+
+unsigned int Renderer::getViewportWidth() { return s_screen->getViewportWidth(); }
+unsigned int Renderer::getViewportHeight() { return s_screen->getViewportHeight(); }
 
 void Renderer::shutdown()
 {
-    delete s_renderData;
+    delete s_screen;
 }
 
 void Renderer::begin(const glm::vec3& clearColor)
 {
-    s_renderData->screen->clear(clearColor);
+    s_screen->clear(clearColor);
 }
 
-void Renderer::pathTrace()
+void Renderer::pathTrace(std::shared_ptr<Image> image)
 {
-    std::shared_ptr<Image> image = s_renderData->image;
-
-    for(unsigned int x = 0; x < image->getWidth(); x++)
+    for(unsigned int y = 0; y < image->getHeight(); y++)
     {
-        for(unsigned int y = 0; y < image->getHeight(); y++)
+        for(unsigned int x = 0; x < image->getWidth(); x++)
         {
-            float r = (float)rand() / (float)RAND_MAX;
-            float g = (float)rand() / (float)RAND_MAX;
-            float b = (float)rand() / (float)RAND_MAX;
-            (*image)(x, y) = {r, g, b};
+            (*image)(x, y) = {0.2f, 0.2f, 0.2f};
         }
     }
 }
 
-void Renderer::draw()
+void Renderer::draw(const std::shared_ptr<Image>& image)
 {
-    s_renderData->screen->draw(s_renderData->image);
+    s_screen->draw(image);
+}
+
+void Renderer::resize(unsigned int width, unsigned int height)
+{
+    s_screen->resize(width, height);
 }
 
 }
