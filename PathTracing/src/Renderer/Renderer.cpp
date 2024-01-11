@@ -39,7 +39,8 @@ void Renderer::pathTrace(std::shared_ptr<Image> image)
     {
         for(unsigned int x = 0; x < image->getWidth(); x++)
         {
-            (*image)(x, y) = {0.2f, 0.2f, 0.2f};
+            glm::vec3 color = { 0.8f, 0.2f, 0.2f };
+            image->setData(x, y, color);
         }
     }
 }
