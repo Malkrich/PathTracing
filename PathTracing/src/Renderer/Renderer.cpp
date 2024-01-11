@@ -35,9 +35,12 @@ void Renderer::begin(const glm::vec3& clearColor)
 
 void Renderer::pathTrace(std::shared_ptr<Image> image)
 {
-    for(unsigned int i = 0; i < image->getWidth() * image->getHeight(); i++)
+    for(unsigned int y = 0; y < image->getHeight(); y++)
     {
-        (*image)[i] = {0.2f, 0.2f, 0.2f};
+        for(unsigned int x = 0; x < image->getWidth(); x++)
+        {
+            (*image)(x, y) = {0.2f, 0.2f, 0.2f};
+        }
     }
 }
 
