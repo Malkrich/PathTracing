@@ -6,6 +6,7 @@
 
 #include "Event.h"
 #include "Renderer/Image.h"
+#include "Renderer/Scene/Scene.h"
 
 namespace PathTracing
 {
@@ -29,6 +30,7 @@ namespace PathTracing
 		const glm::vec3 m_clearColor = { 0.2f, 0.2f, 0.2f };
 
 		std::shared_ptr<Image> m_image;
+        std::shared_ptr<Scene> m_scene;
 	};
 
 }
