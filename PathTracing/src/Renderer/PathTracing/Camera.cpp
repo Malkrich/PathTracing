@@ -19,7 +19,7 @@ Camera::Camera(glm::vec3 const& center_param,
                float const length_screen_param)
     : m_center(center_param)
     , m_direction(direction_param)
-    , m_up(up_param)
+    , m_up(glm::normalize(up_param))
     , m_screenDistance(distance_screen_param)
     , m_screenLength(length_screen_param)
 {}
@@ -42,8 +42,8 @@ glm::vec3 screen_position(Camera const& cam,float u,float v)
     glm::vec3 const right = glm::normalize(cross(cam.direction(),cam.up()));
     glm::vec3 const p0    = cam.center() + cam.direction() * cam.distance_screen();
 
-    glm::vec3 const translate_right = right * (u-0.5f)*2.0f*cam.length_screen();
-    glm::vec3 const translate_up    = cam.up() * (v-0.5f)*2.0f*cam.length_screen();
+    glm::vec3 const translate_right = right * (u-0.5f)*2.0f*cam.getAspectRatio();
+    glm::vec3 const translate_up    = cam.up() * (v-0.5f)*2.0f;
 
     glm::vec3 const current = p0+translate_right+translate_up;
 

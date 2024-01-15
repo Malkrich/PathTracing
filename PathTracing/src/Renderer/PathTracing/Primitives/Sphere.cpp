@@ -39,8 +39,6 @@ float Sphere::radius() const
 
 bool Sphere::intersect(Ray const& ray_param,IntersectData& intersection) const
 {
-
-
     glm::vec3 const& u = ray_param.u();
     glm::vec3 const& x0 = center_data;
     float const& r = radius_data;

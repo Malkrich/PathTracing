@@ -77,21 +77,20 @@ void Renderer::init()
     SceneObject* so5 = new SceneObject(r1,l1);
     //empty_cornel_box.push_back(so5);
 
-    Rectangle* r6 = new Rectangle(glm::vec3(0,0,555),glm::vec3(555,0,0),glm::vec3(0,555,0));
+    Rectangle* r6 = new Rectangle(glm::vec3(0,-0.5,0),glm::vec3(1,0,0),glm::vec3(0,1,0));
     Lambertian* l6 = new Lambertian(white);
-    SceneObject* so6 = new SceneObject(r1,l1);
+    SceneObject* so6 = new SceneObject(r6,l6);
     //empty_cornel_box.push_back(so6);
 
-    float aaa =  2.0f;
-    Sphere* sphere = new Sphere(glm::vec3(1.0f,-2.0,0.0f),0.5);//1.9999
+    Sphere* sphere = new Sphere(glm::vec3(-25.0f,20.0f,50.0f),3);//1.9999
     Lambertian* l7 = new Lambertian(red);
     SceneObject* so7 = new SceneObject(sphere,l7);
     empty_cornel_box.push_back(so7);
 
 
-    Plane* plane = new Plane(glm::vec3(0.0f,-2.0f,0.0f) , glm::vec3(0.0f,-1.0f,0.0f));//1.9999
-    Lambertian* l8 = new Lambertian(white);
-    SceneObject* so8 = new SceneObject(sphere,l7);
+    //Plane* plane = new Plane(glm::vec3(0.0f,0.0f,0.0f) , glm::vec3(0.0f,-1.0f,0.0f));//1.9999
+    //Lambertian* l8 = new Lambertian(white);
+    //SceneObject* so8 = new SceneObject(sphere,l7);
 //    empty_cornel_box.push_back(so8);
 
     list_object = empty_cornel_box.getListObject();
@@ -117,7 +116,7 @@ void Renderer::pathTrace(std::shared_ptr<Image> image)
         float const v = static_cast<float>(y)/(image->getHeight()-1);
         for(unsigned int x = 0; x < image->getWidth(); x++)
         {
-            float const u = static_cast<float>(x)/(image->getWidth()-1) * cam.getAspectRatio();
+            float const u = static_cast<float>(x)/(image->getWidth()-1);
 
             //IntersectData intersection; //current intersection
             //int intersected_primitive = 0;  //current index of intersected primitive
@@ -125,6 +124,8 @@ void Renderer::pathTrace(std::shared_ptr<Image> image)
             Ray ray = ray_generator(cam,u,v);
 
             glm::vec3 color = getValue(ray,empty_cornel_box);
+
+//             glm::vec3 color = glm::vec3(std::fabs(ray.u().x));
 
             //bool is_intersected = compute_intersection(ray,empty_cornel_box,intersection,intersected_primitive);
 
@@ -222,7 +223,7 @@ glm::vec3 Renderer::getValue(Ray const& r,Scene const& scene)
         return intersection.material->get_albedo();
     }
 
-    return glm::vec3(0,1,0);
+    return glm::vec3(0,0,0);
 }
 
 }
