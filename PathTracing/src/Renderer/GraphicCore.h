@@ -1,6 +1,11 @@
 #pragma once
 
-#define CHECK_GL_ERROR() ::PathTracing::_check_gl_error(__FILE__,__LINE__)
+#define GRAPHIC_DEBUG
+#ifdef GRAPHIC_DEBUG
+	#define CHECK_GL_ERROR() ::PathTracing::_check_gl_error(__FILE__,__LINE__)
+#else
+	#define CHECK_GL_ERROR()
+#endif
 
 namespace PathTracing
 {

@@ -36,21 +36,12 @@ std::vector<SceneObject*> list_object;
 int N_sample_per_pixel = 1;
 int max_depth = 1;
 
-struct RenderData
-{
-    std::shared_ptr<Image> image;
-    std::unique_ptr<Screen> screen;
-};
-
-static RenderData* s_renderData = nullptr;
+static Screen* s_screen;
 
 void Renderer::init()
 {
-    s_renderData = new RenderData();
-
-    s_renderData->image.reset(new Image(Application::get()->getWindow()->getWidth(),
-                                        Application::get()->getWindow()->getHeight()));
-    s_renderData->screen.reset(new Screen());
+    s_screen = new Screen(Application::get()->getWindow()->getWidth(),
+                          Application::get()->getWindow()->getHeight());
 
     glm::vec3 red = glm::vec3(.65,.05,.05);
     glm::vec3 green = glm::vec3(.12,.45,.15);
@@ -139,13 +130,7 @@ void Renderer::pathTrace(std::shared_ptr<Image> image)
 
             //bool is_intersected = compute_intersection(ray,empty_cornel_box,intersection,intersected_primitive);
 
-
-
-            float r = color.x;
-            float g = color.y;
-            float b = color.z;
-
-            (*image)(x, y) = {r, g, b};
+            image->setData(x, y, color);
         }
     }
 }

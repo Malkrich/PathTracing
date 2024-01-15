@@ -72,3 +72,7 @@ target_link_libraries(
     glfw
     OpenGL::GL
 )
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
