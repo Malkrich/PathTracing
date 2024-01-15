@@ -23,6 +23,9 @@ public:
     /*Return normal of the Rectangle*/
     glm::vec3 const& normal() const;
 
+    bool intersect(Ray const& ray_param,IntersectData& intersection) const;
+
+
 private:
     glm::vec3 p_data;
     glm::vec3 v1_data;

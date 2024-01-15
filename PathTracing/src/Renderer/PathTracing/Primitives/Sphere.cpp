@@ -37,27 +37,8 @@ float Sphere::radius() const
     return radius_data;
 }
 
-/*bool Sphere::intersect(ray const& ray_param,intersection_data& intersection) const
+bool Sphere::intersect(Ray const& ray_param,IntersectData& intersection) const
 {
-
-
-    // ********************************************************** //
-    // ********************************************************** //
-    //  TO DO:
-    //    Calcul d'intersection entre un rayon et une plan
-    //
-    // Variales:
-    //  - Position initiale du rayon: ray_param.p0()
-    //  - Vecteur directeur unitaire du rayon: u
-    //  - Position du centre de la Sphere: center_data
-    //  - Rayon de la Sphere: radius_data
-    //
-    // Aide de syntaxe:
-    //  - Norme au carre d'un vecteur v: float norme=v.norm2();
-    //             ou: float norme=v.dot(v);
-    //
-    // ********************************************************** //
-    // ********************************************************** //
 
 
     glm::vec3 const& u = ray_param.u();
@@ -65,9 +46,9 @@ float Sphere::radius() const
     float const& r = radius_data;
     glm::vec3 const& xs = ray_param.p0();
 
-    float a = pow(norm(u),2);
+    float a = pow(glm::length(u),2);
     float b = 2*dot(xs-x0,u);
-    float c = pow(norm(xs-x0),2)-pow(r,2);
+    float c = pow(glm::length(xs-x0),2)-pow(r,2);
 
     float Delta = pow(b,2)-4*a*c;
 
@@ -78,13 +59,14 @@ float Sphere::radius() const
 
         if (t1 >= 0.0f) {
             glm::vec3 x_inter = xs+t1*u;
-            glm::vec3 n = normalized(x_inter -x0);
+            glm::vec3 n = glm::normalize(x_inter -x0);
             intersection.set(x_inter,n,t1);
             return true;
         }
         else if (t2 >= 0.0f) {
+
             glm::vec3 x_inter = xs+t2*u;
-            glm::vec3 n = normalized(x_inter -x0);
+            glm::vec3 n = glm::normalize(x_inter -x0);
             intersection.set(x_inter,n,t2);
             return true;
         }
@@ -96,8 +78,9 @@ float Sphere::radius() const
     else if (Delta == 0.0f){
         float t = -b/2*a;
         if (t >= 0.0f) {
+
             glm::vec3 x_inter = xs+t*u;
-            glm::vec3 n = normalized(x_inter -x0);
+            glm::vec3 n = glm::normalize(x_inter -x0);
             intersection.set(x_inter,n,t);
             return true;
         }
@@ -110,7 +93,7 @@ float Sphere::radius() const
     }
 
 
-}*/
+}
 
 
 

@@ -9,9 +9,11 @@ class Material {
 
 
 public:
-    virtual ~Material() {}
+    Material();
+    Material(glm::vec3 color_param);
 
     virtual float brdf(glm::vec3 x,float theta_out,float theta_in,float lambda) const = 0;
+    glm::vec3 get_albedo() {return color;};
     glm::vec3 get_albedo(glm::vec3 x,float theta_out,float theta_in,float lambda) {return color;};
 
     virtual bool CanEmit() {return false;};

@@ -23,11 +23,15 @@ namespace PathTracing
 {
 
 Ray::Ray()
-    :p0_data(glm::vec3()),u_data(glm::vec3(1.0f,0.0f,0.0f))
+    :Ray(glm::vec3(),glm::vec3(1.0f,0.0f,0.0f),0)
 {}
 
 Ray::Ray(glm::vec3 const& p0_param,glm::vec3 const& u_param)
-    :p0_data(p0_param),u_data(glm::normalize(u_param))
+    :Ray(p0_param,u_param,0)
+{}
+
+Ray::Ray(glm::vec3 const& p0_param,glm::vec3 const& u_param,int const depth_param)
+    :p0_data(p0_param),u_data(glm::normalize(u_param)),depth_data(depth_param)
 {}
 
 glm::vec3 const& Ray::p0() const {return p0_data;}
@@ -46,6 +50,11 @@ void Ray::offset(float const epsilon)
 
 glm::vec3 Ray::getValue() {
     return glm::vec3(1.0f,1.0f,1.0f);
+}
+
+int const Ray::depth() const
+{
+    return depth_data;
 }
 
 /*

@@ -14,11 +14,14 @@ public:
 
     Ray();
     Ray(glm::vec3 const& p0_param,glm::vec3 const& u_param);
+    Ray(glm::vec3 const& p0_param,glm::vec3 const& u_param,int const depth_param);
 
     /** Starting point */
     glm::vec3 const& p0() const;
     /** Direction */
     glm::vec3 const& u() const;
+
+    int const depth() const;
 
 
     /** Evaluate 3D position at x0+t*u */
@@ -34,6 +37,8 @@ private:
     glm::vec3 p0_data;
     /** Internal direction of the Ray */
     glm::vec3 u_data;
+
+    int depth_data;
 };
 
 

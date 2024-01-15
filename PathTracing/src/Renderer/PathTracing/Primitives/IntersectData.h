@@ -21,10 +21,14 @@ struct IntersectData
              glm::vec3 const& normal_param,
              float relative_param);
     /** Set all the fields of the intersection value */
-    void set(IntersectData const& intersection);
+    //void set(IntersectData const& intersection);
 
-    Ray create_ray();
-    glm::vec3 getValue(Ray* outray, Ray* inray);
+    void setPdf(Pdf* pdf);
+    void setMaterial(Material* material);
+
+
+    Ray create_ray(int depth);
+    glm::vec3 getValue(Ray outray, Ray inray);
 
 
     /** 3D position of the intersection */
