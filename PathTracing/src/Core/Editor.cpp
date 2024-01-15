@@ -13,7 +13,6 @@
 
 namespace PathTracing
 {
-
 	Editor::Editor()
 	{
 		// has to be called first
@@ -32,7 +31,7 @@ namespace PathTracing
 		m_deltaTime = dt;
 		// Renderer render
 		Renderer::begin(m_clearColor);
-		Renderer::pathTrace(m_image);
+        Renderer::pathTrace(m_image);
 		Renderer::draw(m_image);
 	}
 

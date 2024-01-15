@@ -6,9 +6,9 @@
 
 #include "Image.h"
 #include "PathTracing/Ray.h"
-#include "PathTracing/Scene/Scene.h"
-#include "PathTracing/Primitives/IntersectData.h"
-#include "PathTracing/Camera.h"
+#include "Renderer/Scene/Scene.h"
+#include "Renderer/Primitives/IntersectData.h"
+#include "Camera.h"
 #include "PathTracing/Ray.h"
 
 namespace PathTracing

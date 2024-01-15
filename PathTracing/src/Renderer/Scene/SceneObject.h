@@ -1,8 +1,8 @@
 #ifndef SCENEOBJECT_H
 #define SCENEOBJECT_H
 
-#include "../Primitives/Primitive.h"
-#include "../Materials/Material.h"
+#include "Renderer/Primitives/Primitive.h"
+#include "Renderer/PathTracing/Materials/Material.h"
 
 namespace PathTracing
 {
@@ -11,7 +11,6 @@ namespace PathTracing
     {
         SceneObject(Primitive* primitive_param,Material* material_param);
         bool intersect(Ray const& ray_param,IntersectData& intersection) const;
-
 
         Primitive* primitive;
         Material* material;

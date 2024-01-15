@@ -2,9 +2,8 @@
 #define SCENE_H
 
 #include <vector>
+#include "Renderer/Camera.h"
 #include "SceneObject.h"
-#include "../Camera.h"
-
 
 namespace PathTracing
 {

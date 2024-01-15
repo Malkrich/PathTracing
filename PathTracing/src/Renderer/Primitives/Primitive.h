@@ -3,8 +3,8 @@
 
 #include "Renderer/PathTracing/Ray.h"
 #include "IntersectData.h"
-#include "../Ray.h"
-#include "../Materials/Material.h"
+#include "Renderer/PathTracing/Ray.h"
+#include "Renderer/PathTracing/Materials/Material.h"
 
 namespace PathTracing
 {

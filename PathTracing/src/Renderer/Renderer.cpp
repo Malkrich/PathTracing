@@ -12,14 +12,12 @@
 
 //Include for Ugo test
 #include "PathTracing/Ray.h"
-#include "PathTracing/Camera.h"
 
-#include "PathTracing/Scene/Scene.h"
-#include "PathTracing/Scene/SceneObject.h"
+#include "Scene/SceneObject.h"
 
-#include "PathTracing/Primitives/Rectangle.h"
-#include "PathTracing/Primitives/Sphere.h"
-#include "PathTracing/Primitives/Plane.h"
+#include "Primitives/Rectangle.h"
+#include "Primitives/Sphere.h"
+#include "Primitives/Plane.h"
 
 #include "PathTracing/Materials/Lambertian.h"
 
@@ -87,7 +85,6 @@ void Renderer::init()
     Lambertian* l7 = new Lambertian(red);
     SceneObject* so7 = new SceneObject(sphere,l7);
     empty_cornel_box.push_back(so7);
-
 
     Plane* plane = new Plane(glm::vec3(0.0f,-2.0f,0.0f) , glm::vec3(0.0f,-1.0f,0.0f));//1.9999
     Lambertian* l8 = new Lambertian(white);
