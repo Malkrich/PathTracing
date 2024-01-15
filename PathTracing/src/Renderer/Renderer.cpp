@@ -82,15 +82,15 @@ void Renderer::init()
     //empty_cornel_box.push_back(so6);
 
     float aaa =  2.0f;
-    Sphere* sphere = new Sphere(glm::vec3(1.0f,1.0,aaa),1);//1.9999
+    Sphere* sphere = new Sphere(glm::vec3(1.0f,-2.0,0.0f),0.5);//1.9999
     Lambertian* l7 = new Lambertian(red);
     SceneObject* so7 = new SceneObject(sphere,l7);
     empty_cornel_box.push_back(so7);
 
 
-    Plane* plane = new Plane(glm::vec3(0.0f,1.0f,0.0f) , glm::vec3(0.0f,-1.0f,0.0f));//1.9999
+    Plane* plane = new Plane(glm::vec3(0.0f,-2.0f,0.0f) , glm::vec3(0.0f,-1.0f,0.0f));//1.9999
     Lambertian* l8 = new Lambertian(white);
-    SceneObject* so8 = new SceneObject(sphere,l7);
+    SceneObject* so8 = new SceneObject(plane,l8);
     empty_cornel_box.push_back(so8);
 
     list_object = empty_cornel_box.getListObject();
