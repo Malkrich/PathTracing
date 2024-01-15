@@ -58,9 +58,15 @@ namespace PathTracing
 		std::string fpsStat = "Fps : ";
 		fpsStat += std::to_string(fps);
 
-		ImGui::Begin("Statistic : ");
+        std::string infoDimension = "Dimension : ["
+                + std::to_string(Renderer::getViewportWidth()) + ", "
+                + std::to_string(Renderer::getViewportHeight()) + "]";
+
+        ImGui::Begin("Info : ");
 		ImGui::Text(timeStat.c_str());
 		ImGui::Text(fpsStat.c_str());
+        ImGui::Text("");
+        ImGui::Text(infoDimension.c_str());
 		ImGui::End();
 	}
 
