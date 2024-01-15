@@ -11,7 +11,8 @@ class Lambertian : public Material
 
 
 public:
-    virtual ~Lambertian() {}
+    Lambertian();
+    Lambertian(glm::vec3 color_param);
 
     float brdf(glm::vec3 x,float theta_out,float theta_in,float lambda) const override {return 1/M_PI;};
 

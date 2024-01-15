@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "SceneObject.h"
+#include "../Camera.h"
 
 
 namespace PathTracing
@@ -11,10 +12,21 @@ namespace PathTracing
     {
     public:
         Scene();
-        void push_back(SceneObject object);
+        Scene(Camera cam_param);
+        void push_back(SceneObject* object);
+
+        /*Getter*/
+        Camera const& getCamera() const;
+        std::vector<SceneObject*> const& getListObject() const;
+
+        int const size_primitive() const;
+        SceneObject* getSceneObject(int index) const;
+        Primitive const& get_primitive(int index) const;
+        Material const& get_material(int index) const;
 
     private:
-        std::vector<SceneObject> list_object;
+        std::vector<SceneObject*> list_object;
+        Camera cam;
     };
 }
 
