@@ -50,6 +50,7 @@ void Renderer::init()
 
     empty_cornel_box = Scene();
     cam = empty_cornel_box.getCamera();
+    cam.resize(getViewportWidth(), getViewportHeight());
 
     Rectangle* r1 = new Rectangle(glm::vec3(555.0f,0.0f,0.0f),glm::vec3(0,555,0),glm::vec3(0,0,555));
     Lambertian* l1 = new Lambertian(green);
@@ -81,8 +82,8 @@ void Renderer::init()
     SceneObject* so6 = new SceneObject(r1,l1);
     //empty_cornel_box.push_back(so6);
 
-    float aaa =  2.0f;
-    Sphere* sphere = new Sphere(glm::vec3(1.0f,1.0,aaa),1);//1.9999
+    float aaa =  1.0f;
+    Sphere* sphere = new Sphere(glm::vec3(1.0f,1.0f,aaa),1);//1.9999
     Lambertian* l7 = new Lambertian(red);
     SceneObject* so7 = new SceneObject(sphere,l7);
     empty_cornel_box.push_back(so7);
@@ -91,7 +92,7 @@ void Renderer::init()
     Plane* plane = new Plane(glm::vec3(0.0f,1.0f,0.0f) , glm::vec3(0.0f,-1.0f,0.0f));//1.9999
     Lambertian* l8 = new Lambertian(white);
     SceneObject* so8 = new SceneObject(sphere,l7);
-    empty_cornel_box.push_back(so8);
+//    empty_cornel_box.push_back(so8);
 
     list_object = empty_cornel_box.getListObject();
 }
@@ -116,10 +117,7 @@ void Renderer::pathTrace(std::shared_ptr<Image> image)
         float const v = static_cast<float>(y)/(image->getHeight()-1);
         for(unsigned int x = 0; x < image->getWidth(); x++)
         {
-            float const u = static_cast<float>(x)/(image->getWidth()-1);
-            //float r = (float)rand() / (float)RAND_MAX;
-            //float g = (float)rand() / (float)RAND_MAX;
-            //float b = (float)rand() / (float)RAND_MAX;
+            float const u = static_cast<float>(x)/(image->getWidth()-1) * cam.getAspectRatio();
 
             //IntersectData intersection; //current intersection
             //int intersected_primitive = 0;  //current index of intersected primitive
@@ -143,6 +141,7 @@ void Renderer::draw(const std::shared_ptr<Image>& image)
 void Renderer::resize(unsigned int width, unsigned int height)
 {
     s_screen->resize(width, height);
+    cam.resize(width, height);
 }
 
 Ray Renderer::ray_generator(Camera const& cam,float const u,float const v)
