@@ -5,11 +5,11 @@ namespace PathTracing
 {
 
 Camera::Camera()
-    : m_center(glm::vec3(0.0f,0.0f,-2.0f))
-    , m_direction(glm::vec3(0.0f,0.0f,1.0f))
-    , m_up(glm::vec3(0.0f,1.0f,0.0f))
-    , m_screenDistance(2.0f)
-    , m_screenLength(4.0f)
+    : Camera(glm::vec3(0.0f,0.0f,-2.0f),
+             glm::vec3(0.0f,0.0f,1.0f),
+             glm::vec3(0.0f,1.0f,0.0f),
+             2.0f,
+             4.0f)
 {}
 
 Camera::Camera(glm::vec3 const& center_param,
@@ -23,7 +23,6 @@ Camera::Camera(glm::vec3 const& center_param,
     , m_screenDistance(distance_screen_param)
     , m_screenLength(length_screen_param)
 {}
-
 
 glm::vec3 const& Camera::center() const {return m_center;}
 glm::vec3 const& Camera::direction() const {return m_direction;}
