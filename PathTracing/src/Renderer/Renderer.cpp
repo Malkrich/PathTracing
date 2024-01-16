@@ -9,21 +9,11 @@
 #include "GraphicCore.h"
 #include "Screen.h"
 
-
-//Include for Ugo test
 #include "PathTracing/Ray.h"
 
 #include "Scene/SceneObject.h"
 
-#include "Primitives/Rectangle.h"
-#include "Primitives/Sphere.h"
-#include "Primitives/Plane.h"
-
-#include "PathTracing/Materials/Lambertian.h"
-
 #include "PathTracing/Pdf/CosinePdf.h"
-
-
 
 namespace PathTracing
 {
