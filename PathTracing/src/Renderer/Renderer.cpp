@@ -65,6 +65,7 @@ void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> sc
             image->setData(x, y, color);
         }
     }
+    std::cout<<"Fin boucle"<<std::endl;
 }
 
 void Renderer::draw(const std::shared_ptr<Image>& image)
@@ -140,11 +141,13 @@ glm::vec3 Renderer::getValue(Ray const& r, const Scene& scene)
 
     if (is_intersected)
     {
-        /*if (intersection.material->CanEmit())
+
+        if (intersection.material->CanEmit())
         {
+            std::cout<<"Light"<<std::endl;
             return intersection.material->emitted();
         }
-        else if (r.depth() < N_sample_per_pixel)
+        else if (r.depth()+1 < N_sample_per_pixel)
         {
             Ray new_r = intersection.create_ray(r.depth());
             return intersection.getValue(r,new_r);
@@ -152,8 +155,8 @@ glm::vec3 Renderer::getValue(Ray const& r, const Scene& scene)
         else
         {
             return glm::vec3(0,0,0);
-        }*/
-        return intersection.material->get_albedo();
+        }
+        //return intersection.material->get_albedo();
     }
 
     return glm::vec3(0,0,0);
