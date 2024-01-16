@@ -36,9 +36,9 @@ void Camera::resize(unsigned int width, unsigned int height)
     m_aspectRatio = (float)width / (float)height;
 }
 
-glm::vec3 screen_position(Camera const& cam,float u,float v)
+glm::vec3 screen_position(Camera const& cam, float u, float v)
 {
-    glm::vec3 const right = glm::normalize(cross(cam.direction(),cam.up()));
+    glm::vec3 const right = glm::normalize(cross(cam.direction(), cam.up()));
     glm::vec3 const p0    = cam.center() + cam.direction() * cam.distance_screen();
 
     glm::vec3 const translate_right = right * (u-0.5f)*2.0f*cam.getAspectRatio();

@@ -60,7 +60,7 @@ private:
 };
 
 /** Compute the 3D position of the pixel parameterized by (u,v), where (u,v) is in [0,1] on the screen of the camera */
-glm::vec3 screen_position(Camera const& cam,float u,float v);
+glm::vec3 screen_position(Camera const& cam, float u, float v);
 
 
 }

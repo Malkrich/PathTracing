@@ -78,16 +78,13 @@ void Renderer::resize(unsigned int width, unsigned int height)
     s_screen->resize(width, height);
 }
 
-Ray Renderer::ray_generator(Camera const& cam,float const u,float const v)
+Ray Renderer::ray_generator(const Camera& cam, float u, float v)
 {
     // position of the sample on the screen in 3D
-    glm::vec3 const p_screen = screen_position(cam,u,v);
-
-    // vector "camera center" to "screen position"
-    glm::vec3 const d = p_screen-cam.center();
+    const glm::vec3 d = screen_position(cam, u, v) - cam.center();
 
     // compute the ray
-    Ray const r(cam.center(),d);
+    Ray r(cam.center(), d);
 
     return r;
 }
@@ -112,7 +109,6 @@ bool Renderer::compute_intersection(Ray const& r, Scene const& scene, IntersectD
                 t = new_relative;
             }
         }
-
         ++k;
     }
     //Pour remettre la valeur de primitive correctement
@@ -132,7 +128,7 @@ bool Renderer::compute_intersection(Ray const& r, Scene const& scene, IntersectD
 }
 
 
-glm::vec3 Renderer::getValue(Ray const& r, const Scene& scene)
+glm::vec3 Renderer::getValue(const Ray& r, const Scene& scene)
 {
     IntersectData intersection; //current intersection
     int intersected_primitive = 0;  //current index of intersected primitive

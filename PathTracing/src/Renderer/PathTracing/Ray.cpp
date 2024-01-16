@@ -23,38 +23,32 @@ namespace PathTracing
 {
 
 Ray::Ray()
-    :Ray(glm::vec3(),glm::vec3(1.0f,0.0f,0.0f),0)
+    : Ray(glm::vec3(), glm::vec3(1.0f,0.0f,0.0f), 0)
 {}
 
-Ray::Ray(glm::vec3 const& p0_param,glm::vec3 const& u_param)
-    :Ray(p0_param,u_param,0)
+Ray::Ray(const glm::vec3& p0, const glm::vec3& u)
+    : Ray(p0, u, 0)
 {}
 
-Ray::Ray(glm::vec3 const& p0_param,glm::vec3 const& u_param,int const depth_param)
-    :p0_data(p0_param),u_data(glm::normalize(u_param)),depth_data(depth_param)
+Ray::Ray(const glm::vec3& p0, const glm::vec3& u, int depth)
+    : m_p0(p0)
+    , m_u(glm::normalize(u))
+    , m_depth(depth)
 {}
 
-glm::vec3 const& Ray::p0() const {return p0_data;}
-glm::vec3 const& Ray::u() const {return u_data;}
-
-
-glm::vec3 Ray::operator()(float const t) const
+glm::vec3 Ray::operator()(float t) const
 {
-    return p0_data + t*u_data;
+    return m_p0 + t*m_u;
 }
 
-void Ray::offset(float const epsilon)
+void Ray::offset(float epsilon)
 {
-    p0_data += epsilon*u_data;
+    m_p0 += epsilon * m_u;
 }
 
-glm::vec3 Ray::getValue() {
-    return glm::vec3(1.0f,1.0f,1.0f);
-}
-
-int const Ray::depth() const
+glm::vec3 Ray::getValue()
 {
-    return depth_data;
+    return glm::vec3(1.0f, 1.0f, 1.0f);
 }
 
 /*

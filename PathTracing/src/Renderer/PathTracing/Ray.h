@@ -11,18 +11,16 @@ namespace PathTracing
 class Ray
 {
 public:
-
     Ray();
-    Ray(glm::vec3 const& p0_param,glm::vec3 const& u_param);
-    Ray(glm::vec3 const& p0_param,glm::vec3 const& u_param,int const depth_param);
+    Ray(const glm::vec3& p0, const glm::vec3& u);
+    Ray(const glm::vec3& p0, const glm::vec3& u,int depth);
 
     /** Starting point */
-    glm::vec3 const& p0() const;
+    const glm::vec3& p0() const { return m_p0; }
     /** Direction */
-    glm::vec3 const& u() const;
+    const glm::vec3& u() const { return m_u; }
 
-    int const depth() const;
-
+    int depth() const { return m_depth; }
 
     /** Evaluate 3D position at x0+t*u */
     glm::vec3 operator()(float t) const;
@@ -31,21 +29,17 @@ public:
 
     glm::vec3 getValue();
 
-
 private:
     /** Internal initial position of the Ray */
-    glm::vec3 p0_data;
+    glm::vec3 m_p0;
     /** Internal direction of the Ray */
-    glm::vec3 u_data;
+    glm::vec3 m_u;
 
-    int depth_data;
+    int m_depth;
 };
 
-
 /** Exporting Ray data */
-std::ostream& operator<<(std::ostream& stream,Ray const& r);
-
-
+//std::ostream& operator<<(std::ostream& stream,Ray const& r);
 
 }
 
