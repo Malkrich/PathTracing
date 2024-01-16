@@ -47,45 +47,46 @@ void Renderer::init()
     glm::vec3 green = glm::vec3(.12,.45,.15);
     glm::vec3 light = glm::vec3(1,1,1);
     glm::vec3 white = glm::vec3(.73,.73,.73);
+    glm::vec3 blue = glm::vec3(.05,.05,.65);
 
     empty_cornel_box = Scene();
     cam = empty_cornel_box.getCamera();
     cam.resize(getViewportWidth(), getViewportHeight());
 
-    Rectangle* r1 = new Rectangle(glm::vec3(555.0f,0.0f,0.0f),glm::vec3(0,555,0),glm::vec3(0,0,555));
+    Rectangle* r1 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(0,2,0),glm::vec3(0,0,1));
     Lambertian* l1 = new Lambertian(green);
     SceneObject* so1 = new SceneObject(r1,l1);
-    //empty_cornel_box.push_back(so1);
+    empty_cornel_box.push_back(so1);
 
-    Rectangle* r2 = new Rectangle(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0,555,0),glm::vec3(0,0,555));
+    Rectangle* r2 = new Rectangle(glm::vec3(-1.0f,-1.0f,0.0f),glm::vec3(0,2.00f,0),glm::vec3(0,0,1.00f));
     Lambertian* l2 = new Lambertian(red);
-    SceneObject* so2 = new SceneObject(r1,l1);
-    //empty_cornel_box.push_back(so2);
+    SceneObject* so2 = new SceneObject(r2,l2);
+    empty_cornel_box.push_back(so2);
 
-    Rectangle* r3 = new Rectangle(glm::vec3(343,554,332),glm::vec3(-130,0,0),glm::vec3(0,0,105));
+    Rectangle* r3 = new Rectangle(glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4));
     Lambertian* l3 = new Lambertian(light);
-    SceneObject* so3 = new SceneObject(r1,l1);
-    //empty_cornel_box.push_back(so3);
+    SceneObject* so3 = new SceneObject(r3,l3);
+    empty_cornel_box.push_back(so3);
 
-    Rectangle* r4 = new Rectangle(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(555,0,0),glm::vec3(0,0,555));
+    Rectangle* r4 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(-2.00f,0,0),glm::vec3(0,0,1.00f));
     Lambertian* l4 = new Lambertian(white);
-    SceneObject* so4 = new SceneObject(r1,l1);
-    //empty_cornel_box.push_back(so4);
+    SceneObject* so4 = new SceneObject(r4,l4);
+    empty_cornel_box.push_back(so4);
 
-    Rectangle* r5 = new Rectangle(glm::vec3(555,555,555),glm::vec3(-555,0,0),glm::vec3(0,555,0));
+    Rectangle* r5 = new Rectangle(glm::vec3(1.00f,1.00f,0.00f),glm::vec3(-2.00f,0,0),glm::vec3(0,0.00f,1.0f));
     Lambertian* l5 = new Lambertian(white);
-    SceneObject* so5 = new SceneObject(r1,l1);
-    //empty_cornel_box.push_back(so5);
+    SceneObject* so5 = new SceneObject(r5,l5);
+    empty_cornel_box.push_back(so5);
 
-    Rectangle* r6 = new Rectangle(glm::vec3(0,-0.5,0),glm::vec3(1,0,0),glm::vec3(0,1,0));
-    Lambertian* l6 = new Lambertian(white);
+    Rectangle* r6 = new Rectangle(glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0));
+    Lambertian* l6 = new Lambertian(blue);
     SceneObject* so6 = new SceneObject(r6,l6);
-    //empty_cornel_box.push_back(so6);
+    empty_cornel_box.push_back(so6);
 
     Sphere* sphere = new Sphere(glm::vec3(-25.0f,20.0f,50.0f),3);//1.9999
     Lambertian* l7 = new Lambertian(red);
     SceneObject* so7 = new SceneObject(sphere,l7);
-    empty_cornel_box.push_back(so7);
+    //empty_cornel_box.push_back(so7);
 
 
     //Plane* plane = new Plane(glm::vec3(0.0f,0.0f,0.0f) , glm::vec3(0.0f,-1.0f,0.0f));//1.9999
