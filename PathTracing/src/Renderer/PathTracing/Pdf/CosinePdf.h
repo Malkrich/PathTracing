@@ -7,11 +7,10 @@
 #include "../../../Utils/RandomUtils.h"
 
 namespace PathTracing
-
 {
 
 class CosinePdf : public Pdf {
-  public:
+public:
     CosinePdf(const glm::vec3& w) { uvw.build_from_w(w); }
 
     double value(const glm::vec3& direction) const override {
@@ -32,7 +31,7 @@ class CosinePdf : public Pdf {
         return uvw.local(v);
     }
 
-  private:
+private:
     OrthonormalBasis uvw;
 };
 

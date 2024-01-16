@@ -2,14 +2,12 @@
 
 namespace PathTracing
 {
-Material::Material() {
-    color = glm::vec3(0,0,0);
-}
+Material::Material()
+    : m_color(glm::vec3(0,0,0))
+{}
 
-Material::Material(glm::vec3 color_param):
-    color(color_param)
-{
-
-}
+Material::Material(const glm::vec3& color):
+    m_color(color)
+{}
 
 }

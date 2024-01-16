@@ -5,9 +5,8 @@
 
 namespace PathTracing
 {
+
 class Pdf {
-
-
 public:
     virtual ~Pdf() {}
 

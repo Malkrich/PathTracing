@@ -3,10 +3,12 @@
 namespace PathTracing
 {
 
-Lambertian::Lambertian() : Material()
+Lambertian::Lambertian()
+    : Material()
 {}
 
-Lambertian::Lambertian(glm::vec3 color_param) : Material(color_param)
+Lambertian::Lambertian(const glm::vec3& color)
+    : Material(color)
 {}
 
 }
