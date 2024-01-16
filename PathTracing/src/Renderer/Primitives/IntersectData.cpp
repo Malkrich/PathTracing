@@ -41,9 +41,9 @@ Ray IntersectData::create_ray(int depth)
     return ray;
 }
 
-glm::vec3 IntersectData::getValue(Ray ray_out,Ray ray_in)
+float IntersectData::getValue(Ray ray_out,Ray ray_in)
 {
-    glm::vec3 res;
+    //glm::vec3 res;
     glm::vec3 u_out = ray_out.u();
     glm::vec3 u_in = ray_in.u();
 
@@ -60,7 +60,14 @@ glm::vec3 IntersectData::getValue(Ray ray_out,Ray ray_in)
 
     const glm::vec3& color = material->getAlbedo(position,theta_out,theta_in,lambda);
 
-    res = color*attenuation*fr*L_in/p_value;
+    //res = color*attenuation*fr*L_in/p_value; //Originel
+    //res = attenuation*fr*L_in/p_value; // Originel sans color
+    float res = attenuation*fr/p_value; // Originel sans color
+
+    //std::cout<<fr*attenuation/p_value<<std::endl;
+    //std::cout<<res.x<<"  "<<res.y<<"  "<<res.z<<std::endl;
+    //std::cout<<L_in.x<<"  "<<L_in.y<<"  "<<L_in.z<<std::endl;
+
 
     return res;
 }

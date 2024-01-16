@@ -10,7 +10,9 @@ namespace PathTracing
 class Light : public Material
 {
 public:
-    virtual ~Light() {}
+
+    Light();
+    Light(glm::vec3 color_param);
 
     bool CanEmit() override
     {
@@ -21,7 +23,7 @@ public:
         return glm::vec3(1.0f,1.0f,1.0f);
     }
 
-    //float brdf(glm::vec3 x,float theta_out,float theta_in,float lambda) const override {return 1/M_PI;};
+    float brdf(glm::vec3 x,float theta_out,float theta_in,float lambda) const override {return 0.0f;};
 
 };
 

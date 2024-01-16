@@ -19,7 +19,7 @@ namespace PathTracing
 {
 
 int N_sample_per_pixel = 1;
-int max_depth = 1;
+int max_depth = 3;
 
 static Screen* s_screen;
 
@@ -137,21 +137,22 @@ glm::vec3 Renderer::getValue(const Ray& r, const Scene& scene)
 
     if(is_intersected)
     {
-/*        if (intersection.material->CanEmit())
+        if (intersection.material->CanEmit())
         {
-            std::cout<<"Light"<<std::endl;
             return intersection.material->emitted();
         }
-        else if (r.depth()+1 < N_sample_per_pixel)
+        else if (r.depth()+1 < max_depth)
         {
             Ray new_r = intersection.create_ray(r.depth());
-            return intersection.getValue(r,new_r);
+            glm::vec3 L_in = getValue(new_r,scene);
+            float value = intersection.getValue(r,new_r);
+            return value*L_in;
         }
         else
         {
             return glm::vec3(0,0,0);
-        }*/
-        return intersection.material->getAlbedo();
+        }
+        //return intersection.material->getAlbedo();
     }
     return glm::vec3(0,0,0);
 }
