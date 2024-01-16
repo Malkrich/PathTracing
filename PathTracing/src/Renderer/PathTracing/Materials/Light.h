@@ -23,7 +23,10 @@ public:
         return glm::vec3(1.0f,1.0f,1.0f);
     }
 
-    float brdf(glm::vec3 x,float theta_out,float theta_in,float lambda) const override {return 0.0f;};
+    float brdf(const glm::vec3&, float, float, float) const override
+    {
+        return 0.0f;
+    }
 
 };
 
