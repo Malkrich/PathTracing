@@ -19,7 +19,7 @@
 
 namespace PathTracing
 {
-    static void makeGuiForSceneObject(const SceneObject* sceneObject)
+    static void makeGuiForSceneObject(const std::shared_ptr<SceneObject>& sceneObject)
     {
         const std::string& name = sceneObject->getName();
         std::string positionName = "##" + name;
@@ -56,39 +56,39 @@ namespace PathTracing
         glm::vec3 white = glm::vec3(.73,.73,.73);
         glm::vec3 blue = glm::vec3(.05,.05,.65);
 
-        Rectangle* r1 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0));
-        Lambertian* l1 = new Lambertian(green);
-        SceneObject* so1 = new SceneObject(r1, l1, "Green Rectangle");
+        std::shared_ptr<Rectangle> r1 = std::make_shared<Rectangle>(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0));
+        std::shared_ptr<Lambertian> l1 = std::make_shared<Lambertian>(green);
+        std::shared_ptr<SceneObject> so1 = std::make_shared<SceneObject>(r1, l1, "Green Rectangle");
         m_scene->addObject(so1);
 
-        Rectangle* r2 = new Rectangle(glm::vec3(-1.0f,-1.0f,0.0f), glm::vec3(0,2.00f,0), glm::vec3(0,0,1.00f));
-        Lambertian* l2 = new Lambertian(red);
-        SceneObject* so2 = new SceneObject(r2, l2, "Red Rectangle");
+        std::shared_ptr<Rectangle> r2 = std::make_shared<Rectangle>(glm::vec3(-1.0f,-1.0f,0.0f), glm::vec3(0,2.00f,0), glm::vec3(0,0,1.00f));
+        std::shared_ptr<Lambertian> l2 = std::make_shared<Lambertian>(red);
+        std::shared_ptr<SceneObject> so2 = std::make_shared<SceneObject>(r2, l2, "Red Rectangle");
         m_scene->addObject(so2);
 
-        Rectangle* r3 = new Rectangle(glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4));
-        Light* l3 = new Light(light);
-        SceneObject* so3 = new SceneObject(r3, l3, "Light");
+        std::shared_ptr<Rectangle> r3 = std::make_shared<Rectangle>(glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4));
+        std::shared_ptr<Light> l3 = std::make_shared<Light>(light);
+        std::shared_ptr<SceneObject> so3 = std::make_shared<SceneObject>(r3, l3, "Light");
         m_scene->addObject(so3);
 
-        Rectangle* r4 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(-2.00f,0,0),glm::vec3(0,0,1.00f));
-        Lambertian* l4 = new Lambertian(white);
-        SceneObject* so4 = new SceneObject(r4, l4, "White Rectangle 1");
+        std::shared_ptr<Rectangle> r4 = std::make_shared<Rectangle>(glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(-2.00f,0,0),glm::vec3(0,0,1.00f));
+        std::shared_ptr<Lambertian> l4 = std::make_shared<Lambertian>(white);
+        std::shared_ptr<SceneObject> so4 = std::make_shared<SceneObject>(r4, l4, "White Rectangle 1");
         m_scene->addObject(so4);
 
-        Rectangle* r5 = new Rectangle(glm::vec3(1.00f,1.00f,0.00f),glm::vec3(0,0,1.00f),glm::vec3(-2.00f,0,0));
-        Lambertian* l5 = new Lambertian(white);
-        SceneObject* so5 = new SceneObject(r5, l5, "White Rectangle 2");
+        std::shared_ptr<Rectangle> r5 = std::make_shared<Rectangle>(glm::vec3(1.00f,1.00f,0.00f),glm::vec3(0,0,1.00f),glm::vec3(-2.00f,0,0));
+        std::shared_ptr<Lambertian> l5 = std::make_shared<Lambertian>(white);
+        std::shared_ptr<SceneObject> so5 = std::make_shared<SceneObject>(r5, l5, "White Rectangle 2");
         m_scene->addObject(so5);
 
-        Rectangle* r6 = new Rectangle(glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0));
-        Lambertian* l6 = new Lambertian(blue);
-        SceneObject* so6 = new SceneObject(r6, l6, "Blue Rectangle");
+        std::shared_ptr<Rectangle> r6 = std::make_shared<Rectangle>(glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0));
+        std::shared_ptr<Lambertian> l6 = std::make_shared<Lambertian>(blue);
+        std::shared_ptr<SceneObject> so6 = std::make_shared<SceneObject>(r6, l6, "Blue Rectangle");
         m_scene->addObject(so6);
 
-//        Sphere* sphere = new Sphere(glm::vec3(-25.0f,20.0f,50.0f),3);//1.9999
-//        Lambertian* l7 = new Lambertian(red);
-//        SceneObject* so7 = new SceneObject(sphere,l7);
+//        std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(-25.0f,20.0f,50.0f),3);//1.9999
+//        std::shared_ptr<Lambertian> l7 = std::make_shared<Lambertian>(red);
+//        std::shared_ptr<SceneObject> so7 = std::make_shared<SceneObject>(sphere,l7);
 //        m_scene->addObject(so7);
 	}
 

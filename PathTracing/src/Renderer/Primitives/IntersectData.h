@@ -1,6 +1,8 @@
 #ifndef INTERSECTDATA_H
 #define INTERSECTDATA_H
 
+#include <memory>
+
 #include <glm/glm.hpp>
 #include <ostream>
 #include "Renderer/PathTracing/Pdf/Pdf.h"
@@ -13,9 +15,11 @@ namespace PathTracing
 struct IntersectData
 {
     IntersectData();
-    IntersectData(glm::vec3 const& position_param,
-                      glm::vec3 const& normal_param,
-                      float relative_param,Pdf* pdf,Material* material);
+    IntersectData(const glm::vec3& position_param,
+                  const glm::vec3& normal_param,
+                  float relative_param,
+                  std::shared_ptr<Pdf> pdf,
+                  std::shared_ptr<Material> material);
 
     /** Set all the fields of the intersection value */
     void set(glm::vec3 const& position_param,
@@ -24,9 +28,8 @@ struct IntersectData
     /** Set all the fields of the intersection value */
     //void set(IntersectData const& intersection);
 
-    void setPdf(Pdf* pdf);
-    void setMaterial(Material* material);
-
+    void setPdf(std::shared_ptr<Pdf> pdf);
+    void setMaterial(std::shared_ptr<Material> material);
 
     Ray create_ray(int depth);
     float getValue(Ray outray, Ray inray);
@@ -41,8 +44,8 @@ struct IntersectData
       * position = ray.p0 + relative*ray.u */
     float relative;
     /*Probability density function*/
-    Pdf* pdf;
-    Material* material;
+    std::shared_ptr<Pdf> pdf;
+    std::shared_ptr<Material> material;
 };
 
 //std::ostream& operator<<(std::ostream& stream,IntersectData const& intersection);

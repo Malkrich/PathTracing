@@ -98,8 +98,8 @@ bool Renderer::compute_intersection(Ray const& r, Scene const& scene, IntersectD
     float t = std::numeric_limits<float>::max();
     while(k < N_primitive)
     {
-        const Primitive* primitive = scene.getPrimitive(k);
-        bool is_intersection = primitive->intersect(r,intersection);
+        const std::shared_ptr<Primitive>& primitive = scene.getPrimitive(k);
+        bool is_intersection = primitive->intersect(r, intersection);
         if(is_intersection)
         {
             found_intersection = true;
@@ -112,14 +112,14 @@ bool Renderer::compute_intersection(Ray const& r, Scene const& scene, IntersectD
         ++k;
     }
     //Pour remettre la valeur de primitive correctement
-    if (found_intersection)
+    if(found_intersection)
     {
-        const SceneObject* obj = scene.getSceneObject(index_intersected_primitive);
+        std::shared_ptr<SceneObject> obj = scene.getSceneObject(index_intersected_primitive);
 
-        const Primitive* primitive = scene.getPrimitive(index_intersected_primitive);
-        primitive->intersect(r,intersection);
+        std::shared_ptr<Primitive> primitive = scene.getPrimitive(index_intersected_primitive);
+        primitive->intersect(r, intersection);
         glm::vec3 n = intersection.normal;
-        CosinePdf* pdf = new CosinePdf(n);
+        std::shared_ptr<Pdf> pdf = std::make_shared<CosinePdf>(n);
         intersection.setPdf(pdf);
         intersection.setMaterial(obj->material);
     }
@@ -127,13 +127,12 @@ bool Renderer::compute_intersection(Ray const& r, Scene const& scene, IntersectD
     return found_intersection;
 }
 
-
 glm::vec3 Renderer::getValue(const Ray& r, const Scene& scene)
 {
     IntersectData intersection; //current intersection
     int intersected_primitive = 0;  //current index of intersected primitive
 
-    bool is_intersected = compute_intersection(r, scene, intersection,intersected_primitive);
+    bool is_intersected = compute_intersection(r, scene, intersection, intersected_primitive);
 
     if(is_intersected)
     {

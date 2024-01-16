@@ -12,7 +12,7 @@ Scene::Scene(const Camera& camera)
     , m_camera(camera)
 {}
 
-void Scene::addObject(SceneObject* object)
+void Scene::addObject(std::shared_ptr<SceneObject> object)
 {
     m_objectList.push_back(object);
 }

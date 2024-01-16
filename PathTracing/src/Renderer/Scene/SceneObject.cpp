@@ -3,7 +3,7 @@
 namespace PathTracing
 {
 
-SceneObject::SceneObject(Primitive* primitive_param,Material* material_param, const std::string& name_param)
+SceneObject::SceneObject(std::shared_ptr<Primitive> primitive_param, std::shared_ptr<Material> material_param, const std::string& name_param)
     : primitive(primitive_param)
     , material(material_param)
     , name(name_param)

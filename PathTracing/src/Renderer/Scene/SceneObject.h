@@ -9,14 +9,14 @@ namespace PathTracing
 
     struct SceneObject
     {
-        SceneObject(Primitive* primitive_param, Material* material_param, const std::string& name_param);
+        SceneObject(std::shared_ptr<Primitive> primitive_param, std::shared_ptr<Material> material_param, const std::string& name_param);
 
         bool intersect(Ray const& ray_param, IntersectData& intersection) const;
 
         const std::string& getName() const { return name; }
 
-        Primitive* primitive;
-        Material* material;
+        std::shared_ptr<Primitive> primitive;
+        std::shared_ptr<Material> material;
         std::string name;
     };
 
