@@ -15,7 +15,7 @@ public:
     //  Constructor
     // ********************************************* //
 
-    Camera();
+    Camera(unsigned int width, unsigned int height);
 
     /** Camera parameterized by its center, its main direction, and its up direction,
             the distance between the screen and the center, and the length of the screen */
@@ -23,7 +23,7 @@ public:
            glm::vec3 const& direction_param,
            glm::vec3 const& up_param,
            float distance_screen_param,
-           float length_screen_param);
+           unsigned int width, unsigned int height);
 
     // ********************************************* //
     //  Access parameters
@@ -35,10 +35,11 @@ public:
     glm::vec3 const& direction() const;
     /** Get the up direction value */
     glm::vec3 const& up() const;
+
+    glm::vec3 const& right() const;
+
     /** Get the dist_screen value */
     float distance_screen() const;
-    /** Get the length_of the screen value */
-    float length_screen() const;
 
     float getAspectRatio() const;
     void resize(unsigned int width, unsigned int height);
@@ -51,10 +52,10 @@ private:
     glm::vec3 m_direction;
     /** Up direction of the camera */
     glm::vec3 m_up;
+    /** Right vector of the camera */
+    glm::vec3 m_right;
     /** Internal screen distance to the center */
     float m_screenDistance;
-    /** Length of the screen */
-    float m_screenLength;
     /** aspect ration of the screen */
     float m_aspectRatio;
 };

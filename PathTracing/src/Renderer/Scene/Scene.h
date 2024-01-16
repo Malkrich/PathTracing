@@ -12,7 +12,6 @@ namespace PathTracing
 class Scene
 {
 public:
-    Scene();
     Scene(const Camera& camera);
 
     /*Getter*/

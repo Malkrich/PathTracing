@@ -2,10 +2,6 @@
 
 namespace PathTracing
 {
-Scene::Scene()
-    : m_objectList()
-    , m_camera()
-{}
 
 Scene::Scene(const Camera& camera)
     : m_objectList()
