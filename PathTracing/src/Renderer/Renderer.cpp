@@ -65,7 +65,7 @@ void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> sc
             image->setData(x, y, color);
         }
     }
-    std::cout<<"Fin boucle"<<std::endl;
+//    std::cout<<"Fin boucle"<<std::endl;
 }
 
 void Renderer::draw(const std::shared_ptr<Image>& image)

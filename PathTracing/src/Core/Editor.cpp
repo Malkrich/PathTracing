@@ -21,9 +21,18 @@ namespace PathTracing
     static void makeGuiForSceneObject(const SceneObject* sceneObject)
     {
         const std::string& name = sceneObject->getName();
+        std::string positionName = "##" + name;
         glm::vec3& albedo = sceneObject->material->getAlbedo();
-        ImGui::Text(name.c_str());
-        ImGui::ColorPicker3(name.c_str(), glm::value_ptr(albedo));
+        glm::vec3& position = sceneObject->primitive->getPosition();
+        ImGui::Text("%s", name.c_str());
+
+        // Color
+        ImGui::Text("Color : ");
+        ImGui::SameLine();
+        ImGui::ColorEdit3(name.c_str(), glm::value_ptr(albedo), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+
+        // Position
+        ImGui::SliderFloat3(positionName.c_str(), glm::value_ptr(position), -2.0f, 2.0f, "%.3f");
     }
 
 	Editor::Editor()
@@ -113,23 +122,14 @@ namespace PathTracing
 
 	void Editor::onGuiRender()
 	{
-		std::string timeStat = "Delta time : ";
-		timeStat += std::to_string(m_deltaTime * 1000.0f) + " ms";
-		float fps = 1 / m_deltaTime;
-		std::string fpsStat = "Fps : ";
-		fpsStat += std::to_string(fps);
-
-        std::string infoDimension = "Dimension : ["
-                + std::to_string(Renderer::getViewportWidth()) + ", "
-                + std::to_string(Renderer::getViewportHeight()) + "]";
-
         ImGui::Begin("Info : ", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-        ImGui::SetWindowSize(ImVec2(200, 100));
+        ImGui::SetWindowSize(ImVec2(250, 100));
         ImGui::Text("Renderer info : ");
-		ImGui::Text(timeStat.c_str());
-		ImGui::Text(fpsStat.c_str());
+        ImGui::Text("Delta time : %f ms", m_deltaTime * 1000.0f);
+        ImGui::Text("Fps : %f", 1 / m_deltaTime);
         ImGui::Text("");
-        ImGui::Text(infoDimension.c_str());
+        ImGui::Text("Window dimension : [%i , %i]",
+                    Renderer::getViewportWidth(), Renderer::getViewportHeight());
 		ImGui::End();
 
         ImGui::Begin("Scene editor");
