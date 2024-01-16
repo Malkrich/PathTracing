@@ -5,6 +5,10 @@ project(PathTracing LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 find_package(glfw3 3.3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
@@ -60,19 +64,31 @@ source_group("sources"  FILES ${SOURCE_FILES})
 source_group("lib"      FILES ${LIB_FILES})
 source_group("shaders"  FILES ${SHADER_FILES})
 
+
+
 add_definitions(-DGLFW_INCLUDE_NONE)
+
+find_package(OpenMP)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+
 add_executable(
     ${PROJECT_NAME}
     ${SOURCE_FILES} ${HEADER_FILES}
     ${LIB_FILES}
 )
 
+
+
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX glfw
+        OpenGL::GL)
+else()
 target_link_libraries(
     ${PROJECT_NAME}
     glfw
     OpenGL::GL
 )
+endif()
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
