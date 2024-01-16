@@ -3,9 +3,9 @@
 
 #include <glm/glm.hpp>
 #include <ostream>
-#include "../Pdf/Pdf.h"
-#include "../Ray.h"
-#include "../Materials/Material.h"
+#include "Renderer/PathTracing/Pdf/Pdf.h"
+#include "Renderer/PathTracing/Ray.h"
+#include "Renderer/PathTracing/Materials/Material.h"
 
 namespace PathTracing
 {

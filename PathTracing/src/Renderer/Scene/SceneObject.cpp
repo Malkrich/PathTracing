@@ -17,5 +17,4 @@ bool SceneObject::intersect(Ray const& ray_param,IntersectData& intersection) co
     return IsIntersect;
 };
 
-
 }
