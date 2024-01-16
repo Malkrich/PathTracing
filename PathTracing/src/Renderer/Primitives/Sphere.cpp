@@ -24,73 +24,61 @@
 namespace PathTracing
 {
 
-Sphere::Sphere(glm::vec3 const& center_param,float radius_param)
-    :center_data(center_param),radius_data(radius_param)
+Sphere::Sphere(const glm::vec3& center, float radius)
+    : m_center(center)
+    , m_radius(radius)
 {}
 
-glm::vec3 const& Sphere::center() const
+bool Sphere::intersect(Ray const& ray_param, IntersectData& intersection) const
 {
-    return center_data;
-}
-float Sphere::radius() const
-{
-    return radius_data;
-}
+    const glm::vec3& u  = ray_param.u();
+    const glm::vec3& x0 = m_center;
+    const float r       = m_radius;
+    const glm::vec3& xs = ray_param.p0();
 
-bool Sphere::intersect(Ray const& ray_param,IntersectData& intersection) const
-{
-    glm::vec3 const& u = ray_param.u();
-    glm::vec3 const& x0 = center_data;
-    float const& r = radius_data;
-    glm::vec3 const& xs = ray_param.p0();
+    float a = pow(glm::length(u), 2);
+    float b = 2*dot(xs - x0, u);
+    float c = pow(glm::length(xs-x0), 2) - pow(r, 2);
 
-    float a = pow(glm::length(u),2);
-    float b = 2*dot(xs-x0,u);
-    float c = pow(glm::length(xs-x0),2)-pow(r,2);
+    float delta = pow(b, 2) - 4*a*c;
 
-    float Delta = pow(b,2)-4*a*c;
-
-    if(Delta>0.0f)
+    if(delta > 0.0f)
     {
-        float t1 = (-b-sqrt(Delta))/2*a;
-        float t2 = (-b+sqrt(Delta))/2*a;
+        float t1 = (-b - sqrt(delta)) / 2*a;
+        float t2 = (-b + sqrt(delta)) / 2*a;
 
-        if (t1 >= 0.0f) {
-            glm::vec3 x_inter = xs+t1*u;
-            glm::vec3 n = glm::normalize(x_inter -x0);
-            intersection.set(x_inter,n,t1);
+        if (t1 >= 0.0f)
+        {
+            glm::vec3 x_inter = xs + t1 * u;
+            glm::vec3 n = glm::normalize(x_inter - x0);
+            intersection.set(x_inter, n, t1);
             return true;
         }
-        else if (t2 >= 0.0f) {
-
-            glm::vec3 x_inter = xs+t2*u;
+        else if (t2 >= 0.0f)
+        {
+            glm::vec3 x_inter = xs + t2 * u;
             glm::vec3 n = glm::normalize(x_inter -x0);
-            intersection.set(x_inter,n,t2);
+            intersection.set(x_inter, n, t2);
             return true;
         }
-        else {
+        else
             return false;
-        }
-
     }
-    else if (Delta == 0.0f){
-        float t = -b/2*a;
-        if (t >= 0.0f) {
-
-            glm::vec3 x_inter = xs+t*u;
-            glm::vec3 n = glm::normalize(x_inter -x0);
-            intersection.set(x_inter,n,t);
+    else if (delta == 0.0f)
+    {
+        float t = -b / 2*a;
+        if (t >= 0.0f)
+        {
+            glm::vec3 x_inter = xs + t * u;
+            glm::vec3 n = glm::normalize(x_inter - x0);
+            intersection.set(x_inter, n, t);
             return true;
         }
-        else {
+        else
             return false;
-        }
     }
-    else {
+    else
         return false;
-    }
-
-
 }
 
 
