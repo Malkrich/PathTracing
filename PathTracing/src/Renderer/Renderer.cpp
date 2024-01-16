@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+#include <omp.h>
+
 #include <string>
 #include <cstdlib>
 
@@ -44,6 +46,7 @@ void Renderer::begin(const glm::vec3& clearColor)
 
 void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> scene)
 {
+    #pragma omp parallel for shared(image)
     for(unsigned int y = 0; y < image->getHeight(); y++)
     {
         float const v = static_cast<float>(y)/(image->getHeight()-1);
@@ -57,7 +60,6 @@ void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> sc
             Ray ray = ray_generator(scene->getCamera(), u, v);
 
             glm::vec3 color = getValue(ray, *scene);
-
 //             glm::vec3 color = glm::vec3(std::fabs(ray.u().x));
 
 //            bool is_intersected = compute_intersection(ray,empty_cornel_box,intersection,intersected_primitive);
@@ -65,7 +67,6 @@ void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> sc
             image->setData(x, y, color);
         }
     }
-//    std::cout<<"Fin boucle"<<std::endl;
 }
 
 void Renderer::draw(const std::shared_ptr<Image>& image)
