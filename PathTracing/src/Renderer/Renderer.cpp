@@ -153,7 +153,7 @@ glm::vec3 Renderer::getValue(Ray const& r, const Scene& scene)
         {
             return glm::vec3(0,0,0);
         }*/
-        return intersection.material->get_albedo();
+        return intersection.material->getAlbedo();
     }
 
     return glm::vec3(0,0,0);
