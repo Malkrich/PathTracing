@@ -10,6 +10,7 @@
 
 namespace PathTracing
 {
+    void createCornellBoxScene(std::shared_ptr<Scene> scene);
 
 	class Editor
 	{

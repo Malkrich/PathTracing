@@ -19,6 +19,51 @@
 
 namespace PathTracing
 {
+    void createCornellBoxScene(std::shared_ptr<Scene> scene)
+    {
+        /***** CORNELL BOX ****/
+        glm::vec3 red = glm::vec3(.65,.05,.05);
+        glm::vec3 green = glm::vec3(.12,.45,.15);
+        glm::vec3 light = glm::vec3(1,1,1);
+        glm::vec3 white = glm::vec3(.73,.73,.73);
+        glm::vec3 blue = glm::vec3(.05,.05,.65);
+
+        std::shared_ptr<Rectangle> r1 = std::make_shared<Rectangle>(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0));
+        std::shared_ptr<Lambertian> l1 = std::make_shared<Lambertian>(green);
+        std::shared_ptr<SceneObject> so1 = std::make_shared<SceneObject>(r1, l1, "Green Rectangle");
+        scene->addObject(so1);
+
+        std::shared_ptr<Rectangle> r2 = std::make_shared<Rectangle>(glm::vec3(-1.0f,-1.0f,0.0f), glm::vec3(0,2.00f,0), glm::vec3(0,0,1.00f));
+        std::shared_ptr<Lambertian> l2 = std::make_shared<Lambertian>(red);
+        std::shared_ptr<SceneObject> so2 = std::make_shared<SceneObject>(r2, l2, "Red Rectangle");
+        scene->addObject(so2);
+
+        std::shared_ptr<Rectangle> r3 = std::make_shared<Rectangle>(glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4));
+        std::shared_ptr<Light> l3 = std::make_shared<Light>(light);
+        std::shared_ptr<SceneObject> so3 = std::make_shared<SceneObject>(r3, l3, "Light");
+        scene->addObject(so3);
+
+        std::shared_ptr<Rectangle> r4 = std::make_shared<Rectangle>(glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(-2.00f,0,0),glm::vec3(0,0,1.00f));
+        std::shared_ptr<Lambertian> l4 = std::make_shared<Lambertian>(white);
+        std::shared_ptr<SceneObject> so4 = std::make_shared<SceneObject>(r4, l4, "White Rectangle 1");
+        scene->addObject(so4);
+
+        std::shared_ptr<Rectangle> r5 = std::make_shared<Rectangle>(glm::vec3(1.00f,1.00f,0.00f),glm::vec3(0,0,1.00f),glm::vec3(-2.00f,0,0));
+        std::shared_ptr<Lambertian> l5 = std::make_shared<Lambertian>(white);
+        std::shared_ptr<SceneObject> so5 = std::make_shared<SceneObject>(r5, l5, "White Rectangle 2");
+        scene->addObject(so5);
+
+        std::shared_ptr<Rectangle> r6 = std::make_shared<Rectangle>(glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0));
+        std::shared_ptr<Lambertian> l6 = std::make_shared<Lambertian>(blue);
+        std::shared_ptr<SceneObject> so6 = std::make_shared<SceneObject>(r6, l6, "Blue Rectangle");
+        scene->addObject(so6);
+
+//        std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(-25.0f,20.0f,50.0f),3);//1.9999
+//        std::shared_ptr<Lambertian> l7 = std::make_shared<Lambertian>(red);
+//        std::shared_ptr<SceneObject> so7 = std::make_shared<SceneObject>(sphere,l7);
+//        m_scene->addObject(so7);
+    }
+
     static void makeGuiForSceneObject(const std::shared_ptr<SceneObject>& sceneObject)
     {
         const std::string& name = sceneObject->getName();
@@ -43,53 +88,10 @@ namespace PathTracing
 
         m_image.reset(new Image32UI(Renderer::getViewportWidth(), Renderer::getViewportHeight()));
 
-        m_scene.reset(new Scene());
+        Camera camera = Camera(Renderer::getViewportWidth(), Renderer::getViewportHeight());
+        m_scene.reset(new Scene(camera));
 
-        Camera cam = Camera();
-        cam.resize(Renderer::getViewportWidth(), Renderer::getViewportHeight());
-        m_scene->setCamera(cam);
-
-        /***** CORNELL BOX ****/
-        glm::vec3 red = glm::vec3(.65,.05,.05);
-        glm::vec3 green = glm::vec3(.12,.45,.15);
-        glm::vec3 light = glm::vec3(1,1,1);
-        glm::vec3 white = glm::vec3(.73,.73,.73);
-        glm::vec3 blue = glm::vec3(.05,.05,.65);
-
-        std::shared_ptr<Rectangle> r1 = std::make_shared<Rectangle>(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0));
-        std::shared_ptr<Lambertian> l1 = std::make_shared<Lambertian>(green);
-        std::shared_ptr<SceneObject> so1 = std::make_shared<SceneObject>(r1, l1, "Green Rectangle");
-        m_scene->addObject(so1);
-
-        std::shared_ptr<Rectangle> r2 = std::make_shared<Rectangle>(glm::vec3(-1.0f,-1.0f,0.0f), glm::vec3(0,2.00f,0), glm::vec3(0,0,1.00f));
-        std::shared_ptr<Lambertian> l2 = std::make_shared<Lambertian>(red);
-        std::shared_ptr<SceneObject> so2 = std::make_shared<SceneObject>(r2, l2, "Red Rectangle");
-        m_scene->addObject(so2);
-
-        std::shared_ptr<Rectangle> r3 = std::make_shared<Rectangle>(glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4));
-        std::shared_ptr<Light> l3 = std::make_shared<Light>(light);
-        std::shared_ptr<SceneObject> so3 = std::make_shared<SceneObject>(r3, l3, "Light");
-        m_scene->addObject(so3);
-
-        std::shared_ptr<Rectangle> r4 = std::make_shared<Rectangle>(glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(-2.00f,0,0),glm::vec3(0,0,1.00f));
-        std::shared_ptr<Lambertian> l4 = std::make_shared<Lambertian>(white);
-        std::shared_ptr<SceneObject> so4 = std::make_shared<SceneObject>(r4, l4, "White Rectangle 1");
-        m_scene->addObject(so4);
-
-        std::shared_ptr<Rectangle> r5 = std::make_shared<Rectangle>(glm::vec3(1.00f,1.00f,0.00f),glm::vec3(0,0,1.00f),glm::vec3(-2.00f,0,0));
-        std::shared_ptr<Lambertian> l5 = std::make_shared<Lambertian>(white);
-        std::shared_ptr<SceneObject> so5 = std::make_shared<SceneObject>(r5, l5, "White Rectangle 2");
-        m_scene->addObject(so5);
-
-        std::shared_ptr<Rectangle> r6 = std::make_shared<Rectangle>(glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0));
-        std::shared_ptr<Lambertian> l6 = std::make_shared<Lambertian>(blue);
-        std::shared_ptr<SceneObject> so6 = std::make_shared<SceneObject>(r6, l6, "Blue Rectangle");
-        m_scene->addObject(so6);
-
-//        std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(-25.0f,20.0f,50.0f),3);//1.9999
-//        std::shared_ptr<Lambertian> l7 = std::make_shared<Lambertian>(red);
-//        std::shared_ptr<SceneObject> so7 = std::make_shared<SceneObject>(sphere,l7);
-//        m_scene->addObject(so7);
+        createCornellBoxScene(m_scene);
 	}
 
 	Editor::~Editor()
