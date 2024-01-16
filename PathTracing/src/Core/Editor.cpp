@@ -41,11 +41,11 @@ namespace PathTracing
         m_scene->setCamera(cam);
 
         /***** CORNELL BOX ****/
-        glm::vec3 red = glm::vec3(.65,.05,.05);
-        glm::vec3 green = glm::vec3(.12,.45,.15);
+        glm::vec3 red = glm::vec3(.85,.05,.05);
+        glm::vec3 green = glm::vec3(.12,.85,.15);
         glm::vec3 light = glm::vec3(1,1,1);
         glm::vec3 white = glm::vec3(.73,.73,.73);
-        glm::vec3 blue = glm::vec3(.05,.05,.65);
+        glm::vec3 blue = glm::vec3(.05,.05,.85);
 
         Rectangle* r1 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0));
         Lambertian* l1 = new Lambertian(green);
