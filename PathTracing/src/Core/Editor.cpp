@@ -18,6 +18,14 @@
 
 namespace PathTracing
 {
+    static void makeGuiForSceneObject(const SceneObject* sceneObject)
+    {
+        const std::string& name = sceneObject->getName();
+        glm::vec3& albedo = sceneObject->material->getAlbedo();
+        ImGui::Text(name.c_str());
+        ImGui::ColorPicker3(name.c_str(), glm::value_ptr(albedo));
+    }
+
 	Editor::Editor()
 	{
 		// has to be called first
@@ -38,34 +46,34 @@ namespace PathTracing
         glm::vec3 white = glm::vec3(.73,.73,.73);
         glm::vec3 blue = glm::vec3(.05,.05,.65);
 
-        Rectangle* r1 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(0,2,0),glm::vec3(0,0,1));
+        Rectangle* r1 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,2,0), glm::vec3(0,0,1));
         Lambertian* l1 = new Lambertian(green);
-        SceneObject* so1 = new SceneObject(r1,l1);
+        SceneObject* so1 = new SceneObject(r1, l1, "Green Rectangle");
         m_scene->addObject(so1);
 
-        Rectangle* r2 = new Rectangle(glm::vec3(-1.0f,-1.0f,0.0f),glm::vec3(0,2.00f,0),glm::vec3(0,0,1.00f));
+        Rectangle* r2 = new Rectangle(glm::vec3(-1.0f,-1.0f,0.0f), glm::vec3(0,2.00f,0), glm::vec3(0,0,1.00f));
         Lambertian* l2 = new Lambertian(red);
-        SceneObject* so2 = new SceneObject(r2,l2);
+        SceneObject* so2 = new SceneObject(r2, l2, "Red Rectangle");
         m_scene->addObject(so2);
 
         Rectangle* r3 = new Rectangle(glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4));
         Lambertian* l3 = new Lambertian(light);
-        SceneObject* so3 = new SceneObject(r3,l3);
+        SceneObject* so3 = new SceneObject(r3, l3, "Light");
         m_scene->addObject(so3);
 
         Rectangle* r4 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(-2.00f,0,0),glm::vec3(0,0,1.00f));
         Lambertian* l4 = new Lambertian(white);
-        SceneObject* so4 = new SceneObject(r4,l4);
+        SceneObject* so4 = new SceneObject(r4, l4, "White Rectangle 1");
         m_scene->addObject(so4);
 
         Rectangle* r5 = new Rectangle(glm::vec3(1.00f,1.00f,0.00f),glm::vec3(-2.00f,0,0),glm::vec3(0,0.00f,1.0f));
         Lambertian* l5 = new Lambertian(white);
-        SceneObject* so5 = new SceneObject(r5,l5);
+        SceneObject* so5 = new SceneObject(r5, l5, "White Rectangle 2");
         m_scene->addObject(so5);
 
         Rectangle* r6 = new Rectangle(glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0));
         Lambertian* l6 = new Lambertian(blue);
-        SceneObject* so6 = new SceneObject(r6,l6);
+        SceneObject* so6 = new SceneObject(r6, l6, "Blue Rectangle");
         m_scene->addObject(so6);
 
 //        Sphere* sphere = new Sphere(glm::vec3(-25.0f,20.0f,50.0f),3);//1.9999
@@ -115,12 +123,22 @@ namespace PathTracing
                 + std::to_string(Renderer::getViewportWidth()) + ", "
                 + std::to_string(Renderer::getViewportHeight()) + "]";
 
-        ImGui::Begin("Info : ");
+        ImGui::Begin("Info : ", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+        ImGui::SetWindowSize(ImVec2(200, 100));
+        ImGui::Text("Renderer info : ");
 		ImGui::Text(timeStat.c_str());
 		ImGui::Text(fpsStat.c_str());
         ImGui::Text("");
         ImGui::Text(infoDimension.c_str());
 		ImGui::End();
+
+        ImGui::Begin("Scene editor");
+        for(auto& sceneObject : *m_scene)
+        {
+            makeGuiForSceneObject(sceneObject);
+            ImGui::Separator();
+        }
+        ImGui::End();
 	}
 
 }

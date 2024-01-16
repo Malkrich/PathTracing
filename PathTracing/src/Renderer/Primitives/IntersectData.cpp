@@ -58,7 +58,7 @@ glm::vec3 IntersectData::getValue(Ray ray_out,Ray ray_in)
     float theta_in = acos(dot(normalize(normal),normalize(u_in)));
     float fr = material->brdf(position,theta_out,theta_in,lambda);
 
-    glm::vec3 color = material->get_albedo(position,theta_out,theta_in,lambda);
+    const glm::vec3& color = material->getAlbedo(position,theta_out,theta_in,lambda);
 
     res = color*attenuation*fr*L_in/p_value;
 

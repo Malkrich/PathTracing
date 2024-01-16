@@ -139,10 +139,9 @@ glm::vec3 Renderer::getValue(Ray const& r, const Scene& scene)
 
     bool is_intersected = compute_intersection(r, scene, intersection,intersected_primitive);
 
-    if (is_intersected)
+    if(is_intersected)
     {
-
-        if (intersection.material->CanEmit())
+/*        if (intersection.material->CanEmit())
         {
             std::cout<<"Light"<<std::endl;
             return intersection.material->emitted();
@@ -155,10 +154,9 @@ glm::vec3 Renderer::getValue(Ray const& r, const Scene& scene)
         else
         {
             return glm::vec3(0,0,0);
-        }
-        //return intersection.material->get_albedo();
+        }*/
+        return intersection.material->getAlbedo();
     }
-
     return glm::vec3(0,0,0);
 }
 

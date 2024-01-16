@@ -17,9 +17,9 @@ public:
 
     //virtual bool intersect(Ray const& ray);
     virtual bool intersect(Ray const& ray_param,IntersectData& intersection) const = 0;
-
-
-
+    virtual const glm::vec3& getPosition() const = 0;
+    virtual glm::vec3& getPosition() = 0;
+    virtual void rotate(const glm::quat& rotation) = 0;
 };
 
 }

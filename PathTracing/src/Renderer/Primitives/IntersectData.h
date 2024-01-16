@@ -9,6 +9,7 @@
 
 namespace PathTracing
 {
+
 struct IntersectData
 {
     IntersectData();
@@ -43,7 +44,8 @@ struct IntersectData
     Material* material;
 };
 
-std::ostream& operator<<(std::ostream& stream,IntersectData const& intersection);
+//std::ostream& operator<<(std::ostream& stream,IntersectData const& intersection);
+
 }
 
 #endif // INTERSECTDATA_H

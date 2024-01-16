@@ -5,26 +5,24 @@
 
 namespace PathTracing
 {
+
 class Plane : public Primitive
 {
-
 public:
-    Plane(glm::vec3 const& position_param,glm::vec3 const& normal_param);
+    Plane(glm::vec3 const& position, glm::vec3 const& normal);
 
-    /*Return Point of the plane*/
-    glm::vec3 const& position() const;
     /*Return normal of the plane*/
-    glm::vec3 const& normal() const;
+    glm::vec3 const& getNormal() const { return m_normal; }
 
-    bool intersect(Ray const& ray_param,IntersectData& intersection) const override;
-
+    virtual bool intersect(Ray const& ray_param, IntersectData& intersection) const override;
+    virtual glm::vec3& getPosition() override { return m_position; }
+    virtual const glm::vec3& getPosition() const override { return m_position; }
+    virtual void rotate(const glm::quat& roatation);
 
 private:
-    glm::vec3 position_data;
-    glm::vec3 normal_data;
-
+    glm::vec3 m_position;
+    glm::vec3 m_normal;
 };
-
 
 }
 
