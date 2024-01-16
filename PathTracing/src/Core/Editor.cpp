@@ -14,6 +14,7 @@
 #include "Renderer/Primitives/Rectangle.h"
 #include "Renderer/Primitives/Sphere.h"
 #include "Renderer/PathTracing/Materials/Lambertian.h"
+#include "Renderer/PathTracing/Materials/Light.h"
 #include "Renderer/Camera.h"
 
 namespace PathTracing
@@ -46,7 +47,7 @@ namespace PathTracing
         glm::vec3 white = glm::vec3(.73,.73,.73);
         glm::vec3 blue = glm::vec3(.05,.05,.65);
 
-        Rectangle* r1 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,2,0), glm::vec3(0,0,1));
+        Rectangle* r1 = new Rectangle(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0));
         Lambertian* l1 = new Lambertian(green);
         SceneObject* so1 = new SceneObject(r1, l1, "Green Rectangle");
         m_scene->addObject(so1);
@@ -57,7 +58,7 @@ namespace PathTracing
         m_scene->addObject(so2);
 
         Rectangle* r3 = new Rectangle(glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4));
-        Lambertian* l3 = new Lambertian(light);
+        Light* l3 = new Light(light);
         SceneObject* so3 = new SceneObject(r3, l3, "Light");
         m_scene->addObject(so3);
 
@@ -66,7 +67,7 @@ namespace PathTracing
         SceneObject* so4 = new SceneObject(r4, l4, "White Rectangle 1");
         m_scene->addObject(so4);
 
-        Rectangle* r5 = new Rectangle(glm::vec3(1.00f,1.00f,0.00f),glm::vec3(-2.00f,0,0),glm::vec3(0,0.00f,1.0f));
+        Rectangle* r5 = new Rectangle(glm::vec3(1.00f,1.00f,0.00f),glm::vec3(0,0,1.00f),glm::vec3(-2.00f,0,0));
         Lambertian* l5 = new Lambertian(white);
         SceneObject* so5 = new SceneObject(r5, l5, "White Rectangle 2");
         m_scene->addObject(so5);
