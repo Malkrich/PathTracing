@@ -55,7 +55,7 @@ void Application::onEvent(Event& e)
     m_editor->onEvent(e);
 }
 
-bool Application::onWindowClose(const WindowCloseEvent& e)
+bool Application::onWindowClose(const WindowCloseEvent&)
 {
     m_running = false;
     return true;

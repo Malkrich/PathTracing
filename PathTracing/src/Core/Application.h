@@ -28,7 +28,7 @@ private:
 
     void onEvent(Event& e);
 
-    bool onWindowClose(const WindowCloseEvent& e);
+    bool onWindowClose(const WindowCloseEvent&);
 
 private:
     bool m_running = true;
