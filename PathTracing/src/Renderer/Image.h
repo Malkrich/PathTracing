@@ -18,6 +18,8 @@ public:
     unsigned int getWidth() const { return m_width; }
     unsigned int getHeight() const { return m_height; }
 
+    glm::vec3 getPixel(unsigned int x, unsigned int y) const;
+
     void setData(unsigned int x, unsigned int y, float r, float g, float b);
     void setData(unsigned int x, unsigned int y, const glm::vec3& color);
     void setData(unsigned int x, unsigned int y, const glm::vec4& color);

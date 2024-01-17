@@ -17,6 +17,22 @@ Image::~Image()
     delete[] m_data;
 }
 
+glm::vec3 Image::getPixel(unsigned int x, unsigned int y) const
+{
+    uint32_t uPixelValue = m_data[y * m_width + x];
+
+    const uint32_t maskR = 0xff000000;
+    const uint32_t maskG = 0x00ff0000;
+    const uint32_t maskB = 0x0000ff00;
+
+    glm::vec3 pixelValue;
+    pixelValue.r = ((maskR & uPixelValue) >> 24) / 255.0f;
+    pixelValue.g = ((maskG & uPixelValue) >> 16) / 255.0f;
+    pixelValue.b = ((maskB & uPixelValue) >> 8 ) / 255.0f;
+
+    return pixelValue;
+}
+
 void Image::setData(unsigned int x, unsigned int y, const glm::vec3& color)
 {
     setData(x, y, color.r, color.g, color.b);
