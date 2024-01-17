@@ -19,6 +19,7 @@
 
 namespace PathTracing
 {
+
     void createCornellBoxScene(std::shared_ptr<Scene> scene)
     {
         /***** CORNELL BOX ****/
@@ -69,23 +70,6 @@ namespace PathTracing
         scene->setRenderSettingds(renderSettings);
     }
 
-    static void makeGuiForSceneObject(const std::shared_ptr<SceneObject>& sceneObject)
-    {
-        const std::string& name = sceneObject->getName();
-        std::string positionName = "##" + name;
-        glm::vec3& albedo = sceneObject->material->getAlbedo();
-        glm::vec3& position = sceneObject->primitive->getPosition();
-        ImGui::Text("%s", name.c_str());
-
-        // Color
-        ImGui::Text("Color : ");
-        ImGui::SameLine();
-        ImGui::ColorEdit3(name.c_str(), glm::value_ptr(albedo), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-
-        // Position
-        ImGui::SliderFloat3(positionName.c_str(), glm::value_ptr(position), -2.0f, 2.0f, "%.3f");
-    }
-
 	Editor::Editor()
 	{
 		// has to be called first
@@ -128,11 +112,30 @@ namespace PathTracing
 		return true;
 	}
 
+    void Editor::makeGuiForSceneObject(const std::shared_ptr<SceneObject>& sceneObject)
+    {
+        const std::string& name = sceneObject->getName();
+        std::string positionName = "##" + name;
+        glm::vec3& albedo = sceneObject->material->getAlbedo();
+        glm::vec3& position = sceneObject->primitive->getPosition();
+        ImGui::Text("%s", name.c_str());
+
+        // Color
+        ImGui::Text("Color : ");
+        ImGui::SameLine(m_guiLayoutSettings.m_editorSpace);
+        ImGui::ColorEdit3(name.c_str(), glm::value_ptr(albedo), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+
+        // Position
+        ImGui::Text("Position : ");
+        ImGui::SameLine(m_guiLayoutSettings.m_editorSpace);
+        ImGui::SliderFloat3(positionName.c_str(), glm::value_ptr(position), -2.0f, 2.0f, "%.3f");
+    }
+
 	void Editor::onGuiRender()
 	{
         ImGui::Begin("Info : ", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-        ImGui::SetWindowSize(ImVec2(250, 100));
-        ImGui::Text("Renderer info : ");
+        ImGui::SetWindowSize(ImVec2(250, 110));
+        ImGui::SeparatorText("Renderer info :");
         ImGui::Text("Delta time : %f ms", m_deltaTime * 1000.0f);
         ImGui::Text("Fps : %f", 1 / m_deltaTime);
         ImGui::Text("");
@@ -147,8 +150,13 @@ namespace PathTracing
             makeGuiForSceneObject(sceneObject);
             ImGui::Separator();
         }
-        ImGui::SeparatorText("Render Settings");
-        // TODO : edit render settings
+        ImGui::SeparatorText("Render Settings :");
+        ImGui::Text("Sample Per Pixel");
+        ImGui::SameLine(m_guiLayoutSettings.m_editorSpace);
+        ImGui::InputInt("##SamplePerPixel", (int*)(&m_scene->getRenderSettings().samplePerPixel));
+        ImGui::Text("Max Depth");
+        ImGui::SameLine(m_guiLayoutSettings.m_editorSpace);
+        ImGui::InputInt("##MaxDepth", (int*)(&m_scene->getRenderSettings().maxDepth));
         ImGui::End();
 	}
 
