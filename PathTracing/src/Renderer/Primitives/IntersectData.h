@@ -48,7 +48,6 @@ struct IntersectData
     std::shared_ptr<Material> material;
 };
 
-//std::ostream& operator<<(std::ostream& stream,IntersectData const& intersection);
 
 }
 

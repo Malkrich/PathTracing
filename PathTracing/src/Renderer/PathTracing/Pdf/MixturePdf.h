@@ -19,7 +19,7 @@ class MixturePdf : public Pdf {
     }
 
     glm::vec3 generate() const override {
-        if (random_double() < 0.5)
+        if (Utils::random_double() < 0.5)
             return pdf1->generate();
         else
             return pdf2->generate();

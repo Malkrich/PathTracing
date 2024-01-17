@@ -24,11 +24,11 @@ namespace PathTracing
     void createCornellBoxScene(std::shared_ptr<Scene> scene)
     {
         /***** CORNELL BOX ****/
-        glm::vec3 red = glm::vec3(.65,.05,.05);
-        glm::vec3 green = glm::vec3(.12,.45,.15);
+        glm::vec3 red = glm::vec3(1,.05,.05);
+        glm::vec3 green = glm::vec3(.12,1,.15);
         glm::vec3 light = glm::vec3(1,1,1);
         glm::vec3 white = glm::vec3(.73,.73,.73);
-        glm::vec3 blue = glm::vec3(.05,.05,.65);
+        glm::vec3 blue = glm::vec3(.05,.05,1);
 
         std::shared_ptr<Rectangle> r1 = std::make_shared<Rectangle>(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0));
         std::shared_ptr<Lambertian> l1 = std::make_shared<Lambertian>(green);
@@ -66,8 +66,8 @@ namespace PathTracing
 //        m_scene->addObject(so7);
 
         RenderSettings renderSettings;
-        renderSettings.samplePerPixel = 2;
-        renderSettings.maxDepth = 5;
+        renderSettings.samplePerPixel = 1;
+        renderSettings.maxDepth = 2;
         scene->setRenderSettingds(renderSettings);
     }
 

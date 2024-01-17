@@ -41,7 +41,9 @@ void IntersectData::setPdf(std::shared_ptr<Pdf> pdf_param)
 Ray IntersectData::create_ray(int depth)
 {
     glm::vec3 p0 = position;
+    //std::cout<<"position : "<<position.x<<"  "<<position.y<<"  "<<position.z<<std::endl;
     glm::vec3 u = pdf->generate();
+    //std::cout<<"u : "<<u.x<<"  "<<u.y<<"  "<<u.z<<std::endl;
     Ray ray = Ray(p0,u,depth+1);
     return ray;
 }
@@ -67,10 +69,13 @@ glm::vec3 IntersectData::getValue(Ray ray_out,Ray ray_in)
 
     //res = color*attenuation*fr*L_in/p_value; //Originel
     //res = attenuation*fr*L_in/p_value; // Originel sans color
-    glm::vec3 res = color*attenuation*fr/p_value;
+    //glm::vec3 res = color*attenuation*fr/p_value;
+    glm::vec3 res = color*attenuation*fr;
 
-    //std::cout<<fr*attenuation/p_value<<std::endl;
-    //std::cout<<res.x<<"  "<<res.y<<"  "<<res.z<<std::endl;
+    //std::cout<<"attenuation : "<<attenuation<<std::endl;
+    //std::cout<<"fr : "<<fr<<std::endl;
+    //std::cout<<"p_value : "<<p_value<<std::endl;
+    //std::cout<<"Multiplication"<<p_value*res.x<<"  "<<p_value*res.y<<"  "<<p_value*res.z<<std::endl;
     //std::cout<<L_in.x<<"  "<<L_in.y<<"  "<<L_in.z<<std::endl;
 
 

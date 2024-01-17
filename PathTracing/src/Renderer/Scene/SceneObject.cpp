@@ -26,6 +26,7 @@ double SceneObject::pdf_value(const glm::vec3 &o, const glm::vec3 &v) const
 
 glm::vec3 SceneObject::random(const glm::vec3 &o) const
 {
+    //std::cout<<"Name SceneObject"<<name<<std::endl;
     return primitive->random(o);
 }
 

@@ -1,6 +1,7 @@
 #include "PathTracer.h"
 
 #include "Renderer/PathTracing/Pdf/CosinePdf.h"
+#include "Renderer/PathTracing/Pdf/HittablePdf.h"
 
 namespace PathTracing
 {
@@ -30,7 +31,7 @@ void PathTracer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> 
 
             float N = s_accumalationCount * scene->getRenderSettings().samplePerPixel;
 
-            glm::vec3 color_average = (N*current_color+current_color)/(N+2.0f);
+            glm::vec3 color_average = (N*image->getPixel(x,y)+current_color)/(N+scene->getRenderSettings().samplePerPixel);
 
             image->setData(x, y, color_average);
         }
@@ -79,7 +80,12 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         std::shared_ptr<Primitive> primitive = scene.getPrimitive(index_intersected_primitive);
         primitive->intersect(r, intersection);
         glm::vec3 n = intersection.normal;
-        std::shared_ptr<Pdf> pdf = std::make_shared<CosinePdf>(n);
+
+        //std::shared_ptr<Pdf> pdf = std::make_shared<CosinePdf>(n);
+        //std::shared_ptr<Pdf> pdf = std::make_shared<HittablePdf>(*obj,intersection.position);
+        std::shared_ptr<SceneObject> light = scene.getSceneObject(2);
+        std::shared_ptr<Pdf> pdf = std::make_shared<HittablePdf>(*light,intersection.position);
+
         intersection.setPdf(pdf);
         intersection.setMaterial(obj->material);
     }
@@ -104,7 +110,9 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
         {
             Ray new_r = intersection.create_ray(r.depth());
             glm::vec3 L_in = getValue(new_r,scene);
+            //std::cout<<"L_in : "<<L_in.x<<"  "<<L_in.y<<"  "<<L_in.z<<std::endl;
             glm::vec3 value = intersection.getValue(r,new_r);
+            //std::cout<<value.x<<"   "<<value.y<<"   "<<value.z<<std::endl;
             return value*L_in;
         }
         else
