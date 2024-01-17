@@ -1,4 +1,8 @@
 #include "Rectangle.h"
+#include "Utils/RandomUtils.h"
+
+
+#include "Renderer/PathTracing/Ray.h"
 
 #include <cmath>
 
@@ -11,6 +15,7 @@ Rectangle::Rectangle(const glm::vec3& p, const glm::vec3& v1, const glm::vec3& v
     , m_v2(v2)
 {
     m_normal = glm::normalize(glm::cross(v1, v2));
+    m_area = glm::length(m_v1)*glm::length(m_v2);
 }
 
 void Rectangle::rotate(const glm::quat& rotation)
@@ -49,4 +54,27 @@ bool Rectangle::intersect(const Ray& ray_param, IntersectData& intersection) con
 
 }
 
+double Rectangle::pdf_value(const glm::vec3 &o, const glm::vec3 &v) const
+{
+    Ray ray = Ray(o, v);
+    IntersectData intersection;
+    bool is_intersected = intersect(ray,intersection);
+    if (is_intersected)
+    {
+        auto distance_squared = intersection.relative * intersection.relative; // * v.length_squared();
+        auto cosine = fabs(dot(v, intersection.normal) / v.length());
+        return distance_squared / (cosine * m_area);
+    } else
+    {
+        return 0;
+    }
 }
+
+glm::vec3 Rectangle::random(const glm::vec3 &o) const
+{
+    glm::vec3 p = m_p + (static_cast<float>(Utils::random_double()) * m_v1) + (static_cast<float>(Utils::random_double()) * m_v2);
+    return p-o;
+}
+
+}
+

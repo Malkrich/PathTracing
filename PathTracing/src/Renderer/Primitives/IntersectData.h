@@ -32,8 +32,8 @@ struct IntersectData
     void setMaterial(std::shared_ptr<Material> material);
 
     Ray create_ray(int depth);
-    float getValue(Ray outray, Ray inray);
-    //glm::vec3 getValue(Ray outray, Ray inray);
+    //float getValue(Ray outray, Ray inray);
+    glm::vec3 getValue(Ray outray, Ray inray);
 
 
     /** 3D position of the intersection */
