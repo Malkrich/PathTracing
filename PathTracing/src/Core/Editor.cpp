@@ -62,6 +62,11 @@ namespace PathTracing
 //        std::shared_ptr<Lambertian> l7 = std::make_shared<Lambertian>(red);
 //        std::shared_ptr<SceneObject> so7 = std::make_shared<SceneObject>(sphere,l7);
 //        m_scene->addObject(so7);
+
+        RenderSettings renderSettings;
+        renderSettings.samplePerPixel = 2;
+        renderSettings.maxDepth = 5;
+        scene->setRenderSettingds(renderSettings);
     }
 
     static void makeGuiForSceneObject(const std::shared_ptr<SceneObject>& sceneObject)
@@ -135,12 +140,15 @@ namespace PathTracing
                     Renderer::getViewportWidth(), Renderer::getViewportHeight());
 		ImGui::End();
 
-        ImGui::Begin("Scene editor");
+        ImGui::Begin("Scene");
+        ImGui::SeparatorText("Scene Hierarchy :");
         for(auto& sceneObject : *m_scene)
         {
             makeGuiForSceneObject(sceneObject);
             ImGui::Separator();
         }
+        ImGui::SeparatorText("Render Settings");
+        // TODO : edit render settings
         ImGui::End();
 	}
 

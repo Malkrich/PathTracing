@@ -20,9 +20,6 @@
 namespace PathTracing
 {
 
-int N_sample_per_pixel = 2;
-int max_depth = 5;
-
 static Screen* s_screen;
 
 void Renderer::init()
@@ -56,7 +53,7 @@ void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> sc
 
             glm::vec3 color_average{0.0,0.0,0.0};
 
-            for (int i =0 ;i < N_sample_per_pixel;i++ )
+            for (unsigned int i = 0; i < scene->getRenderSettings().samplePerPixel; i++ )
             {
                 Ray ray = ray_generator(scene->getCamera(), u, v);
 
@@ -65,7 +62,7 @@ void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> sc
                 color_average = color_average + color;
             }
 
-            color_average = static_cast<float>((1.0f / N_sample_per_pixel)) * color_average;
+            color_average = static_cast<float>((1.0f / scene->getRenderSettings().samplePerPixel)) * color_average;
 
             image->setData(x, y, color_average);
         }
@@ -144,7 +141,7 @@ glm::vec3 Renderer::getValue(const Ray& r, const Scene& scene)
         {
             return intersection.material->emitted();
         }
-        else if (r.depth()+1 < max_depth)
+        else if (r.depth() + 1 < scene.getRenderSettings().maxDepth)
         {
             Ray new_r = intersection.create_ray(r.depth());
             glm::vec3 L_in = getValue(new_r,scene);

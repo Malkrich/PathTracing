@@ -9,6 +9,24 @@
 
 namespace PathTracing
 {
+
+struct RenderSettings
+{
+public:
+    RenderSettings()
+        : RenderSettings(1, 1)
+    {}
+
+    RenderSettings(unsigned int samplePerPixelParam, unsigned int maxDepthParam)
+        : samplePerPixel(samplePerPixelParam)
+        , maxDepth(maxDepthParam)
+    {}
+
+public:
+    unsigned int samplePerPixel;
+    unsigned int maxDepth;
+};
+
 class Scene
 {
 public:
@@ -22,9 +40,11 @@ public:
     std::shared_ptr<SceneObject> getSceneObject(int index) const { return m_objectList[index]; }
     std::shared_ptr<Primitive> getPrimitive(int index) const { return getSceneObject(index)->primitive; };
     std::shared_ptr<Material> getMaterial(int index) const { return getSceneObject(index)->material; }
+    const RenderSettings& getRenderSettings() const { return m_renderSettings; }
 
     void addObject(std::shared_ptr<SceneObject> object);
     void setCamera(const Camera& camera) { m_camera = camera; }
+    void setRenderSettingds(const RenderSettings& renderSettings) { m_renderSettings = renderSettings; }
 
     std::vector<std::shared_ptr<SceneObject>>::iterator begin() { return m_objectList.begin(); }
     std::vector<std::shared_ptr<SceneObject>>::iterator end() { return m_objectList.end(); }
@@ -38,7 +58,9 @@ public:
 private:
     std::vector<std::shared_ptr<SceneObject>> m_objectList;
     Camera m_camera;
+    RenderSettings m_renderSettings;
 };
+
 }
 
 #endif // SCENE_H
