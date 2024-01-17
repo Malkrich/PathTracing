@@ -4,33 +4,6 @@
 
 #include "GraphicCore.h"
 
-namespace Utils
-{
-    using PathTracing::ImageType;
-
-    static GLenum getTextureInternalFormat(ImageType type)
-    {
-        switch (type)
-        {
-            case ImageType::Image32F:   return GL_RGB32F;
-            case ImageType::Image32UI:  return GL_RGBA;
-        }
-
-        return 0;
-    }
-
-    static GLenum getTextureType(ImageType type)
-    {
-        switch (type)
-        {
-            case ImageType::Image32F:   return GL_FLOAT;
-            case ImageType::Image32UI:  return GL_UNSIGNED_INT_8_8_8_8;
-        }
-
-        return 0;
-    }
-}
-
 namespace PathTracing
 {
 
@@ -44,12 +17,9 @@ Texture::Texture()
 
 void Texture::setData(const std::shared_ptr<Image>& image)
 {
-    GLenum internalFormat = Utils::getTextureInternalFormat(image->getType());
-    GLenum type = Utils::getTextureType(image->getType());
-
-    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                  image->getWidth(), image->getHeight(),
-                 0, GL_RGBA, type,
+                 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8,
                  image->getData());                     CHECK_GL_ERROR();
 }
 

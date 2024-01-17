@@ -64,8 +64,6 @@ source_group("sources"  FILES ${SOURCE_FILES})
 source_group("lib"      FILES ${LIB_FILES})
 source_group("shaders"  FILES ${SHADER_FILES})
 
-
-
 add_definitions(-DGLFW_INCLUDE_NONE)
 
 find_package(OpenMP)
@@ -77,18 +75,8 @@ add_executable(
     ${LIB_FILES}
 )
 
-
-
-
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX glfw
-        OpenGL::GL)
-else()
 target_link_libraries(
     ${PROJECT_NAME}
     glfw
     OpenGL::GL
 )
-endif()
-
-
