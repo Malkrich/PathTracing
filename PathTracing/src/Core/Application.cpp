@@ -66,8 +66,8 @@ void Application::initialize(const std::string& appName)
     // Window handler
     Window::WindowSpec windowSpec;
     windowSpec.name     = appName;
-    windowSpec.Width    = 1280;
-    windowSpec.Height   = 720;
+    windowSpec.Width    = 400;
+    windowSpec.Height   = 400;
     m_window.reset(new Window(windowSpec));
 
     // Renderer
