@@ -75,7 +75,7 @@ namespace PathTracing
 		// has to be called first
 		Renderer::init();
 
-        m_image.reset(new Image32UI(Renderer::getViewportWidth(), Renderer::getViewportHeight()));
+        m_image.reset(new Image(Renderer::getViewportWidth(), Renderer::getViewportHeight()));
 
         Camera camera = Camera(Renderer::getViewportWidth(), Renderer::getViewportHeight());
         m_scene.reset(new Scene(camera));
