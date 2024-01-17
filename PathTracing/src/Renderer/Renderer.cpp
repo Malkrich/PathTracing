@@ -43,7 +43,6 @@ void Renderer::begin(const glm::vec3& clearColor)
 
 void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> scene)
 {
-    #pragma omp parallel for shared(image)
     for(unsigned int y = 0; y < image->getHeight(); y++)
     {
         float const v = static_cast<float>(y)/(image->getHeight()-1);
