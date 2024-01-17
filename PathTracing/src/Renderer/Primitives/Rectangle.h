@@ -35,7 +35,6 @@ private:
     glm::vec3 m_v2;
     glm::vec3 m_normal;
     double m_area;
-
 };
 
 }
