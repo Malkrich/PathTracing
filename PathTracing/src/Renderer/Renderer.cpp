@@ -20,8 +20,8 @@
 namespace PathTracing
 {
 
-int N_sample_per_pixel = 1;
-int max_depth = 3;
+int N_sample_per_pixel = 2;
+int max_depth = 5;
 
 static Screen* s_screen;
 
@@ -54,17 +54,20 @@ void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> sc
         {
             float const u = static_cast<float>(x)/(image->getWidth()-1);
 
-//            IntersectData intersection; //current intersection
-//            int intersected_primitive = 0;  //current index of intersected primitive
+            glm::vec3 color_average{0.0,0.0,0.0};
 
-            Ray ray = ray_generator(scene->getCamera(), u, v);
+            for (int i =0 ;i < N_sample_per_pixel;i++ )
+            {
+                Ray ray = ray_generator(scene->getCamera(), u, v);
 
-            glm::vec3 color = getValue(ray, *scene);
-//             glm::vec3 color = glm::vec3(std::fabs(ray.u().x));
+                glm::vec3 color = getValue(ray, *scene);
 
-//            bool is_intersected = compute_intersection(ray,empty_cornel_box,intersection,intersected_primitive);
+                color_average = color_average + color;
+            }
 
-            image->setData(x, y, color);
+            color_average = static_cast<float>((1.0f / N_sample_per_pixel)) * color_average;
+
+            image->setData(x, y, color_average);
         }
     }
 }
@@ -145,7 +148,7 @@ glm::vec3 Renderer::getValue(const Ray& r, const Scene& scene)
         {
             Ray new_r = intersection.create_ray(r.depth());
             glm::vec3 L_in = getValue(new_r,scene);
-            float value = intersection.getValue(r,new_r);
+            glm::vec3 value = intersection.getValue(r,new_r);
             return value*L_in;
         }
         else

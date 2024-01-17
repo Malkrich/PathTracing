@@ -19,8 +19,8 @@ public:
     }
 
     glm::vec3 generate() const override {
-        auto r1 = random_double();
-        auto r2 = random_double();
+        auto r1 = Utils::random_double();
+        auto r2 = Utils::random_double();
 
         auto phi = 2*M_PI*r1;
         auto x = cos(phi)*sqrt(r2);

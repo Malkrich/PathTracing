@@ -26,11 +26,15 @@ public:
     virtual const glm::vec3& getPosition() const override { return m_p; }
     virtual void rotate(const glm::quat& rotation) override;
 
+    double pdf_value(const glm::vec3& o, const glm::vec3& v) const override;
+    glm::vec3 random(const glm::vec3& o) const override;
+
 private:
     glm::vec3 m_p;
     glm::vec3 m_v1;
     glm::vec3 m_v2;
     glm::vec3 m_normal;
+    double m_area;
 
 };
 
