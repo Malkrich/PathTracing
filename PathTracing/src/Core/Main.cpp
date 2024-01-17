@@ -26,7 +26,7 @@ int main()
     std::shared_ptr<PathTracing::Scene> scene = std::make_shared<PathTracing::Scene>(camera);
     PathTracing::createCornellBoxScene(scene);
 
-    std::shared_ptr<PathTracing::Image> image = std::make_shared<PathTracing::Image32UI>(width, height);
+    std::shared_ptr<PathTracing::Image> image = std::make_shared<PathTracing::Image>(width, height);
 
     PathTracing::Renderer::pathTrace(image, scene);
 #endif
