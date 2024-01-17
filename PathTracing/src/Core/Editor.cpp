@@ -10,6 +10,7 @@
 #include "Base.h"
 #include "Application.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/PathTracing/PathTracer.h"
 #include "Renderer/Primitives/Plane.h"
 #include "Renderer/Primitives/Rectangle.h"
 #include "Renderer/Primitives/Sphere.h"
@@ -93,7 +94,7 @@ namespace PathTracing
 		m_deltaTime = dt;
 		// Renderer render
 		Renderer::begin(m_clearColor);
-        Renderer::pathTrace(m_image, m_scene);
+        PathTracer::pathTrace(m_image, m_scene);
 		Renderer::draw(m_image);
 	}
 
