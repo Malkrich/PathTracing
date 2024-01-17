@@ -20,7 +20,8 @@
 namespace PathTracing
 {
 
-static Screen* s_screen;
+static Screen* s_screen = nullptr;
+static unsigned int s_accumalationCount = 0;
 
 void Renderer::init()
 {
@@ -51,7 +52,7 @@ void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> sc
         {
             float const u = static_cast<float>(x)/(image->getWidth()-1);
 
-            glm::vec3 color_average{0.0,0.0,0.0};
+            glm::vec3 current_color{0.0,0.0,0.0};
 
             for (unsigned int i = 0; i < scene->getRenderSettings().samplePerPixel; i++ )
             {
@@ -59,14 +60,19 @@ void Renderer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> sc
 
                 glm::vec3 color = getValue(ray, *scene);
 
-                color_average = color_average + color;
+                current_color = current_color + color;
             }
 
-            color_average = static_cast<float>((1.0f / scene->getRenderSettings().samplePerPixel)) * color_average;
+            //current_color = static_cast<float>((1.0f / scene->getRenderSettings().samplePerPixel)) * current_color;
+
+            float N = s_accumalationCount*scene->getRenderSettings().samplePerPixel;
+
+            glm::vec3 color_average = (N*current_color+current_color)/(N+2.0f);
 
             image->setData(x, y, color_average);
         }
     }
+    s_accumalationCount++;
 }
 
 void Renderer::draw(const std::shared_ptr<Image>& image)
