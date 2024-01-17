@@ -21,7 +21,7 @@
 namespace PathTracing
 {
 
-    void createCornellBoxScene(std::shared_ptr<Scene> scene)
+    void createCornellBoxScene(std::shared_ptr<SceneData> scene)
     {
         /***** CORNELL BOX ****/
         glm::vec3 red = glm::vec3(.65,.05,.05);
@@ -30,72 +30,45 @@ namespace PathTracing
         glm::vec3 white = glm::vec3(.73,.73,.73);
         glm::vec3 blue = glm::vec3(.05,.05,.65);
 
-        std::shared_ptr<Rectangle> r1 = std::make_shared<Rectangle>(glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0));
-        std::shared_ptr<Lambertian> l1 = std::make_shared<Lambertian>(green);
-        std::shared_ptr<SceneObject> so1 = std::make_shared<SceneObject>(r1, l1, "Green Rectangle");
-        scene->addObject(so1);
+        scene->addRectangle("Green Rectangle",
+                            glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0),
+                            SceneObjectMaterial::lambertien, green);
+        scene->addRectangle("Red Rectangle",
+                            glm::vec3(-1.0f,-1.0f,0.0f), glm::vec3(0,2.00f,0), glm::vec3(0,0,1.00f),
+                            SceneObjectMaterial::lambertien, red);
+        scene->addRectangle("Light",
+                            glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4),
+                            SceneObjectMaterial::light, light);
+        scene->addRectangle("White Rectangle 1",
+                            glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(-2.00f,0,0),glm::vec3(0,0,1.00f),
+                            SceneObjectMaterial::lambertien, white);
+        scene->addRectangle("White Rectangle 2",
+                            glm::vec3(1.00f,1.00f,0.00f),glm::vec3(0,0,1.00f),glm::vec3(-2.00f,0,0),
+                            SceneObjectMaterial::lambertien, white);
+        scene->addRectangle("Blue Rectangle",
+                            glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0),
+                            SceneObjectMaterial::lambertien, blue);
 
-        std::shared_ptr<Rectangle> r2 = std::make_shared<Rectangle>(glm::vec3(-1.0f,-1.0f,0.0f), glm::vec3(0,2.00f,0), glm::vec3(0,0,1.00f));
-        std::shared_ptr<Lambertian> l2 = std::make_shared<Lambertian>(red);
-        std::shared_ptr<SceneObject> so2 = std::make_shared<SceneObject>(r2, l2, "Red Rectangle");
-        scene->addObject(so2);
-
-        std::shared_ptr<Rectangle> r3 = std::make_shared<Rectangle>(glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4));
-        std::shared_ptr<Light> l3 = std::make_shared<Light>(light);
-        std::shared_ptr<SceneObject> so3 = std::make_shared<SceneObject>(r3, l3, "Light");
-        scene->addObject(so3);
-
-        std::shared_ptr<Rectangle> r4 = std::make_shared<Rectangle>(glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(-2.00f,0,0),glm::vec3(0,0,1.00f));
-        std::shared_ptr<Lambertian> l4 = std::make_shared<Lambertian>(white);
-        std::shared_ptr<SceneObject> so4 = std::make_shared<SceneObject>(r4, l4, "White Rectangle 1");
-        scene->addObject(so4);
-
-        std::shared_ptr<Rectangle> r5 = std::make_shared<Rectangle>(glm::vec3(1.00f,1.00f,0.00f),glm::vec3(0,0,1.00f),glm::vec3(-2.00f,0,0));
-        std::shared_ptr<Lambertian> l5 = std::make_shared<Lambertian>(white);
-        std::shared_ptr<SceneObject> so5 = std::make_shared<SceneObject>(r5, l5, "White Rectangle 2");
-        scene->addObject(so5);
-
-        std::shared_ptr<Rectangle> r6 = std::make_shared<Rectangle>(glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0));
-        std::shared_ptr<Lambertian> l6 = std::make_shared<Lambertian>(blue);
-        std::shared_ptr<SceneObject> so6 = std::make_shared<SceneObject>(r6, l6, "Blue Rectangle");
-        scene->addObject(so6);
+        RenderSettings renderSettings;
+        renderSettings.samplePerPixel = 2;
+        renderSettings.maxDepth = 5;
+        scene->setRenderSettings(renderSettings);
 
 //        std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(-25.0f,20.0f,50.0f),3);//1.9999
 //        std::shared_ptr<Lambertian> l7 = std::make_shared<Lambertian>(red);
 //        std::shared_ptr<SceneObject> so7 = std::make_shared<SceneObject>(sphere,l7);
 //        m_scene->addObject(so7);
-
-        RenderSettings renderSettings;
-        renderSettings.samplePerPixel = 2;
-        renderSettings.maxDepth = 5;
-        scene->setRenderSettingds(renderSettings);
     }
 
 	Editor::Editor()
 	{
-		// has to be called first
-		Renderer::init();
-
-        m_image.reset(new Image(Renderer::getViewportWidth(), Renderer::getViewportHeight()));
-
-        Camera camera = Camera(Renderer::getViewportWidth(), Renderer::getViewportHeight());
-        m_scene.reset(new Scene(camera));
-
-        createCornellBoxScene(m_scene);
-	}
-
-	Editor::~Editor()
-	{
-		Renderer::shutdown();
-	}
+        m_sceneData.reset(new SceneData());
+        createCornellBoxScene(m_sceneData);
+    }
 
 	void Editor::onUpdate(float dt)
 	{
-		m_deltaTime = dt;
-		// Renderer render
-		Renderer::begin(m_clearColor);
-        PathTracer::pathTrace(m_image, m_scene);
-		Renderer::draw(m_image);
+        m_deltaTime = dt;
 	}
 
 	void Editor::onEvent(Event& e)
@@ -107,29 +80,27 @@ namespace PathTracing
 
 	bool Editor::onWindowResizeEvent(const WindowResizeEvent& e)
 	{
-		m_image->resize(e.getWidth(), e.getHeight());
 		Renderer::resize(e.getWidth(), e.getHeight());
-        m_scene->getCamera().resize(e.getWidth(), e.getHeight());
 		return true;
 	}
 
-    void Editor::makeGuiForSceneObject(const std::shared_ptr<SceneObject>& sceneObject)
+    void Editor::makeGuiForSceneObject(const SceneObjectData& sceneObject)
     {
-        const std::string& name = sceneObject->getName();
+        const std::string& name = sceneObject.name;
         std::string positionName = "##" + name;
-        glm::vec3& albedo = sceneObject->material->getAlbedo();
-        glm::vec3& position = sceneObject->primitive->getPosition();
         ImGui::Text("%s", name.c_str());
 
         // Color
         ImGui::Text("Color : ");
         ImGui::SameLine(m_guiLayoutSettings.m_editorSpace);
-        ImGui::ColorEdit3(name.c_str(), glm::value_ptr(albedo), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+        ImGui::ColorEdit3(name.c_str(), (float*)glm::value_ptr(sceneObject.color),
+                          ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 
         // Position
         ImGui::Text("Position : ");
         ImGui::SameLine(m_guiLayoutSettings.m_editorSpace);
-        ImGui::SliderFloat3(positionName.c_str(), glm::value_ptr(position), -2.0f, 2.0f, "%.3f");
+        ImGui::SliderFloat3(positionName.c_str(), (float*)glm::value_ptr(sceneObject.primitive->getPosition()),
+                            -2.0f, 2.0f, "%.3f");
     }
 
 	void Editor::onGuiRender()
@@ -146,7 +117,7 @@ namespace PathTracing
 
         ImGui::Begin("Scene");
         ImGui::SeparatorText("Scene Hierarchy :");
-        for(auto& sceneObject : *m_scene)
+        for(auto& sceneObject : *m_sceneData)
         {
             makeGuiForSceneObject(sceneObject);
             ImGui::Separator();
@@ -154,10 +125,10 @@ namespace PathTracing
         ImGui::SeparatorText("Render Settings :");
         ImGui::Text("Sample Per Pixel");
         ImGui::SameLine(m_guiLayoutSettings.m_editorSpace);
-        ImGui::InputInt("##SamplePerPixel", (int*)(&m_scene->getRenderSettings().samplePerPixel));
+        ImGui::InputInt("##SamplePerPixel", (int*)(&m_sceneData->getRenderSettings().samplePerPixel));
         ImGui::Text("Max Depth");
         ImGui::SameLine(m_guiLayoutSettings.m_editorSpace);
-        ImGui::InputInt("##MaxDepth", (int*)(&m_scene->getRenderSettings().maxDepth));
+        ImGui::InputInt("##MaxDepth", (int*)(&m_sceneData->getRenderSettings().maxDepth));
         ImGui::End();
 	}
 

@@ -9,6 +9,7 @@
 
 #include "Base.h"
 #include "Renderer/Image.h"
+#include "Renderer/Renderer.h"
 
 namespace PathTracing
 {
@@ -25,7 +26,9 @@ Application::Application(const std::string& appName)
 }
 
 Application::~Application()
-{}
+{
+    Renderer::shutdown();
+}
 
 void Application::run()
 {
@@ -37,6 +40,15 @@ void Application::run()
         m_time = time;
 
         m_editor->onUpdate(deltaTime);
+
+        if(!m_sceneRenderingController->isRendering())
+        {
+            auto sceneData = m_editor->getSceneData();
+            m_sceneRenderingController->setSceneData(sceneData);
+            m_sceneRenderingController->startRenderingThread();
+        }
+        Renderer::begin(m_clearColor);
+        Renderer::draw(m_sceneRenderingController->getImage());
 
         // GUI RENDER
         m_imGuiRenderer->OnNewFrame();
@@ -71,9 +83,11 @@ void Application::initialize(const std::string& appName)
     m_window.reset(new Window(windowSpec));
 
     // Renderer
-    m_editor.reset(new Editor());
+    Renderer::init();
 
-    // GUI
+    // GUI / Editor
+    m_editor.reset(new Editor());
+    m_sceneRenderingController.reset(new SceneRenderingController());
     m_imGuiRenderer.reset(new ImGuiRenderer());
 }
 
