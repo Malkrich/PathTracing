@@ -13,6 +13,23 @@
 
 namespace PathTracing
 {
+//////////////////////////////////////////////////////
+////////////////// CAMERA ////////////////////////////
+//////////////////////////////////////////////////////
+struct CameraData
+{
+    CameraData()
+        : position(glm::vec3(0.0f, 0.0f, -2.0f))
+        , direction(glm::vec2(0.0f, 0.0f))
+        , screenDistance(2.0f)
+    {}
+
+    glm::vec3 position;
+    glm::vec2 direction;
+    float screenDistance;
+};
+
+bool operator==(const CameraData& camera1, const CameraData& camera2);
 
 //////////////////////////////////////////////////////
 ///////////////// PRIMITIVE //////////////////////////
@@ -38,6 +55,11 @@ public:
 
     virtual std::shared_ptr<Primitive> createPrimitive() const = 0;
 
+    bool operator==(const PrimitiveData& other);
+
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const;
+
 protected:
     SceneObjectPrimitive m_primitive;
     glm::vec3 m_position;
@@ -55,6 +77,9 @@ public:
     {
         return std::make_shared<Plane>(m_position, m_normal);
     }
+
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const override;
 
 private:
     glm::vec3 m_normal;
@@ -74,6 +99,9 @@ public:
         return std::make_shared<Rectangle>(m_position, m_v1, m_v2);
     }
 
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const override;
+
 private:
     glm::vec3 m_v1;
     glm::vec3 m_v2;
@@ -91,6 +119,9 @@ public:
     {
         return std::make_shared<Sphere>(m_position, m_radius);
     }
+
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const override;
 
 private:
     float m_radius;
@@ -130,6 +161,8 @@ struct SceneObjectData
         , color(color)
     {}
 
+    SceneObjectData(const SceneObjectData& other);
+
     // global data
     std::string name;
 
@@ -142,11 +175,13 @@ struct SceneObjectData
 //    std::shared_ptr<MaterialParameter> materialParameter;
 };
 
+bool operator==(const SceneObjectData& object1, const SceneObjectData& object2);
+
 struct RenderSettings
 {
 public:
     RenderSettings()
-        : RenderSettings(1, 1)
+        : RenderSettings(1, 2)
     {}
 
     RenderSettings(unsigned int samplePerPixelParam, unsigned int maxDepthParam)
@@ -159,12 +194,17 @@ public:
     unsigned int maxDepth;
 };
 
+bool operator==(const RenderSettings& settings1, const RenderSettings& settings2);
+
 class SceneData
 {
 public:
     SceneData();
 
+    const CameraData& getCameraData() const { return m_camera; }
     const RenderSettings& getRenderSettings() const { return m_renderSettings; }
+    const SceneObjectData& getSceneObject(unsigned int index) const { return m_sceneObjects[index]; }
+    unsigned int getSceneObjectsCount() const { return m_sceneObjects.size(); }
 
     std::vector<SceneObjectData>::iterator                  begin() { return m_sceneObjects.begin(); }
     std::vector<SceneObjectData>::iterator                  end() { return m_sceneObjects.end(); }
@@ -174,6 +214,8 @@ public:
     std::vector<SceneObjectData>::const_iterator            end() const { return m_sceneObjects.end(); }
     std::vector<SceneObjectData>::const_reverse_iterator    rbegin() const { return m_sceneObjects.rbegin(); }
     std::vector<SceneObjectData>::const_reverse_iterator    rend() const { return m_sceneObjects.rend(); }
+
+    void setCameraData(const CameraData& camera) { m_camera = camera; }
 
     void addObject(const SceneObjectData& object);
     void addObject(const std::string& name,
@@ -192,8 +234,11 @@ public:
     void setRenderSettings(const RenderSettings& renderSettings) { m_renderSettings = renderSettings; }
 
 private:
+    CameraData m_camera;
     std::vector<SceneObjectData> m_sceneObjects;
     RenderSettings m_renderSettings;
 };
+
+bool operator==(const SceneData& scene1, const SceneData& scene2);
 
 }

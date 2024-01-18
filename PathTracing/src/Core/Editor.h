@@ -19,20 +19,17 @@ public:
 
     const std::shared_ptr<SceneData> getSceneData() const { return m_sceneData; }
 
-    void onUpdate(float dt);
-    void onEvent(Event& e);
-
     void onGuiRender();
 
 private:
-    bool onWindowResizeEvent(const WindowResizeEvent& e);
-
+    void makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&));
     void makeGuiForSceneObject(const SceneObjectData& sceneObject);
 
 private:
     struct GuiLayoutSettings
     {
-        const float m_editorSpace = 150.0f;
+        const float parameterOffset     = 150.0f;
+        const float resetButtonOffset   = 90.0f;
     };
 
 private:

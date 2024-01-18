@@ -6,6 +6,7 @@
 #include "Event.h"
 #include "Window.h"
 #include "Editor.h"
+#include "Viewport.h"
 #include "SceneRenderingController.h"
 #include "Renderer/ImGuiRenderer.h"
 
@@ -40,6 +41,7 @@ private:
     std::shared_ptr<Window> m_window;
     std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
     std::unique_ptr<Editor> m_editor;
+    std::unique_ptr<Viewport> m_viewport;
     std::unique_ptr<SceneRenderingController> m_sceneRenderingController;
 
     // singleton instance
