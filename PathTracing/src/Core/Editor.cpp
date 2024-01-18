@@ -85,15 +85,15 @@ namespace PathTracing
 
 	void Editor::onGuiRender()
 	{
-        ImGui::Begin("Info : ", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-        ImGui::SetWindowSize(ImVec2(250, 110));
-        ImGui::SeparatorText("Renderer info :");
-        ImGui::Text("Delta time : %f ms", m_deltaTime * 1000.0f);
-        ImGui::Text("Fps : %f", 1 / m_deltaTime);
-        ImGui::Text("");
-        ImGui::Text("Window dimension : [%i , %i]",
-                    Renderer::getViewportWidth(), Renderer::getViewportHeight());
-		ImGui::End();
+//        ImGui::Begin("Info : ", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+//        ImGui::SetWindowSize(ImVec2(250, 110));
+//        ImGui::SeparatorText("Renderer info :");
+//        ImGui::Text("Delta time : %f ms", m_deltaTime * 1000.0f);
+//        ImGui::Text("Fps : %f", 1 / m_deltaTime);
+//        ImGui::Text("");
+//        ImGui::Text("Window dimension : [%i , %i]",
+//                    Renderer::getViewportWidth(), Renderer::getViewportHeight());
+//		ImGui::End();
 
         ImGui::Begin("Scene");
         ImGui::SeparatorText("Scene Hierarchy :");

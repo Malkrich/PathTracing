@@ -52,6 +52,21 @@ SceneRenderingController::SceneRenderingController()
     m_image.reset(new Image(m_width, m_height));
 }
 
+void SceneRenderingController::setSceneData(std::shared_ptr<SceneData> sceneData)
+{
+    if(*m_sceneData == *sceneData) // we check if all of the scene data are similar
+    {
+        m_sceneHasNewData = false;
+        return;
+    }
+    else
+    {
+        m_sceneHasNewData = true;
+        m_sceneData = std::make_shared<SceneData>(*sceneData);
+        updateSceneFromSceneData();
+    }
+}
+
 void SceneRenderingController::updateSceneFromSceneData()
 {
     // TODO : move camera construction to editor.
@@ -70,7 +85,15 @@ void SceneRenderingController::startRenderingThread()
 {
     if(m_width != m_image->getWidth() || m_height != m_image->getHeight())
     {
+        m_scene->getCamera().resize(m_width, m_height);
         m_image->resize(m_width, m_height);
+        m_image->clearData();
+        PathTracer::resetAccumultationCount();
+    }
+
+    if(m_sceneHasNewData)
+    {
+        m_image->clearData();
         PathTracer::resetAccumultationCount();
     }
 

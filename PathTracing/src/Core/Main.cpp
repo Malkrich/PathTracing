@@ -3,7 +3,8 @@
 #ifndef CLI
     #include "Application.h"
 #else
-    #include "Core/Editor.h"
+    #include "SceneData.h"
+    #include "Editor.h"
     #include "Renderer/Renderer.h"
     #include "Renderer/Scene/Scene.h"
     #include "Renderer/Camera.h"
@@ -28,7 +29,7 @@ int main()
 
     std::shared_ptr<PathTracing::Image> image = std::make_shared<PathTracing::Image>(width, height);
 
-    PathTracing::Renderer::pathTrace(image, scene);
+    PathTracing::PathTracer::pathTrace(image, scene);
 #endif
     return 0;
 }

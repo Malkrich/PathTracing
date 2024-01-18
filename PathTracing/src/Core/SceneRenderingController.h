@@ -15,7 +15,7 @@ public:
     SceneRenderingController();
 
     bool isRendering() const { return m_isRendering; }
-    void setSceneData(std::shared_ptr<SceneData> sceneData) { m_sceneData = sceneData; updateSceneFromSceneData(); }
+    void setSceneData(std::shared_ptr<SceneData> sceneData);
     std::shared_ptr<Image> getImage() const { return m_image; }
 
     void startRenderingThread();
@@ -34,6 +34,7 @@ private:
     std::shared_ptr<Image> m_image;
 
     bool m_isRendering = false;
+    bool m_sceneHasNewData = true;
 
     unsigned int m_width, m_height;
 };

@@ -3,10 +3,94 @@
 namespace PathTracing
 {
 
+bool PrimitiveData::operator==(const PrimitiveData& other)
+{
+    return this->isEqual(other);
+}
+
+bool PrimitiveData::isEqual(const PrimitiveData& other) const
+{
+    if(typeid(*this) != typeid(other))
+        return false;
+
+    return m_primitive == other.m_primitive
+        && m_position == other.m_position;
+}
+
+
+bool PlaneData::isEqual(const PrimitiveData& other) const
+{
+    if(typeid(*this) != typeid(other))
+        return false;
+
+    auto plane = static_cast<const PlaneData&>(other);
+    if(this->m_normal != plane.m_normal)
+        return false;
+
+    return PrimitiveData::isEqual(other);
+}
+
+
+bool RectangleData::isEqual(const PrimitiveData& other) const
+{
+    if(typeid(*this) != typeid(other))
+        return false;
+
+    auto rectangle = static_cast<const RectangleData&>(other);
+    if(this->m_v1 != rectangle.m_v1 || this->m_v2 != rectangle.m_v2)
+        return false;
+
+    return PrimitiveData::isEqual(other);
+}
+
+bool SphereData::isEqual(const PrimitiveData& other) const
+{
+    if(typeid(*this) != typeid(other))
+        return false;
+
+    auto sphere = static_cast<const SphereData&>(other);
+    if(this->m_radius != sphere.m_radius)
+        return false;
+
+    return PrimitiveData::isEqual(other);
+}
+
+bool operator==(const SceneObjectData& object1, const SceneObjectData& object2)
+{
+    return (object1.name == object2.name)
+        && (*object1.primitive == *object2.primitive)
+        && (object1.material == object2.material)
+        && (object1.color == object2.color);
+}
+
+bool operator==(const RenderSettings& settings1, const RenderSettings& settings2)
+{
+    return (settings1.samplePerPixel == settings2.samplePerPixel)
+        && (settings1.maxDepth == settings2.maxDepth);
+}
+
 SceneData::SceneData()
     : m_sceneObjects()
     , m_renderSettings()
 {}
+
+static std::shared_ptr<PrimitiveData> createPrimitive(const std::shared_ptr<PrimitiveData>& primitive)
+{
+    switch(primitive->getPrimitiveType())
+    {
+        case SceneObjectPrimitive::plane:       return std::make_shared<PlaneData>(static_cast<const PlaneData&>(*primitive));
+        case SceneObjectPrimitive::rectangle:   return std::make_shared<RectangleData>(static_cast<const RectangleData&>(*primitive));
+        case SceneObjectPrimitive::sphere:      return std::make_shared<SphereData>(static_cast<const SphereData&>(*primitive));
+    }
+}
+
+SceneObjectData::SceneObjectData(const SceneObjectData& other)
+    : name(other.name)
+    , material(other.material)
+    , color(other.color)
+{
+    primitive = createPrimitive(other.primitive);
+}
 
 void SceneData::addObject(const SceneObjectData& object)
 {
@@ -43,6 +127,21 @@ void SceneData::addSphere(const std::string& name,
 {
     std::shared_ptr<SphereData> sphere = std::make_shared<SphereData>(position, radius);
     addObject(name, sphere, material, color);
+}
+
+bool operator==(const SceneData& scene1, const SceneData& scene2)
+{
+    if(scene1.getSceneObjectsCount() != scene2.getSceneObjectsCount())
+        return false;
+
+    bool sameRenderSettings = scene1.getRenderSettings() == scene2.getRenderSettings();
+    // scene objects has the same size
+    bool sameSceneObject = true;
+
+    for(unsigned int i = 0; i < scene1.getSceneObjectsCount(); i++)
+        sameSceneObject &= scene1.getSceneObject(i) == scene2.getSceneObject(i);
+
+    return sameRenderSettings && sameSceneObject;
 }
 
 }

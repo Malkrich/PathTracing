@@ -38,6 +38,11 @@ public:
 
     virtual std::shared_ptr<Primitive> createPrimitive() const = 0;
 
+    bool operator==(const PrimitiveData& other);
+
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const;
+
 protected:
     SceneObjectPrimitive m_primitive;
     glm::vec3 m_position;
@@ -55,6 +60,9 @@ public:
     {
         return std::make_shared<Plane>(m_position, m_normal);
     }
+
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const override;
 
 private:
     glm::vec3 m_normal;
@@ -74,6 +82,9 @@ public:
         return std::make_shared<Rectangle>(m_position, m_v1, m_v2);
     }
 
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const override;
+
 private:
     glm::vec3 m_v1;
     glm::vec3 m_v2;
@@ -91,6 +102,9 @@ public:
     {
         return std::make_shared<Sphere>(m_position, m_radius);
     }
+
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const override;
 
 private:
     float m_radius;
@@ -130,6 +144,8 @@ struct SceneObjectData
         , color(color)
     {}
 
+    SceneObjectData(const SceneObjectData& other);
+
     // global data
     std::string name;
 
@@ -141,6 +157,8 @@ struct SceneObjectData
     glm::vec3 color;
 //    std::shared_ptr<MaterialParameter> materialParameter;
 };
+
+bool operator==(const SceneObjectData& object1, const SceneObjectData& object2);
 
 struct RenderSettings
 {
@@ -159,12 +177,16 @@ public:
     unsigned int maxDepth;
 };
 
+bool operator==(const RenderSettings& settings1, const RenderSettings& settings2);
+
 class SceneData
 {
 public:
     SceneData();
 
     const RenderSettings& getRenderSettings() const { return m_renderSettings; }
+    const SceneObjectData& getSceneObject(unsigned int index) const { return m_sceneObjects[index]; }
+    unsigned int getSceneObjectsCount() const { return m_sceneObjects.size(); }
 
     std::vector<SceneObjectData>::iterator                  begin() { return m_sceneObjects.begin(); }
     std::vector<SceneObjectData>::iterator                  end() { return m_sceneObjects.end(); }
@@ -195,5 +217,7 @@ private:
     std::vector<SceneObjectData> m_sceneObjects;
     RenderSettings m_renderSettings;
 };
+
+bool operator==(const SceneData& scene1, const SceneData& scene2);
 
 }
