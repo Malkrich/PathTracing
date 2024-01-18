@@ -3,6 +3,13 @@
 namespace PathTracing
 {
 
+bool operator==(const CameraData& camera1, const CameraData& camera2)
+{
+    return camera1.position         == camera2.position
+        && camera1.direction        == camera2.direction
+        && camera1.screenDistance   == camera2.screenDistance;
+}
+
 bool PrimitiveData::operator==(const PrimitiveData& other)
 {
     return this->isEqual(other);
@@ -135,13 +142,14 @@ bool operator==(const SceneData& scene1, const SceneData& scene2)
         return false;
 
     bool sameRenderSettings = scene1.getRenderSettings() == scene2.getRenderSettings();
+    bool sameCamera = scene1.getCameraData() == scene2.getCameraData();
     // scene objects has the same size
     bool sameSceneObject = true;
 
     for(unsigned int i = 0; i < scene1.getSceneObjectsCount(); i++)
         sameSceneObject &= scene1.getSceneObject(i) == scene2.getSceneObject(i);
 
-    return sameRenderSettings && sameSceneObject;
+    return sameRenderSettings && sameCamera && sameSceneObject;
 }
 
 }

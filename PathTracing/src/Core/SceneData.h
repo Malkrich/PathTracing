@@ -13,6 +13,23 @@
 
 namespace PathTracing
 {
+//////////////////////////////////////////////////////
+////////////////// CAMERA ////////////////////////////
+//////////////////////////////////////////////////////
+struct CameraData
+{
+    CameraData()
+        : position(glm::vec3(0.0f, 0.0f, -2.0f))
+        , direction(glm::vec2(0.0f, 0.0f))
+        , screenDistance(2.0f)
+    {}
+
+    glm::vec3 position;
+    glm::vec2 direction;
+    float screenDistance;
+};
+
+bool operator==(const CameraData& camera1, const CameraData& camera2);
 
 //////////////////////////////////////////////////////
 ///////////////// PRIMITIVE //////////////////////////
@@ -164,7 +181,7 @@ struct RenderSettings
 {
 public:
     RenderSettings()
-        : RenderSettings(1, 1)
+        : RenderSettings(1, 2)
     {}
 
     RenderSettings(unsigned int samplePerPixelParam, unsigned int maxDepthParam)
@@ -184,6 +201,7 @@ class SceneData
 public:
     SceneData();
 
+    const CameraData& getCameraData() const { return m_camera; }
     const RenderSettings& getRenderSettings() const { return m_renderSettings; }
     const SceneObjectData& getSceneObject(unsigned int index) const { return m_sceneObjects[index]; }
     unsigned int getSceneObjectsCount() const { return m_sceneObjects.size(); }
@@ -196,6 +214,8 @@ public:
     std::vector<SceneObjectData>::const_iterator            end() const { return m_sceneObjects.end(); }
     std::vector<SceneObjectData>::const_reverse_iterator    rbegin() const { return m_sceneObjects.rbegin(); }
     std::vector<SceneObjectData>::const_reverse_iterator    rend() const { return m_sceneObjects.rend(); }
+
+    void setCameraData(const CameraData& camera) { m_camera = camera; }
 
     void addObject(const SceneObjectData& object);
     void addObject(const std::string& name,
@@ -214,6 +234,7 @@ public:
     void setRenderSettings(const RenderSettings& renderSettings) { m_renderSettings = renderSettings; }
 
 private:
+    CameraData m_camera;
     std::vector<SceneObjectData> m_sceneObjects;
     RenderSettings m_renderSettings;
 };

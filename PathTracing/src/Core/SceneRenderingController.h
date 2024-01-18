@@ -23,6 +23,8 @@ public:
     void resizeImage(unsigned int width, unsigned int height);
 
 private:
+    void renderThread();
+
     void updateSceneFromSceneData();
 
 private:

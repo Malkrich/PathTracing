@@ -22,12 +22,14 @@ public:
     void onGuiRender();
 
 private:
+    void makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&));
     void makeGuiForSceneObject(const SceneObjectData& sceneObject);
 
 private:
     struct GuiLayoutSettings
     {
-        const float m_editorSpace = 150.0f;
+        const float parameterOffset     = 150.0f;
+        const float resetButtonOffset   = 90.0f;
     };
 
 private:
