@@ -1,6 +1,8 @@
 #ifndef MIXTUREPDF_H
 #define MIXTUREPDF_H
 
+#include <memory>
+
 #include "Pdf.h"
 #include "Utils/RandomUtils.h"
 
@@ -9,7 +11,7 @@ namespace PathTracing
 
 class MixturePdf : public Pdf {
   public:
-    MixturePdf(Pdf* pdf1_param, Pdf* pdf2_param) {
+    MixturePdf(std::shared_ptr<Pdf> pdf1_param, std::shared_ptr<Pdf> pdf2_param) {
         pdf1 = pdf1_param;
         pdf2 = pdf2_param;
     }
@@ -26,8 +28,8 @@ class MixturePdf : public Pdf {
     }
 
   private:
-    Pdf* pdf1;
-    Pdf* pdf2;
+    std::shared_ptr<Pdf> pdf1;
+    std::shared_ptr<Pdf> pdf2;
 };
 
 }

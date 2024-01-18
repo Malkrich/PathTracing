@@ -63,9 +63,9 @@ double Rectangle::pdf_value(const glm::vec3 &o,const glm::vec3 &n, const glm::ve
     {
         auto distance_squared = intersection.relative * intersection.relative; // * v.length_squared();
         //std::cout<<"Relative : "<<intersection.relative<<"      Distance_squared : "<<distance_squared<<std::endl;
-        std::cout<<"Longueur v : "<<v.length()<<"      Longueur v2 : "<<v.length()*v.length()<<std::endl;
+        //std::cout<<"Longueur v : "<<v.length()<<"      Longueur v2 : "<<v.length()*v.length()<<std::endl;
         auto cosine = fabs(dot(v, n));// / v.length());
-        std::cout<<"cosinus : "<<cosine<<std::endl;
+        //std::cout<<"cosinus : "<<cosine<<std::endl;
         //std::cout<<"Area : "<<m_area<<std::endl;
         return distance_squared / (cosine * m_area);
         //return distance_squared / (m_area);

@@ -2,6 +2,7 @@
 
 #include "Renderer/PathTracing/Pdf/CosinePdf.h"
 #include "Renderer/PathTracing/Pdf/HittablePdf.h"
+#include "Renderer/PathTracing/Pdf/MixturePdf.h"
 
 namespace PathTracing
 {
@@ -86,10 +87,13 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         primitive->intersect(r, intersection);
         glm::vec3 n = intersection.normal;
 
-        //std::shared_ptr<Pdf> pdf = std::make_shared<CosinePdf>(n);
-        //std::shared_ptr<Pdf> pdf = std::make_shared<HittablePdf>(*obj,intersection.position);
+        std::shared_ptr<Pdf> pdfCosine = std::make_shared<CosinePdf>(n);
         std::shared_ptr<SceneObject> light = scene.getSceneObject(2);
-        std::shared_ptr<Pdf> pdf = std::make_shared<HittablePdf>(*light,intersection.position,n);
+        std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.position,n);
+
+        //std::shared_ptr<Pdf> pdf = pdfCosine;
+        //std::shared_ptr<Pdf> pdf = pdfLight;
+        std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(pdfCosine,pdfLight);
 
         intersection.setPdf(pdf);
         intersection.setMaterial(obj->material);
