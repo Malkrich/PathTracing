@@ -1,4 +1,4 @@
-#include "IntersectData.h"
+﻿#include "IntersectData.h"
 
 namespace PathTracing
 {
@@ -58,7 +58,7 @@ glm::vec3 IntersectData::getValue(Ray ray_out,Ray ray_in)
 
     float p_value = pdf->value(u_in);
 
-    glm::vec3 L_in = ray_in.getValue();
+    //glm::vec3 L_in = ray_in.getValue();
 
     float lambda;
     float theta_out = acos(dot(normalize(normal), normalize(u_out)));
@@ -69,8 +69,8 @@ glm::vec3 IntersectData::getValue(Ray ray_out,Ray ray_in)
 
     //res = color*attenuation*fr*L_in/p_value; //Originel
     //res = attenuation*fr*L_in/p_value; // Originel sans color
-    //glm::vec3 res = color*attenuation*fr/p_value;
-    glm::vec3 res = color*attenuation*fr;
+    glm::vec3 res = color*attenuation*fr/p_value;
+    //glm::vec3 res = color*attenuation*fr;
 
     //std::cout<<"attenuation : "<<attenuation<<std::endl;
     //std::cout<<"fr : "<<fr<<std::endl;

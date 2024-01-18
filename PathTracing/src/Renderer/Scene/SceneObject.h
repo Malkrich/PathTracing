@@ -15,7 +15,7 @@ struct SceneObject
 
     const std::string& getName() const { return name; }
 
-    double pdf_value(const glm::vec3& o, const glm::vec3& v) const;
+    double pdf_value(const glm::vec3& o, const glm::vec3& n,const glm::vec3& v) const;
     glm::vec3 random(const glm::vec3& o) const;
 
 public:

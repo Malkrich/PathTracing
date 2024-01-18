@@ -23,7 +23,7 @@ public:
     virtual bool CanEmit() { return false; }
     virtual glm::vec3 emitted() const { return glm::vec3(0.0f,0.0f,0.0f); }
 
-private:
+protected:
     glm::vec3 m_color;
 };
 }

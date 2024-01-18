@@ -7,6 +7,11 @@ namespace PathTracing
 {
 static unsigned int s_accumalationCount = 0;
 
+static glm::vec3 threshold1(glm::vec3 v)
+{
+        return glm::vec3(std::min(v.x, 1.0f),std::min(v.y, 1.0f),std::min(v.z, 1.0f));
+}
+
 void PathTracer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> scene)
 {
     for(unsigned int y = 0; y < image->getHeight(); y++)
@@ -22,7 +27,7 @@ void PathTracer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> 
             {
                 Ray ray = ray_generator(scene->getCamera(), u, v);
 
-                glm::vec3 color = getValue(ray, *scene);
+                glm::vec3 color = threshold1(getValue(ray, *scene));
 
                 current_color = current_color + color;
             }
@@ -84,7 +89,7 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         //std::shared_ptr<Pdf> pdf = std::make_shared<CosinePdf>(n);
         //std::shared_ptr<Pdf> pdf = std::make_shared<HittablePdf>(*obj,intersection.position);
         std::shared_ptr<SceneObject> light = scene.getSceneObject(2);
-        std::shared_ptr<Pdf> pdf = std::make_shared<HittablePdf>(*light,intersection.position);
+        std::shared_ptr<Pdf> pdf = std::make_shared<HittablePdf>(*light,intersection.position,n);
 
         intersection.setPdf(pdf);
         intersection.setMaterial(obj->material);

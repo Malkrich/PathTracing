@@ -19,9 +19,9 @@ bool SceneObject::intersect(Ray const& ray_param, IntersectData& intersection) c
     return IsIntersect;
 };
 
-double SceneObject::pdf_value(const glm::vec3 &o, const glm::vec3 &v) const
+double SceneObject::pdf_value(const glm::vec3 &o,const glm::vec3 &n, const glm::vec3 &v) const
 {
-    return primitive->pdf_value(o,v);
+    return primitive->pdf_value(o,n,v);
 }
 
 glm::vec3 SceneObject::random(const glm::vec3 &o) const

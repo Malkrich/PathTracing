@@ -25,8 +25,8 @@ namespace PathTracing
     {
         /***** CORNELL BOX ****/
         glm::vec3 red = glm::vec3(1,.05,.05);
-        glm::vec3 green = glm::vec3(.12,1,.15);
-        glm::vec3 light = glm::vec3(1,1,1);
+        glm::vec3 green = glm::vec3(.0,1,.0);
+        glm::vec3 light = glm::vec3(50,50,50);
         glm::vec3 white = glm::vec3(.73,.73,.73);
         glm::vec3 blue = glm::vec3(.05,.05,1);
 
@@ -55,7 +55,7 @@ namespace PathTracing
 //        m_scene->addObject(so7);
         RenderSettings renderSettings;
         renderSettings.samplePerPixel = 1;
-        renderSettings.maxDepth = 2;
+        renderSettings.maxDepth = 5;
         scene->setRenderSettings(renderSettings);
     }
 

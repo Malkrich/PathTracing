@@ -10,12 +10,12 @@ namespace PathTracing
 
 class HittablePdf : public Pdf {
   public:
-    HittablePdf(const SceneObject& obj, const glm::vec3& origin)
-      : objects(obj), origin(origin)
+    HittablePdf(const SceneObject& obj, const glm::vec3& origin, const glm::vec3& normal_param)
+      : objects(obj), origin(origin),normal(normal_param)
     {}
 
     double value(const glm::vec3& direction) const override {
-        return objects.pdf_value(origin, direction);
+        return objects.pdf_value(origin,normal, direction);
     }
 
     glm::vec3 generate() const override {
@@ -25,6 +25,7 @@ class HittablePdf : public Pdf {
   private:
     const SceneObject& objects;
     glm::vec3 origin;
+    glm::vec3 normal;
 };
 
 

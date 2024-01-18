@@ -9,6 +9,8 @@
 namespace PathTracing
 {
 
+//static glm::vec3 threshold1(glm::vec3);
+
 class PathTracer
 {
 public:

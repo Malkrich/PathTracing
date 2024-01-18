@@ -20,7 +20,8 @@ public:
     }
     glm::vec3 emitted() const override
     {
-        return glm::vec3(1.0f,1.0f,1.0f);
+        //return glm::vec3(1.0f,1.0f,1.0f);
+        return m_color;
     }
 
     float brdf(const glm::vec3&, float, float, float) const override
