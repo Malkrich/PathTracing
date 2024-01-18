@@ -20,6 +20,8 @@ public:
 
     void startRenderingThread();
 
+    void resizeImage(unsigned int width, unsigned int height);
+
 private:
     void updateSceneFromSceneData();
 
@@ -32,6 +34,8 @@ private:
     std::shared_ptr<Image> m_image;
 
     bool m_isRendering = false;
+
+    unsigned int m_width, m_height;
 };
 
 }

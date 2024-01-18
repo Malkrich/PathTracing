@@ -30,6 +30,7 @@ private:
     void onEvent(Event& e);
 
     bool onWindowClose(const WindowCloseEvent&);
+    bool onWindowResize(const WindowResizeEvent& e);
 
 private:
     bool m_running = true;

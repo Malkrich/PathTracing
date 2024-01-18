@@ -34,13 +34,6 @@ void Application::run()
 {
     while(m_running)
     {
-        // time computation
-        float time = glfwGetTime();
-        float deltaTime = time - m_time;
-        m_time = time;
-
-        m_editor->onUpdate(deltaTime);
-
         if(!m_sceneRenderingController->isRendering())
         {
             auto sceneData = m_editor->getSceneData();
@@ -63,13 +56,19 @@ void Application::onEvent(Event& e)
 {
     EventDispatcher dispatcher(e);
     dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::onWindowClose));
-
-    m_editor->onEvent(e);
+    dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::onWindowResize));
 }
 
 bool Application::onWindowClose(const WindowCloseEvent&)
 {
     m_running = false;
+    return true;
+}
+
+bool Application::onWindowResize(const WindowResizeEvent& e)
+{
+    Renderer::resize(e.getWidth(), e.getHeight());
+    m_sceneRenderingController->resizeImage(e.getWidth(), e.getHeight());
     return true;
 }
 

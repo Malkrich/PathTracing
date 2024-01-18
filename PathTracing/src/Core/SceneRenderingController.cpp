@@ -45,9 +45,11 @@ static void renderThread(std::shared_ptr<Image> image, std::shared_ptr<Scene> m_
 }
 
 SceneRenderingController::SceneRenderingController()
+    : m_width(Renderer::getViewportWidth())
+    , m_height(Renderer::getViewportHeight())
 {
     m_sceneData.reset(new SceneData());
-    m_image.reset(new Image(Renderer::getViewportWidth(), Renderer::getViewportHeight()));
+    m_image.reset(new Image(m_width, m_height));
 }
 
 void SceneRenderingController::updateSceneFromSceneData()
@@ -66,8 +68,20 @@ void SceneRenderingController::updateSceneFromSceneData()
 
 void SceneRenderingController::startRenderingThread()
 {
+    if(m_width != m_image->getWidth() || m_height != m_image->getHeight())
+    {
+        m_image->resize(m_width, m_height);
+        PathTracer::resetAccumultationCount();
+    }
+
     std::thread t(renderThread, m_image, m_scene, &m_isRendering);
     t.detach();
+}
+
+void SceneRenderingController::resizeImage(unsigned int width, unsigned int height)
+{
+    m_width = width;
+    m_height = height;
 }
 
 }
