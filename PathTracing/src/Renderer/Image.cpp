@@ -55,8 +55,6 @@ void Image::resize(unsigned int width, unsigned int height)
 
     delete[] m_data;
     m_data = new uint32_t[width * height];
-
-    clearData();
 }
 
 void Image::setData(unsigned int x, unsigned int y, float r, float g, float b, float a)
