@@ -39,6 +39,11 @@ void PathTracer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> 
     s_accumalationCount++;
 }
 
+void PathTracer::resetAccumultationCount()
+{
+    s_accumalationCount = 0;
+}
+
 Ray PathTracer::ray_generator(const Camera& cam, float u, float v)
 {
     // position of the sample on the screen in 3D
