@@ -19,6 +19,7 @@ ImGuiRenderer::ImGuiRenderer()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
     ImGui::StyleColorsDark();
 
     ImGuiStyle& style = ImGui::GetStyle();
@@ -47,6 +48,8 @@ void ImGuiRenderer::OnNewFrame()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    ImGui::DockSpaceOverViewport();
 
     ImGuiIO& io = ImGui::GetIO();
     io.DisplaySize = ImVec2((float)Application::get()->getWindow()->getWidth(),
