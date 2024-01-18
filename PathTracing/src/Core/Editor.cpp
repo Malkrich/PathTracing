@@ -48,11 +48,10 @@ namespace PathTracing
         scene->addRectangle("Blue Rectangle",
                             glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0),
                             SceneObjectMaterial::lambertien, blue);
+        scene->addSphere("Sphere",
+                         glm::vec3(0.0f, 0.3f, 0.7f), 0.3f,
+                         SceneObjectMaterial::lambertien, glm::vec3(1.0f, 0.0f, 0.0f));
 
-//        std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(-25.0f,20.0f,50.0f),3);//1.9999
-//        std::shared_ptr<Lambertian> l7 = std::make_shared<Lambertian>(red);
-//        std::shared_ptr<SceneObject> so7 = std::make_shared<SceneObject>(sphere,l7);
-//        m_scene->addObject(so7);
         RenderSettings renderSettings;
         renderSettings.samplePerPixel = 1;
         renderSettings.maxDepth = 2;
@@ -64,24 +63,6 @@ namespace PathTracing
         m_sceneData.reset(new SceneData());
         createCornellBoxScene(m_sceneData);
     }
-
-	void Editor::onUpdate(float dt)
-	{
-        m_deltaTime = dt;
-	}
-
-	void Editor::onEvent(Event& e)
-	{
-		EventDispatcher dispatcher(e);
-
-		dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(Editor::onWindowResizeEvent));
-	}
-
-	bool Editor::onWindowResizeEvent(const WindowResizeEvent& e)
-	{
-		Renderer::resize(e.getWidth(), e.getHeight());
-		return true;
-	}
 
     void Editor::makeGuiForSceneObject(const SceneObjectData& sceneObject)
     {
