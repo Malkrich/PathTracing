@@ -22,14 +22,21 @@ public:
     void onGuiRender();
 
 private:
+    void makeSlider1(const std::string& name, const std::string& sliderName, float* value, float min, float max);
+    void makeSlider2(const std::string& name, const std::string& sliderName, const glm::vec2& value, float min, float max);
+    void makeSlider3(const std::string& name, const std::string& sliderName, const glm::vec3& value, float min, float max);
+    void makeColorPicker3(const std::string& name, const std::string& colorPickerName, const glm::vec3& value);
+
     void makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&));
     void makeGuiForSceneObject(const SceneObjectData& sceneObject);
 
 private:
     struct GuiLayoutSettings
     {
-        const float parameterOffset     = 150.0f;
-        const float resetButtonOffset   = 90.0f;
+        const float sliderWidth         = 300.0f;
+        const float colorPickerWidth    = sliderWidth;
+        const float inputValueWidth     = sliderWidth;
+        const float resetButtonWidth    = 80.0f;
     };
 
 private:

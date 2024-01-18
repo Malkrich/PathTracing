@@ -64,66 +64,94 @@ Editor::Editor()
     createCornellBoxScene(m_sceneData);
 }
 
+void Editor::makeSlider1(const std::string& name, const std::string& sliderName, float* value, float min, float max)
+{
+    float width = ImGui::GetContentRegionAvail().x;
+    std::string sliderHiddenName = "##" + sliderName;
+
+    ImGui::Text("%s", name.c_str());
+    ImGui::PushItemWidth(m_guiLayoutSettings.sliderWidth);
+    ImGui::SameLine(width - m_guiLayoutSettings.sliderWidth);
+    ImGui::SliderFloat(sliderHiddenName.c_str(), value, min, max);
+    ImGui::PopItemWidth();
+}
+
+void Editor::makeSlider2(const std::string& name, const std::string& sliderName, const glm::vec2& value, float min, float max)
+{
+    float width = ImGui::GetContentRegionAvail().x;
+    std::string sliderHiddenName = "##" + sliderName;
+
+    ImGui::Text("%s", name.c_str());
+    ImGui::PushItemWidth(m_guiLayoutSettings.sliderWidth);
+    ImGui::SameLine(width - m_guiLayoutSettings.sliderWidth);
+    ImGui::SliderFloat2(sliderHiddenName.c_str(), (float*)glm::value_ptr(value), min, max);
+    ImGui::PopItemWidth();
+}
+
+void Editor::makeSlider3(const std::string& name, const std::string& sliderName, const glm::vec3& value, float min, float max)
+{
+    float width = ImGui::GetContentRegionAvail().x;
+    std::string sliderHiddenName = "##" + sliderName;
+
+    ImGui::Text("%s", name.c_str());
+    ImGui::PushItemWidth(m_guiLayoutSettings.sliderWidth);
+    ImGui::SameLine(width - m_guiLayoutSettings.sliderWidth);
+    ImGui::SliderFloat3(sliderHiddenName.c_str(), (float*)glm::value_ptr(value), min, max);
+    ImGui::PopItemWidth();
+}
+
+void Editor::makeColorPicker3(const std::string& name, const std::string& colorPickerName, const glm::vec3& value)
+{
+    float width = ImGui::GetContentRegionAvail().x;
+    std::string colorPickerHiddenName = "##" + colorPickerName;
+
+    ImGui::Text("%s", name.c_str());
+    ImGui::SameLine(width - m_guiLayoutSettings.colorPickerWidth);
+    ImGui::PushItemWidth(m_guiLayoutSettings.colorPickerWidth);
+    ImGui::ColorEdit3(colorPickerHiddenName.c_str(), (float*)glm::value_ptr(value),
+                      ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+    ImGui::PopItemWidth();
+}
+
 void Editor::makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&))
 {
     std::string fullName = "Reset##" + name;
-    float width = ImGui::GetWindowWidth();
-    ImGui::Indent(width - m_guiLayoutSettings.resetButtonOffset);
-    if(ImGui::Button(fullName.c_str(), ImVec2(70, 20)))
+    float width = ImGui::GetContentRegionAvail().x;
+    ImGui::Indent(width - m_guiLayoutSettings.resetButtonWidth);
+    if(ImGui::Button(fullName.c_str(), ImVec2(m_guiLayoutSettings.resetButtonWidth, 20)))
         resetFunction(*m_sceneData);
-    ImGui::Unindent(width - m_guiLayoutSettings.resetButtonOffset);
+    ImGui::Unindent(width - m_guiLayoutSettings.resetButtonWidth);
 }
 
 void Editor::makeGuiForSceneObject(const SceneObjectData& sceneObject)
 {
     const std::string& name = sceneObject.name;
-    std::string positionName = "##" + name;
     ImGui::Text("%s", name.c_str());
 
     // Color
-    ImGui::Text("Color : ");
-    ImGui::SameLine(m_guiLayoutSettings.parameterOffset);
-    ImGui::ColorEdit3(name.c_str(), (float*)glm::value_ptr(sceneObject.color),
-                      ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+    makeColorPicker3("Color :", sceneObject.name, sceneObject.color);
 
     // Position
-    ImGui::Text("Position : ");
-    ImGui::SameLine(m_guiLayoutSettings.parameterOffset);
-    ImGui::SliderFloat3(positionName.c_str(), (float*)glm::value_ptr(sceneObject.primitive->getPosition()),
-                        -2.0f, 2.0f);
+    makeSlider3("Position :", sceneObject.name, sceneObject.primitive->getPosition(), -2.0f, 2.0f);
 }
 
 void Editor::onGuiRender()
 {
-//    ImGui::Begin("Info : ", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-//    ImGui::SetWindowSize(ImVec2(250, 110));
-//    ImGui::SeparatorText("Renderer info :");
-//    ImGui::Text("Delta time : %f ms", m_deltaTime * 1000.0f);
-//    ImGui::Text("Fps : %f", 1 / m_deltaTime);
-//    ImGui::Text("");
-//    ImGui::Text("Window dimension : [%i , %i]",
-//                Renderer::getViewportWidth(), Renderer::getViewportHeight());
-//    ImGui::End();
-
     ImGui::Begin("Scene");
+
+    float width = ImGui::GetContentRegionAvail().x;
+
+    // Camera
     ImGui::SeparatorText("Camera :");
-    makeGuiForResetButton("##CameraReset", [](SceneData& sceneData)
+    makeGuiForResetButton("CameraReset", [](SceneData& sceneData)
     {
         CameraData camera;
         sceneData.setCameraData(camera);
     });
-    ImGui::Text("Position");
-    ImGui::SameLine(m_guiLayoutSettings.parameterOffset);
-    ImGui::SliderFloat3("##CameraPosition", (float*)glm::value_ptr(m_sceneData->getCameraData().position),
-                        -5.0f, 5.0f);
-    ImGui::Text("Direction");
-    ImGui::SameLine(m_guiLayoutSettings.parameterOffset);
-    ImGui::SliderFloat2("##CameraDirection", (float*)glm::value_ptr(m_sceneData->getCameraData().direction),
-                        -1.0f, 1.0f);
-    ImGui::Text("Screen Distance");
-    ImGui::SameLine(m_guiLayoutSettings.parameterOffset);
-    ImGui::SliderFloat("##CameraScreenDistance", (float*)&(m_sceneData->getCameraData().screenDistance),
-                       0.0f, 5.0f);
+    makeSlider3("Position :", "CameraPosition", m_sceneData->getCameraData().position, -5.0f, 5.0f);
+    makeSlider2("Direction :", "CameraDirection", m_sceneData->getCameraData().direction, -1.0f, 1.0f);
+    makeSlider1("Screen Distance :", "CameraScreenDistance", (float*)&(m_sceneData->getCameraData().screenDistance), 0.0f, 5.0f);
+
     ImGui::SeparatorText("Scene Hierarchy :");
     for(auto& sceneObject : *m_sceneData)
     {
@@ -136,12 +164,16 @@ void Editor::onGuiRender()
         RenderSettings renderSettings;
         sceneData.setRenderSettings(renderSettings);
     });
-    ImGui::Text("Sample Per Pixel");
-    ImGui::SameLine(m_guiLayoutSettings.parameterOffset);
+    ImGui::Text("Sample Per Pixel :");
+    ImGui::SameLine(width - m_guiLayoutSettings.sliderWidth);
+    ImGui::PushItemWidth(m_guiLayoutSettings.inputValueWidth);
     ImGui::InputInt("##SamplePerPixel", (int*)(&m_sceneData->getRenderSettings().samplePerPixel));
-    ImGui::Text("Max Depth");
-    ImGui::SameLine(m_guiLayoutSettings.parameterOffset);
+    ImGui::PopItemWidth();
+    ImGui::Text("Max Depth :");
+    ImGui::SameLine(width - m_guiLayoutSettings.sliderWidth);
+    ImGui::PushItemWidth(m_guiLayoutSettings.inputValueWidth);
     ImGui::InputInt("##MaxDepth", (int*)(&m_sceneData->getRenderSettings().maxDepth));
+    ImGui::PopItemWidth();
     ImGui::End();
 }
 
