@@ -37,7 +37,8 @@ private:
     {
         const float sliderWidth         = 300.0f;
         const float colorPickerWidth    = sliderWidth;
-        const float inputValueWidth     = sliderWidth;
+        const float inputValueWidth     = 100.0f;
+        const float comboWidth          = sliderWidth;
         const float resetButtonWidth    = 80.0f;
     };
 

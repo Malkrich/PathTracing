@@ -26,7 +26,7 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
     /***** CORNELL BOX ****/
     glm::vec3 red = glm::vec3(1,.05,.05);
     glm::vec3 green = glm::vec3(.12,1,.15);
-    glm::vec3 light = glm::vec3(1,1,1);
+    glm::vec3 light = glm::vec3(50,50,50);
     glm::vec3 white = glm::vec3(.73,.73,.73);
     glm::vec3 blue = glm::vec3(.05,.05,1);
 
@@ -149,8 +149,8 @@ void Editor::makeGuiForSceneObject(SceneObjectData& sceneObject)
     static const unsigned int itemCount = 3;
     int currentItem = (int)sceneObject.primitive->getPrimitiveType();
     ImGui::Text("Primitive :");
-    ImGui::SameLine(width - m_guiLayoutSettings.inputValueWidth);
-    ImGui::PushItemWidth(m_guiLayoutSettings.inputValueWidth);
+    ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
+    ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
     if(ImGui::Combo(primitiveHiddenName.c_str(), &currentItem, items, itemCount))
         sceneObject.primitive = PrimitiveData::create( (SceneObjectPrimitive)currentItem );
     ImGui::PopItemWidth();
@@ -158,8 +158,6 @@ void Editor::makeGuiForSceneObject(SceneObjectData& sceneObject)
 
     // Color
     makeColorPicker3("Color :", sceneObject.name, sceneObject.color);
-    // Position
-    makeSlider3("Position :", sceneObject.name, sceneObject.primitive->getPosition(), -2.0f, 2.0f);
 }
 
 void Editor::makeGuiForPrimitive(const std::string& name, std::shared_ptr<PrimitiveData> primitiveData)
@@ -218,6 +216,9 @@ void Editor::onGuiRender()
         makeGuiForSceneObject(sceneObject);
         ImGui::Separator();
     }
+    ImGui::End();
+
+    ImGui::Begin("Renderer");
     ImGui::SeparatorText("Render Settings :");
     makeGuiForResetButton("RenderingParameterReset", [](SceneData& sceneData)
     {
@@ -226,7 +227,6 @@ void Editor::onGuiRender()
     });
     makeInputInt1("Sample Per Pixel :", "SamplePerPixel", (int*)&m_sceneData->getRenderSettings().samplePerPixel);
     makeInputInt1("Maximum Depth :", "MaxDepth", (int*)&m_sceneData->getRenderSettings().maxDepth);
-
     ImGui::End();
 }
 
