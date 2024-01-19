@@ -140,9 +140,16 @@ void Editor::makeGuiForSceneObject(const SceneObjectData& sceneObject)
     const std::string& name = sceneObject.name;
     ImGui::Text("%s", name.c_str());
 
+//    int current
+    const char* items[] = { "Plane",
+                            "Rectangle",
+                            "Sphere"};
+    static const unsigned int itemCount = 3;
+    int currentItem = 0;
+//    ImGui::Combo("##Primitive", &currentItem, items, itemCount);
+
     // Color
     makeColorPicker3("Color :", sceneObject.name, sceneObject.color);
-
     // Position
     makeSlider3("Position :", sceneObject.name, sceneObject.primitive->getPosition(), -2.0f, 2.0f);
 }
@@ -150,8 +157,6 @@ void Editor::makeGuiForSceneObject(const SceneObjectData& sceneObject)
 void Editor::onGuiRender()
 {
     ImGui::Begin("Scene");
-
-    float width = ImGui::GetContentRegionAvail().x;
 
     // Camera
     ImGui::SeparatorText("Camera :");
