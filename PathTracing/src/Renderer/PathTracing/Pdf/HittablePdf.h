@@ -23,9 +23,9 @@ class HittablePdf : public Pdf {
     }
 
   private:
-    const SceneObject& objects;
-    glm::vec3 origin;
-    glm::vec3 normal;
+    const SceneObject& objects; //Objet que l'on vise, par exemple la lumiere
+    glm::vec3 origin; //Point de l'intersection (pas la lumiere)
+    glm::vec3 normal; //Normal de l'intersection (pas la lumiere)
 };
 
 
