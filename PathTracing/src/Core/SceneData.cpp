@@ -10,6 +10,26 @@ bool operator==(const CameraData& camera1, const CameraData& camera2)
         && camera1.screenDistance   == camera2.screenDistance;
 }
 
+std::shared_ptr<PrimitiveData> PrimitiveData::create(SceneObjectPrimitive primitive)
+{
+    switch(primitive)
+    {
+        case SceneObjectPrimitive::plane:       return std::make_shared<PlaneData>();
+        case SceneObjectPrimitive::rectangle:   return std::make_shared<RectangleData>();
+        case SceneObjectPrimitive::sphere:      return std::make_shared<SphereData>();
+    }
+}
+
+std::shared_ptr<PrimitiveData> PrimitiveData::copy(const std::shared_ptr<PrimitiveData>& primitive)
+{
+    switch(primitive->getPrimitiveType())
+    {
+        case SceneObjectPrimitive::plane:       return std::make_shared<PlaneData>(static_cast<const PlaneData&>(*primitive));
+        case SceneObjectPrimitive::rectangle:   return std::make_shared<RectangleData>(static_cast<const RectangleData&>(*primitive));
+        case SceneObjectPrimitive::sphere:      return std::make_shared<SphereData>(static_cast<const SphereData&>(*primitive));
+    }
+}
+
 bool PrimitiveData::operator==(const PrimitiveData& other)
 {
     return this->isEqual(other);
@@ -81,22 +101,12 @@ SceneData::SceneData()
     , m_renderSettings()
 {}
 
-static std::shared_ptr<PrimitiveData> createPrimitive(const std::shared_ptr<PrimitiveData>& primitive)
-{
-    switch(primitive->getPrimitiveType())
-    {
-        case SceneObjectPrimitive::plane:       return std::make_shared<PlaneData>(static_cast<const PlaneData&>(*primitive));
-        case SceneObjectPrimitive::rectangle:   return std::make_shared<RectangleData>(static_cast<const RectangleData&>(*primitive));
-        case SceneObjectPrimitive::sphere:      return std::make_shared<SphereData>(static_cast<const SphereData&>(*primitive));
-    }
-}
-
 SceneObjectData::SceneObjectData(const SceneObjectData& other)
     : name(other.name)
     , material(other.material)
     , color(other.color)
 {
-    primitive = createPrimitive(other.primitive);
+    primitive = PrimitiveData::copy(other.primitive);
 }
 
 void SceneData::addObject(const SceneObjectData& object)

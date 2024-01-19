@@ -135,23 +135,66 @@ void Editor::makeGuiForResetButton(const std::string& name, void(*resetFunction)
     ImGui::Unindent(width - m_guiLayoutSettings.resetButtonWidth);
 }
 
-void Editor::makeGuiForSceneObject(const SceneObjectData& sceneObject)
+void Editor::makeGuiForSceneObject(SceneObjectData& sceneObject)
 {
     const std::string& name = sceneObject.name;
+    const std::string primitiveHiddenName = "##" + name;
     ImGui::Text("%s", name.c_str());
+    float width = ImGui::GetContentRegionAvail().x;
 
-//    int current
-    const char* items[] = { "Plane",
-                            "Rectangle",
-                            "Sphere"};
+    // Primitive
+    static const char* items[] = { "Plane",
+                                   "Rectangle",
+                                   "Sphere"};
     static const unsigned int itemCount = 3;
-    int currentItem = 0;
-//    ImGui::Combo("##Primitive", &currentItem, items, itemCount);
+    int currentItem = (int)sceneObject.primitive->getPrimitiveType();
+    ImGui::Text("Primitive :");
+    ImGui::SameLine(width - m_guiLayoutSettings.inputValueWidth);
+    ImGui::PushItemWidth(m_guiLayoutSettings.inputValueWidth);
+    if(ImGui::Combo(primitiveHiddenName.c_str(), &currentItem, items, itemCount))
+        sceneObject.primitive = PrimitiveData::create( (SceneObjectPrimitive)currentItem );
+    ImGui::PopItemWidth();
+    makeGuiForPrimitive(name, sceneObject.primitive);
 
     // Color
     makeColorPicker3("Color :", sceneObject.name, sceneObject.color);
     // Position
     makeSlider3("Position :", sceneObject.name, sceneObject.primitive->getPosition(), -2.0f, 2.0f);
+}
+
+void Editor::makeGuiForPrimitive(const std::string& name, std::shared_ptr<PrimitiveData> primitiveData)
+{
+    SceneObjectPrimitive primitiveType = primitiveData->getPrimitiveType();
+
+    std::string positionName = name + "_position";
+    makeSlider3("Position :", positionName, primitiveData->getPosition(), -5.0f, 5.0f);
+
+    switch(primitiveType)
+    {
+        case SceneObjectPrimitive::plane:
+        {
+            std::shared_ptr<PlaneData> plane = std::static_pointer_cast<PlaneData>(primitiveData);
+            std::string normalName = name + "_normal";
+            makeSlider3("Normal :", normalName, plane->getNormal(), -1.0f, 1.0f);
+            break;
+        }
+        case SceneObjectPrimitive::rectangle:
+        {
+            std::shared_ptr<RectangleData> rectangle = std::static_pointer_cast<RectangleData>(primitiveData);
+            std::string v1Name = name + "_v1";
+            std::string v2Name = name + "_v2";
+            makeSlider3("V1 :", v1Name, rectangle->getV1(), -5.0f, 5.0f);
+            makeSlider3("V2 :", v2Name, rectangle->getV2(), -5.0f, 5.0f);
+            break;
+        }
+        case SceneObjectPrimitive::sphere:
+        {
+            std::shared_ptr<SphereData> sphere = std::static_pointer_cast<SphereData>(primitiveData);
+            std::string radiusName = name + "_radius";
+            makeSlider1("Radius :", radiusName, (float*)&sphere->getRadius(), 0.0f, 5.0f);
+            break;
+        }
+    }
 }
 
 void Editor::onGuiRender()

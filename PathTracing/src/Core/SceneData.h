@@ -49,6 +49,9 @@ public:
         , m_position(position)
     {}
 
+    static std::shared_ptr<PrimitiveData> create(SceneObjectPrimitive primitive);
+    static std::shared_ptr<PrimitiveData> copy(const std::shared_ptr<PrimitiveData>& primitive);
+
     const glm::vec3& getPosition() const { return m_position; }
 
     SceneObjectPrimitive getPrimitiveType() const { return m_primitive; }
@@ -68,10 +71,16 @@ protected:
 class PlaneData : public PrimitiveData
 {
 public:
+    PlaneData()
+        : PlaneData({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f})
+    {}
+
     PlaneData(const glm::vec3& position, const glm::vec3& normal)
         : PrimitiveData(SceneObjectPrimitive::plane, position)
         , m_normal(normal)
     {}
+
+    const glm::vec3& getNormal() const { return m_normal; }
 
     virtual std::shared_ptr<Primitive> createPrimitive() const override
     {
@@ -88,11 +97,18 @@ private:
 class RectangleData : public PrimitiveData
 {
 public:
+    RectangleData()
+        : RectangleData({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f})
+    {}
+
     RectangleData(const glm::vec3& position, const glm::vec3& v1, const glm::vec3& v2)
         : PrimitiveData(SceneObjectPrimitive::rectangle, position)
         , m_v1(v1)
         , m_v2(v2)
     {}
+
+    const glm::vec3& getV1() const { return m_v1; }
+    const glm::vec3& getV2() const { return m_v2; }
 
     virtual std::shared_ptr<Primitive> createPrimitive() const override
     {
@@ -110,10 +126,16 @@ private:
 class SphereData : public PrimitiveData
 {
 public:
+    SphereData()
+        : SphereData({0.0f, 0.0f, 0.0f}, 1.0f)
+    {}
+
     SphereData(const glm::vec3& position, float radius)
         : PrimitiveData(SceneObjectPrimitive::sphere, position)
         , m_radius(radius)
     {}
+
+    const float& getRadius() const { return m_radius; }
 
     virtual std::shared_ptr<Primitive> createPrimitive() const override
     {

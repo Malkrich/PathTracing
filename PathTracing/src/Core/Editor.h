@@ -29,7 +29,8 @@ private:
     void makeInputInt1(const std::string& name, const std::string& inputIntName, int* value);
 
     void makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&));
-    void makeGuiForSceneObject(const SceneObjectData& sceneObject);
+    void makeGuiForSceneObject(SceneObjectData& sceneObject);
+    void makeGuiForPrimitive(const std::string& name, std::shared_ptr<PrimitiveData> primitiveData);
 
 private:
     struct GuiLayoutSettings
