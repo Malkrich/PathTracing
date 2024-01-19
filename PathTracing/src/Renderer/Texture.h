@@ -11,6 +11,9 @@ class Texture
 {
 public:
     Texture();
+    ~Texture();
+
+    unsigned int getTextureId() const { return m_textureId; }
 
     void setData(const std::shared_ptr<Image>& image);
 

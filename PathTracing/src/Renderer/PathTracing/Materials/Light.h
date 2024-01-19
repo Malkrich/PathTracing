@@ -6,20 +6,31 @@
 
 namespace PathTracing
 {
+
 class Light : public Material
 {
-
-
 public:
-    virtual ~Light() {}
 
-    bool CanEmit() override {return true;};
-    glm::vec3 emitted() const override {return glm::vec3(1.0f,1.0f,1.0f);};
+    Light();
+    Light(glm::vec3 color_param);
 
-    //float brdf(glm::vec3 x,float theta_out,float theta_in,float lambda) const override {return 1/M_PI;};
+    bool CanEmit() override
+    {
+        return true;
+    }
+    glm::vec3 emitted() const override
+    {
+        //return glm::vec3(1.0f,1.0f,1.0f);
+        return m_color;
+    }
 
+    float brdf(const glm::vec3&, float, float, float) const override
+    {
+        return 0.0f;
+    }
 
 };
+
 }
 
 #endif // LIGHT_H

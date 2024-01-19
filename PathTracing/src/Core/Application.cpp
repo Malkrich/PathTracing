@@ -9,6 +9,7 @@
 
 #include "Base.h"
 #include "Renderer/Image.h"
+#include "Renderer/Renderer.h"
 
 namespace PathTracing
 {
@@ -25,22 +26,27 @@ Application::Application(const std::string& appName)
 }
 
 Application::~Application()
-{}
+{
+}
 
 void Application::run()
 {
     while(m_running)
     {
-        // time computation
-        float time = glfwGetTime();
-        float deltaTime = time - m_time;
-        m_time = time;
-
-        m_editor->onUpdate(deltaTime);
+        if(!m_sceneRenderingController->isRendering())
+        {
+            auto sceneData = m_editor->getSceneData();
+            m_sceneRenderingController->setSceneData(sceneData);
+            m_sceneRenderingController->resizeImage(m_viewport->getWidth(), m_viewport->getHeight());
+            m_sceneRenderingController->startRenderingThread();
+        }
+        Renderer::clear(m_clearColor);
+        m_viewport->setViewportImage(m_sceneRenderingController->getImage());
 
         // GUI RENDER
         m_imGuiRenderer->OnNewFrame();
         m_editor->onGuiRender();
+        m_viewport->onViewportRender();
         m_imGuiRenderer->onRender();
 
         m_window->onUpdate();
@@ -51,11 +57,9 @@ void Application::onEvent(Event& e)
 {
     EventDispatcher dispatcher(e);
     dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::onWindowClose));
-
-    m_editor->onEvent(e);
 }
 
-bool Application::onWindowClose(const WindowCloseEvent& e)
+bool Application::onWindowClose(const WindowCloseEvent&)
 {
     m_running = false;
     return true;
@@ -70,11 +74,13 @@ void Application::initialize(const std::string& appName)
     windowSpec.Height   = 720;
     m_window.reset(new Window(windowSpec));
 
-    // Renderer
+    // GUI / Editor
     m_editor.reset(new Editor());
-
-    // GUI
+    m_sceneRenderingController.reset(new SceneRenderingController());
     m_imGuiRenderer.reset(new ImGuiRenderer());
+
+    // Viewport
+    m_viewport.reset(new Viewport());
 }
 
 }
