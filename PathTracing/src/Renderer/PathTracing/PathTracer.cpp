@@ -97,7 +97,7 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         std::vector<std::shared_ptr<Pdf>> listPdf;
 
         std::shared_ptr<Pdf> pdfCosine = std::make_shared<CosinePdf>(n);
-        //listPdf.push_back(pdfCosine);
+        listPdf.push_back(pdfCosine);
 
         for (int index : listIndexLight)
         {
@@ -143,6 +143,11 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
         else if (r.depth() + 1 < scene.getRenderSettings().maxDepth)
         {
             Ray new_r = intersection.create_ray(r.depth());
+            int count = 0;
+            while (dot(new_r.u(),intersection.normal) < 0 &&(count<10)) {
+                new_r = intersection.create_ray(r.depth());
+                count++;
+            }
             if (dot(new_r.u(),intersection.normal) < 0)
             {
                 return glm::vec3(0,0,0);
