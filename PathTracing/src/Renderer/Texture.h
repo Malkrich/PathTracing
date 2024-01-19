@@ -11,6 +11,7 @@ class Texture
 {
 public:
     Texture();
+    ~Texture();
 
     unsigned int getTextureId() const { return m_textureId; }
 

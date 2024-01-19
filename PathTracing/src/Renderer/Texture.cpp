@@ -15,6 +15,11 @@ Texture::Texture()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
+Texture::~Texture()
+{
+    glDeleteTextures(1, &m_textureId);
+}
+
 void Texture::setData(const std::shared_ptr<Image>& image)
 {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
