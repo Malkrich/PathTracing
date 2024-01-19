@@ -20,6 +20,8 @@ ImGuiRenderer::ImGuiRenderer()
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
+    io.ConfigWindowsMoveFromTitleBarOnly = true;
+
     ImGui::StyleColorsDark();
 
     ImGuiStyle& style = ImGui::GetStyle();
