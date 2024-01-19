@@ -79,39 +79,41 @@ bool Sphere::intersect(Ray const& ray_param, IntersectData& intersection) const
     }
     else
         return false;
+//    const glm::vec3& x_0 = m_center;
+//    const glm::vec3& x_s = ray_param.p0();
 
-//    float a = square( norm(u) );
-//     float b = 2 * dot(x_0 - x_s, u);
-//     float c = square( norm(x_0 - x_s) ) - square(radius_data);
-//     // calcul de delta
-//     float delta = square(b) - 4 * a * c;
+//    float a = pow( glm::length(ray_param.u()), 2);
+//    float b = 2 * glm::dot(x_0 - x_s, ray_param.u());
+//    float c = pow( glm::length(x_0 - x_s), 2) - pow(m_radius, 2);
+//    // calcul de delta
+//    float delta = pow(b, 2) - 4 * a * c;
 
-//     float t_inter = 0.0f;
-//     if(delta > 0.0f)
-//     {
-//         // 2 solutions
-//          (-b +/- sqrt(delta)) / (2 * a)
-//         float t_min = ( -b - sqrt(delta) ) / ( 2.0f * a ); // plus petite solutiojn
-//         float t_max = ( -b + sqrt(delta) ) / ( 2.0f * a ); // plus grande solution
-//         t_inter = t_min > 0.0f ? t_min : t_max; // on garde la solution t_min si t_min est positif, sinon on prend t_max
-//     }
-//     else if(delta == 0.0f)
-//     {
-//         // 1 solution
-//         // -b / 2 * a
-//         t_inter = -b / (2.0f * a);
-//     }
-//     else if(delta < 0.0f)
-//     {
-//         // aucune solution
-//         t_inter = -1.0f;
-//     }
+//    float t_inter = 0.0f;
+//    if(delta > 0.0f)
+//    {
+//        // 2 solutions
+//        // (-b +/- sqrt(delta)) / (2 * a)
+//        float t_min = ( -b - sqrt(delta) ) / ( 2.0f * a ); // plus petite solution
+//        float t_max = ( -b + sqrt(delta) ) / ( 2.0f * a ); // plus grande solution
+//        t_inter = t_min > 0.0f ? t_min : t_max; // on garde la solution t_min si t_min est positif, sinon on prend t_max
+//    }
+//    else if(delta == 0.0f)
+//    {
+//        // 1 solution
+//        // -b / 2 * a
+//        t_inter = -b / (2.0f * a);
+//    }
+//    else if(delta < 0.0f)
+//    {
+//        // aucune solution
+//        t_inter = -1.0f;
+//    }
 
-//     vec3 p_inter    = x_0 + t_inter * u;
-//     vec3 n          = normalized(p_inter - center_data);
-//     intersection.set(p_inter, n, t_inter);
+//    glm::vec3 p_inter    = x_0 + t_inter * ray_param.u();
+//    glm::vec3 n          = glm::normalize(p_inter - m_center);
+//    intersection.set(p_inter, n, t_inter);
 
-//     return t_inter > 0.0f;
+//    return t_inter > 0.0f;
 }
 
 
