@@ -97,8 +97,8 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.position,n);
 
         //std::shared_ptr<Pdf> pdf = pdfCosine;
-        //std::shared_ptr<Pdf> pdf = pdfLight;
-        std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(pdfCosine,pdfLight);
+        std::shared_ptr<Pdf> pdf = pdfLight;
+        //std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(pdfCosine,pdfLight);
 
         intersection.setPdf(pdf);
         intersection.setMaterial(obj->material);
