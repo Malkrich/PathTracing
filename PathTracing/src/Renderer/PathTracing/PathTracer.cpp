@@ -97,8 +97,8 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.position,n);
 
         //std::shared_ptr<Pdf> pdf = pdfCosine;
-        std::shared_ptr<Pdf> pdf = pdfLight;
-        //std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(pdfCosine,pdfLight);
+        //std::shared_ptr<Pdf> pdf = pdfLight;
+        std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(pdfCosine,pdfLight);
 
         intersection.setPdf(pdf);
         intersection.setMaterial(obj->material);
@@ -123,6 +123,10 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
         else if (r.depth() + 1 < scene.getRenderSettings().maxDepth)
         {
             Ray new_r = intersection.create_ray(r.depth());
+            if (dot(new_r.u(),intersection.normal) < 0)
+            {
+                return glm::vec3(0,0,0);
+            }
             glm::vec3 L_in = getValue(new_r,scene);
             //std::cout<<"L_in : "<<L_in.x<<"  "<<L_in.y<<"  "<<L_in.z<<std::endl;
             glm::vec3 value = intersection.getValue(r,new_r);
