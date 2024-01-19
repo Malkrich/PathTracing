@@ -1,9 +1,6 @@
 # CMake files
 *.txt.user
 
-# IMGUI file
-*.ini
-
 # build files
 build/
 
