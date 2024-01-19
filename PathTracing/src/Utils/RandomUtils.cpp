@@ -16,6 +16,13 @@ double random_double(double min, double max) {
     return min + (max-min)*random_double();
 }
 
+int random_int(double min,double max)
+{ // Returns a random int in [min,max].
+    double random = random_double(min,max+1);
+    int res = static_cast<int>(random);
+    return res;
+}
+
 }
 
 }

@@ -26,7 +26,7 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
     /***** CORNELL BOX ****/
     glm::vec3 red = glm::vec3(1,.05,.05);
     glm::vec3 green = glm::vec3(.12,1,.15);
-    glm::vec3 light = glm::vec3(50,50,50);
+    glm::vec3 light = glm::vec3(100,100,100);
     glm::vec3 white = glm::vec3(.73,.73,.73);
     glm::vec3 blue = glm::vec3(.05,.05,1);
 
@@ -51,6 +51,9 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
     scene->addSphere("Sphere",
                      glm::vec3(0.0f, 0.3f, 0.7f), 0.3f,
                      SceneObjectMaterial::lambertien, glm::vec3(1.0f, 0.0f, 0.0f));
+    scene->addRectangle("Light 2",
+                        glm::vec3(0.2,-0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4),
+                        SceneObjectMaterial::light, light);
 
     RenderSettings renderSettings;
     renderSettings.samplePerPixel = 1;

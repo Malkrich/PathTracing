@@ -92,13 +92,33 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         primitive->intersect(r, intersection);
         glm::vec3 n = intersection.normal;
 
+
+        std::vector<int> listIndexLight = scene.getListIndexLight();
+        std::vector<std::shared_ptr<Pdf>> listPdf;
+
         std::shared_ptr<Pdf> pdfCosine = std::make_shared<CosinePdf>(n);
+        //listPdf.push_back(pdfCosine);
+
+        for (int index : listIndexLight)
+        {
+            std::shared_ptr<SceneObject> light = scene.getSceneObject(index);
+            std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.position,n);
+            listPdf.push_back(pdfLight);
+        }
+
         std::shared_ptr<SceneObject> light = scene.getSceneObject(2);
         std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.position,n);
 
+//        std::shared_ptr<SceneObject> light2 = scene.getSceneObject(7);
+//        std::shared_ptr<Pdf> pdfLight2 = std::make_shared<HittablePdf>(*light2,intersection.position,n);
+//        std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(pdfLight,pdfLight2);
+
+
         //std::shared_ptr<Pdf> pdf = pdfCosine;
         //std::shared_ptr<Pdf> pdf = pdfLight;
-        std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(pdfCosine,pdfLight);
+        std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(listPdf);
+
+
 
         intersection.setPdf(pdf);
         intersection.setMaterial(obj->material);
