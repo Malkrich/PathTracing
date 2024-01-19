@@ -113,6 +113,18 @@ void Editor::makeColorPicker3(const std::string& name, const std::string& colorP
     ImGui::PopItemWidth();
 }
 
+void Editor::makeInputInt1(const std::string& name, const std::string& inputIntName, int *value)
+{
+    float width = ImGui::GetContentRegionAvail().x;
+    std::string inputIntHiddenName = "##" + inputIntName;
+
+    ImGui::Text("%s", name.c_str());
+    ImGui::SameLine(width - m_guiLayoutSettings.inputValueWidth);
+    ImGui::PushItemWidth(m_guiLayoutSettings.inputValueWidth);
+    ImGui::InputInt(inputIntHiddenName.c_str(), value);
+    ImGui::PopItemWidth();
+}
+
 void Editor::makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&))
 {
     std::string fullName = "Reset##" + name;
@@ -164,16 +176,9 @@ void Editor::onGuiRender()
         RenderSettings renderSettings;
         sceneData.setRenderSettings(renderSettings);
     });
-    ImGui::Text("Sample Per Pixel :");
-    ImGui::SameLine(width - m_guiLayoutSettings.sliderWidth);
-    ImGui::PushItemWidth(m_guiLayoutSettings.inputValueWidth);
-    ImGui::InputInt("##SamplePerPixel", (int*)(&m_sceneData->getRenderSettings().samplePerPixel));
-    ImGui::PopItemWidth();
-    ImGui::Text("Max Depth :");
-    ImGui::SameLine(width - m_guiLayoutSettings.sliderWidth);
-    ImGui::PushItemWidth(m_guiLayoutSettings.inputValueWidth);
-    ImGui::InputInt("##MaxDepth", (int*)(&m_sceneData->getRenderSettings().maxDepth));
-    ImGui::PopItemWidth();
+    makeInputInt1("Sample Per Pixel :", "SamplePerPixel", (int*)&m_sceneData->getRenderSettings().samplePerPixel);
+    makeInputInt1("Maximum Depth :", "MaxDepth", (int*)&m_sceneData->getRenderSettings().maxDepth);
+
     ImGui::End();
 }
 
