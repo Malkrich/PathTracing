@@ -1,6 +1,7 @@
 #include "Viewport.h"
 
 #include <imgui.h>
+#include <glad/glad.h>
 
 namespace PathTracing
 {
@@ -20,8 +21,7 @@ void Viewport::setViewportImage(const std::shared_ptr<Image>& image)
 
 void Viewport::onViewportRender()
 {
-    ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoCollapse
-                                    | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
     m_width     = ImGui::GetContentRegionAvail().x;
     m_height    = ImGui::GetContentRegionAvail().y;
     ImGui::Image(reinterpret_cast<void*>(m_viewportTexture->getTextureId()),

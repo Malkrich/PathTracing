@@ -71,7 +71,7 @@ void ImGuiRenderer::onRender()
     ImGuiIO& io = ImGui::GetIO();
     if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        GLFWwindow* window = Application::get()->getWindow()->getWindowPtr();
+        GLFWwindow* window = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(window);
