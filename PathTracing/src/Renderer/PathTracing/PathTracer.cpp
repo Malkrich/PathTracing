@@ -4,6 +4,7 @@
 #include "Renderer/PathTracing/Pdf/HittablePdf.h"
 #include "Renderer/PathTracing/Pdf/MixturePdf.h"
 
+
 namespace PathTracing
 {
 static unsigned int s_accumalationCount = 0;
@@ -124,7 +125,11 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
 
         //std::shared_ptr<Pdf> pdf = pdfCosine;
         //std::shared_ptr<Pdf> pdf = pdfLight;
-        std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(listPdf);
+        //std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(listPdf);
+        //std::shared_ptr<Pdf> pdf = intersection.material->createPdf(lights,intersection.position,n);
+        //std::cout<<"Coucou : "<<index_intersected_primitive<<std::endl;
+        std::shared_ptr<Pdf> pdf = obj->material->createPdf(lights,intersection.position,n);
+        //std::cout<<obj->material->test()<<std::endl;
 
 
 

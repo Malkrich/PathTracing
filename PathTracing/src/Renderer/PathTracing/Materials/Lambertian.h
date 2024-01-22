@@ -18,6 +18,9 @@ public:
         return 1/M_PI;
     }
 
+    std::shared_ptr<Pdf> createPdf(std::vector<std::shared_ptr<SceneObject>> lights,glm::vec3 position, glm::vec3 normal) override;
+    int test() const override;
+
 };
 
 }

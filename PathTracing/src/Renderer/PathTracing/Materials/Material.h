@@ -27,7 +27,9 @@ public:
     {
         return m_color;
     }
-    std::shared_ptr<Pdf> createPdf(std::vector<std::shared_ptr<SceneObject>> lights);
+    virtual std::shared_ptr<Pdf> createPdf(std::vector<std::shared_ptr<SceneObject>> lights,glm::vec3 position,glm::vec3 normal) = 0;
+    virtual int test() const {return 2;}
+
 
     virtual bool CanEmit() { return false; }
     virtual glm::vec3 emitted() const { return glm::vec3(0.0f,0.0f,0.0f); }

@@ -13,6 +13,7 @@
 #include "Renderer/PathTracing/Materials/Material.h"
 #include "Renderer/PathTracing/Materials/Lambertian.h"
 #include "Renderer/PathTracing/Materials/Light.h"
+#include "Renderer/PathTracing/Materials/Mirror.h"
 
 namespace PathTracing
 {
@@ -222,6 +223,26 @@ public:
     virtual std::shared_ptr<Material> createMaterial() const override
     {
         return std::make_shared<Light>(m_color);
+    }
+
+protected:
+    virtual bool isEqual(const MaterialData& other) const override;
+};
+
+class MirrorData : public MaterialData
+{
+public:
+    MirrorData()
+        : MaterialData(SceneObjectMaterial::mirror, glm::vec3(1.0f, 1.0f, 1.0f))
+    {}
+
+    MirrorData(const glm::vec3& color)
+        : MaterialData(SceneObjectMaterial::mirror, color)
+    {}
+
+    virtual std::shared_ptr<Material> createMaterial() const override
+    {
+        return std::make_shared<Mirror>(m_color);
     }
 
 protected:

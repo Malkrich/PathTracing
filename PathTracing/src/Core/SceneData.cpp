@@ -112,6 +112,7 @@ std::shared_ptr<MaterialData> MaterialData::create(SceneObjectMaterial material)
     {
         case SceneObjectMaterial::lambertian:   return std::make_shared<LambertianData>();
         case SceneObjectMaterial::light:        return std::make_shared<LightData>();
+        case SceneObjectMaterial::mirror:        return std::make_shared<MirrorData>();
     }
 }
 
@@ -121,6 +122,7 @@ std::shared_ptr<MaterialData> MaterialData::copy(const std::shared_ptr<MaterialD
     {
         case SceneObjectMaterial::lambertian:   return std::make_shared<LambertianData>(static_cast<const LambertianData&>(*other));
         case SceneObjectMaterial::light:        return std::make_shared<LightData>(static_cast<const LightData&>(*other));
+        case SceneObjectMaterial::mirror:        return std::make_shared<MirrorData>(static_cast<const MirrorData&>(*other));
     }
 }
 
@@ -147,6 +149,14 @@ bool LambertianData::isEqual(const MaterialData& other) const
 }
 
 bool LightData::isEqual(const MaterialData& other) const
+{
+    if(typeid(*this) != typeid(other))
+            return false;
+
+    return MaterialData::isEqual(other);
+}
+
+bool MirrorData::isEqual(const MaterialData& other) const
 {
     if(typeid(*this) != typeid(other))
             return false;

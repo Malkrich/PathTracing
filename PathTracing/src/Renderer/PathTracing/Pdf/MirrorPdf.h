@@ -14,7 +14,9 @@ public:
     }
 
     glm::vec3 generate(Ray r_in) const override {
+        //std::cout<<m_normal.y<<std::endl;
         float b = glm::dot(r_in.u(),m_normal);
+        //float b = glm::dot(m_normal,r_in.u());
         glm::vec3 reflected_ray = r_in.u()+2.0f*b;
         return reflected_ray;
     }
