@@ -17,19 +17,10 @@ namespace PathTracing
 namespace Utils
 {
 
-static std::shared_ptr<Material> createMaterial(const SceneObjectData& sceneObject)
-{
-    switch(sceneObject.material)
-    {
-        case SceneObjectMaterial::lambertien:   return std::make_shared<Lambertian>(sceneObject.color);
-        case SceneObjectMaterial::light:        return std::make_shared<Light>(sceneObject.color);
-    }
-}
-
 static std::shared_ptr<SceneObject> createSceneObject(const SceneObjectData& sceneObject)
 {
     std::shared_ptr<Primitive> primitive = sceneObject.primitive->createPrimitive();
-    std::shared_ptr<Material> material = createMaterial(sceneObject);
+    std::shared_ptr<Material> material = sceneObject.material->createMaterial();
 
     return std::make_shared<SceneObject>(primitive, material, sceneObject.name);
 }
