@@ -27,9 +27,9 @@ class MixturePdf : public Pdf {
         //return 0.5 * pdf1->value(direction) + 0.5 *pdf2->value(direction);
     }
 
-    glm::vec3 generate() const override {
+    glm::vec3 generate(Ray r_in) const override {
         int random_index = Utils::random_int(0,m_listPdf.size()-1);
-        return m_listPdf[random_index]->generate();
+        return m_listPdf[random_index]->generate(r_in);
         /*if (Utils::random_double() < 0.5)
             return pdf1->generate();
         else

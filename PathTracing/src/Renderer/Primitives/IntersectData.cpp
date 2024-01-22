@@ -38,11 +38,11 @@ void IntersectData::setPdf(std::shared_ptr<Pdf> pdf_param)
     pdf = pdf_param;
 }
 
-Ray IntersectData::create_ray(int depth)
+Ray IntersectData::create_ray(Ray r_in,int depth)
 {
     glm::vec3 p0 = position;
     //std::cout<<"position : "<<position.x<<"  "<<position.y<<"  "<<position.z<<std::endl;
-    glm::vec3 u = pdf->generate();
+    glm::vec3 u = pdf->generate(r_in);
     //std::cout<<"u : "<<u.x<<"  "<<u.y<<"  "<<u.z<<std::endl;
     Ray ray = Ray(p0,u,depth+1);
     return ray;

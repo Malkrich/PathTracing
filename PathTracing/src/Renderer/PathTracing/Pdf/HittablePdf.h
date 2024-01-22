@@ -18,7 +18,7 @@ class HittablePdf : public Pdf {
         return objects.pdf_value(origin,normal, direction);
     }
 
-    glm::vec3 generate() const override {
+    glm::vec3 generate(Ray r_in) const override {
         return objects.random(origin);
     }
 

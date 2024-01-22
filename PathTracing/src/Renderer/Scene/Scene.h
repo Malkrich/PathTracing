@@ -21,9 +21,10 @@ public:
     Camera& getCamera() { return m_camera; }
     const std::vector<std::shared_ptr<SceneObject>>& getListObject() const { return m_objectList; }
     const std::vector<int>& getListIndexLight() const { return m_listIndexLight; }
+    const std::vector<std::shared_ptr<SceneObject>> getLights() const;
     unsigned int getPrimitiveCount() const { return m_objectList.size(); }
     std::shared_ptr<SceneObject> getSceneObject(int index) const { return m_objectList[index]; }
-    std::shared_ptr<Primitive> getPrimitive(int index) const { return getSceneObject(index)->primitive; };
+    std::shared_ptr<Primitive> getPrimitive(int index) const { return getSceneObject(index)->primitive; }
     std::shared_ptr<Material> getMaterial(int index) const { return getSceneObject(index)->material; }
     const RenderSettings& getRenderSettings() const { return m_renderSettings; }
 

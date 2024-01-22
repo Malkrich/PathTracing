@@ -31,7 +31,7 @@ struct IntersectData
     void setPdf(std::shared_ptr<Pdf> pdf);
     void setMaterial(std::shared_ptr<Material> material);
 
-    Ray create_ray(int depth);
+    Ray create_ray(Ray r_in,int depth);
     //float getValue(Ray outray, Ray inray);
     glm::vec3 getValue(Ray outray, Ray inray);
 

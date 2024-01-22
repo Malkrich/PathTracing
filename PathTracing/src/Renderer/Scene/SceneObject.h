@@ -3,6 +3,7 @@
 
 #include "Renderer/Primitives/Primitive.h"
 #include "Renderer/PathTracing/Materials/Material.h"
+#include "Renderer/PathTracing/Pdf/Pdf.h"
 
 namespace PathTracing
 {
@@ -14,6 +15,8 @@ struct SceneObject
     bool intersect(Ray const& ray_param, IntersectData& intersection) const;
 
     const std::string& getName() const { return name; }
+
+    std::shared_ptr<Pdf> createPdf();
 
     double pdf_value(const glm::vec3& o, const glm::vec3& n,const glm::vec3& v) const;
     glm::vec3 random(const glm::vec3& o) const;

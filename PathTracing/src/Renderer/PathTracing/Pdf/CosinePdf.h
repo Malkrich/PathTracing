@@ -4,7 +4,7 @@
 #include "Pdf.h"
 #include "OrthonormalBasis.h"
 #include <cmath>
-#include "../../../Utils/RandomUtils.h"
+#include "Utils/RandomUtils.h"
 
 namespace PathTracing
 {
@@ -18,7 +18,7 @@ public:
         return fmax(0, cosine_theta/M_PI);
     }
 
-    glm::vec3 generate() const override {
+    glm::vec3 generate(Ray r_in) const override {
         auto r1 = Utils::random_double();
         auto r2 = Utils::random_double();
 

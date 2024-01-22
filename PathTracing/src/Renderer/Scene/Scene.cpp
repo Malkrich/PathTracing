@@ -18,4 +18,15 @@ void Scene::addObject(std::shared_ptr<SceneObject> object)
     }
 }
 
+const std::vector<std::shared_ptr<SceneObject>> Scene::getLights() const
+{
+   std::vector<std::shared_ptr<SceneObject>> listLights;
+   for (int index : m_listIndexLight)
+   {
+       std::shared_ptr<SceneObject> light = getSceneObject(index);
+       listLights.push_back(light);
+   }
+   return listLights;
+}
+
 }

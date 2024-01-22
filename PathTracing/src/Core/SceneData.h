@@ -155,7 +155,8 @@ private:
 enum class SceneObjectMaterial
 {
     lambertien = 0,
-    light
+    light,
+    mirror
 };
 
 

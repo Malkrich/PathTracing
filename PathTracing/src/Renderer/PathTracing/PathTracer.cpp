@@ -99,9 +99,17 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         std::shared_ptr<Pdf> pdfCosine = std::make_shared<CosinePdf>(n);
         listPdf.push_back(pdfCosine);
 
-        for (int index : listIndexLight)
+        std::vector<std::shared_ptr<SceneObject>> lights = scene.getLights();
+
+//        for (int index : listIndexLight)
+//        {
+//            std::shared_ptr<SceneObject> light = scene.getSceneObject(index);
+//            std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.position,n);
+//            listPdf.push_back(pdfLight);
+//        }
+
+        for (std::shared_ptr<SceneObject> light : lights)
         {
-            std::shared_ptr<SceneObject> light = scene.getSceneObject(index);
             std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.position,n);
             listPdf.push_back(pdfLight);
         }
@@ -142,10 +150,10 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
         }
         else if (r.depth() + 1 < scene.getRenderSettings().maxDepth)
         {
-            Ray new_r = intersection.create_ray(r.depth());
+            Ray new_r = intersection.create_ray(r,r.depth());
             int count = 0;
             while (dot(new_r.u(),intersection.normal) < 0 &&(count<10)) {
-                new_r = intersection.create_ray(r.depth());
+                new_r = intersection.create_ray(r,r.depth());
                 count++;
             }
             if (dot(new_r.u(),intersection.normal) < 0)
@@ -155,7 +163,11 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
             glm::vec3 L_in = getValue(new_r,scene);
             //std::cout<<"L_in : "<<L_in.x<<"  "<<L_in.y<<"  "<<L_in.z<<std::endl;
             glm::vec3 value = intersection.getValue(r,new_r);
-            //std::cout<<value.x<<"   "<<value.y<<"   "<<value.z<<std::endl;
+            //if (intersected_primitive == 0) {
+                //std::cout<<value.x<<"   "<<value.y<<"   "<<value.z<<std::endl;
+                //return glm::vec3(0,0,0);
+            //}
+
             return value*L_in;
         }
         else
