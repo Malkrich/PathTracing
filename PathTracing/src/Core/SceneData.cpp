@@ -3,6 +3,9 @@
 namespace PathTracing
 {
 
+//////////////////////////////////////////////////////
+///////////////// PRIMITIVE //////////////////////////
+//////////////////////////////////////////////////////
 bool operator==(const CameraData& camera1, const CameraData& camera2)
 {
     return camera1.position         == camera2.position
@@ -84,16 +87,15 @@ bool SphereData::isEqual(const PrimitiveData& other) const
 
 bool operator==(const SceneObjectData& object1, const SceneObjectData& object2)
 {
-    return (object1.name == object2.name)
-        && (*object1.primitive == *object2.primitive)
-        && (object1.material == object2.material)
-        && (object1.color == object2.color);
+    return (object1.name        == object2.name)
+        && (*object1.primitive  == *object2.primitive)
+        && (*object1.material   == *object2.material);
 }
 
 bool operator==(const RenderSettings& settings1, const RenderSettings& settings2)
 {
-    return (settings1.samplePerPixel == settings2.samplePerPixel)
-        && (settings1.maxDepth == settings2.maxDepth);
+    return (settings1.samplePerPixel    == settings2.samplePerPixel)
+        && (settings1.maxDepth          == settings2.maxDepth);
 }
 
 SceneData::SceneData()
@@ -101,14 +103,60 @@ SceneData::SceneData()
     , m_renderSettings()
 {}
 
-SceneObjectData::SceneObjectData(const SceneObjectData& other)
-    : name(other.name)
-    , material(other.material)
-    , color(other.color)
+//////////////////////////////////////////////////////
+///////////////// MATERIAL ///////////////////////////
+//////////////////////////////////////////////////////
+std::shared_ptr<MaterialData> MaterialData::create(SceneObjectMaterial material)
 {
-    primitive = PrimitiveData::copy(other.primitive);
+    switch(material)
+    {
+        case SceneObjectMaterial::lambertian:   return std::make_shared<LambertianData>();
+        case SceneObjectMaterial::light:        return std::make_shared<LightData>();
+    }
 }
 
+std::shared_ptr<MaterialData> MaterialData::copy(const std::shared_ptr<MaterialData>& other)
+{
+    switch(other->getMaterialType())
+    {
+        case SceneObjectMaterial::lambertian:   return std::make_shared<LambertianData>(static_cast<const LambertianData&>(*other));
+        case SceneObjectMaterial::light:        return std::make_shared<LightData>(static_cast<const LightData&>(*other));
+    }
+}
+
+bool MaterialData::operator==(const MaterialData& other) const
+{
+    return this->isEqual(other);
+}
+
+bool MaterialData::isEqual(const MaterialData& other) const
+{
+    if(typeid(*this) != typeid(other))
+        return false;
+
+    return m_material   == other.m_material
+        && m_color      == other.m_color;
+}
+
+bool LambertianData::isEqual(const MaterialData& other) const
+{
+    if(typeid(*this) != typeid(other))
+        return false;
+
+    return MaterialData::isEqual(other);
+}
+
+bool LightData::isEqual(const MaterialData& other) const
+{
+    if(typeid(*this) != typeid(other))
+            return false;
+
+    return MaterialData::isEqual(other);
+}
+
+//////////////////////////////////////////////////////
+//////////////// SCENE OBJECT ////////////////////////
+//////////////////////////////////////////////////////
 void SceneData::addObject(const SceneObjectData& object)
 {
     m_sceneObjects.push_back(object);
@@ -116,34 +164,34 @@ void SceneData::addObject(const SceneObjectData& object)
 
 void SceneData::addObject(const std::string& name,
                           std::shared_ptr<PrimitiveData> primitive,
-                          SceneObjectMaterial material, const glm::vec3& color)
+                          std::shared_ptr<MaterialData> material)
 {
-    SceneObjectData sceneObject(name, primitive, material, color);
+    SceneObjectData sceneObject(name, primitive, material);
     addObject(sceneObject);
 }
 
 void SceneData::addPlane(const std::string& name,
                          const glm::vec3& position, const glm::vec3& normal,
-                         SceneObjectMaterial material, const glm::vec3& color)
+                         std::shared_ptr<MaterialData> material)
 {
     std::shared_ptr<PlaneData> plane = std::make_shared<PlaneData>(position, normal);
-    addObject(name, plane, material, color);
+    addObject(name, plane, material);
 }
 
 void SceneData::addRectangle(const std::string& name,
                              const glm::vec3& position, const glm::vec3& v1, const glm::vec3& v2,
-                             SceneObjectMaterial material, const glm::vec3& color)
+                             std::shared_ptr<MaterialData> material)
 {
     std::shared_ptr<RectangleData> rectangle = std::make_shared<RectangleData>(position, v1, v2);
-    addObject(name, rectangle, material, color);
+    addObject(name, rectangle, material);
 }
 
 void SceneData::addSphere(const std::string& name,
                           const glm::vec3& position, float radius,
-                          SceneObjectMaterial material, const glm::vec3& color)
+                          std::shared_ptr<MaterialData> material)
 {
     std::shared_ptr<SphereData> sphere = std::make_shared<SphereData>(position, radius);
-    addObject(name, sphere, material, color);
+    addObject(name, sphere, material);
 }
 
 bool operator==(const SceneData& scene1, const SceneData& scene2)

@@ -32,28 +32,28 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
 
     scene->addRectangle("Green Rectangle",
                         glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0),
-                        SceneObjectMaterial::lambertien, green);
+                        std::make_shared<LambertianData>(green));
     scene->addRectangle("Red Rectangle",
                         glm::vec3(-1.0f,-1.0f,0.0f), glm::vec3(0,2.00f,0), glm::vec3(0,0,1.00f),
-                        SceneObjectMaterial::lambertien, red);
+                        std::make_shared<LambertianData>(red));
     scene->addRectangle("Light",
                         glm::vec3(0.2,0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4),
-                        SceneObjectMaterial::light, light);
+                        std::make_shared<LightData>(light));
     scene->addRectangle("White Rectangle 1",
                         glm::vec3(1.0f,-1.0f,0.0f),glm::vec3(-2.00f,0,0),glm::vec3(0,0,1.00f),
-                        SceneObjectMaterial::lambertien, white);
+                        std::make_shared<LambertianData>(white));
     scene->addRectangle("White Rectangle 2",
                         glm::vec3(1.00f,1.00f,0.00f),glm::vec3(0,0,1.00f),glm::vec3(-2.00f,0,0),
-                        SceneObjectMaterial::lambertien, white);
+                        std::make_shared<LambertianData>(white));
     scene->addRectangle("Blue Rectangle",
                         glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0),
-                        SceneObjectMaterial::lambertien, blue);
+                        std::make_shared<LambertianData>(blue));
     scene->addSphere("Sphere",
                      glm::vec3(0.0f, 0.3f, 0.7f), 0.3f,
-                     SceneObjectMaterial::lambertien, glm::vec3(1.0f, 0.0f, 0.0f));
+                     std::make_shared<LambertianData>(glm::vec3(1.0f, 0.2f, 0.2f)));
     scene->addRectangle("Light 2",
                         glm::vec3(0.2,-0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4),
-                        SceneObjectMaterial::light, light);
+                        std::make_shared<LightData>(light));
 
     RenderSettings renderSettings;
     renderSettings.samplePerPixel = 1;
@@ -141,26 +141,41 @@ void Editor::makeGuiForResetButton(const std::string& name, void(*resetFunction)
 void Editor::makeGuiForSceneObject(SceneObjectData& sceneObject)
 {
     const std::string& name = sceneObject.name;
-    const std::string primitiveHiddenName = "##" + name;
+    const std::string primitiveHiddenName   = "##" + name + "_primitive";
+    const std::string materialHiddenName    = "##" + name + "_material";
     ImGui::Text("%s", name.c_str());
     float width = ImGui::GetContentRegionAvail().x;
 
     // Primitive
-    static const char* items[] = { "Plane",
-                                   "Rectangle",
-                                   "Sphere"};
-    static const unsigned int itemCount = 3;
-    int currentItem = (int)sceneObject.primitive->getPrimitiveType();
-    ImGui::Text("Primitive :");
-    ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
-    ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
-    if(ImGui::Combo(primitiveHiddenName.c_str(), &currentItem, items, itemCount))
-        sceneObject.primitive = PrimitiveData::create( (SceneObjectPrimitive)currentItem );
-    ImGui::PopItemWidth();
+    static const char* primitiveItems[] = { "Plane",
+                                            "Rectangle",
+                                            "Sphere"};
+    static const unsigned int primitiveItemCount = 3;
+    {
+        int currentItem = (int)sceneObject.primitive->getPrimitiveType();
+        ImGui::Text("Primitive :");
+        ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
+        ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
+        if(ImGui::Combo(primitiveHiddenName.c_str(), &currentItem, primitiveItems, primitiveItemCount))
+            sceneObject.primitive = PrimitiveData::create( (SceneObjectPrimitive)currentItem );
+        ImGui::PopItemWidth();
+    }
     makeGuiForPrimitive(name, sceneObject.primitive);
 
-    // Color
-    makeColorPicker3("Color :", sceneObject.name, sceneObject.color);
+    // Material
+    static const char* materialItems[] = { "Lambertian",
+                                            "Light"};
+    static const unsigned int materialItemCount = 2;
+    {
+        int currentItem = (int)sceneObject.material->getMaterialType();
+        ImGui::Text("Material :");
+        ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
+        ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
+        if(ImGui::Combo(materialHiddenName.c_str(), &currentItem, materialItems, materialItemCount))
+            sceneObject.material = MaterialData::create( (SceneObjectMaterial)currentItem );
+        ImGui::PopItemWidth();
+    }
+    makeColorPicker3("Color :", sceneObject.name, sceneObject.material->getColor());
 }
 
 void Editor::makeGuiForPrimitive(const std::string& name, std::shared_ptr<PrimitiveData> primitiveData)
