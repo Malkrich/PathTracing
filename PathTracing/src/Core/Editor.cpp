@@ -51,8 +51,8 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
                         glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0),
                         std::make_shared<LambertianData>(blue));
     scene->addSphere("Sphere",
-                     glm::vec3(0.0f, 0.3f, 0.7f), 0.3f,
-                     std::make_shared<LambertianData>(red));
+                     glm::vec3(0.0f, 0.0f, 0.7f), 0.5f,
+                     std::make_shared<LambertianData>(glm::vec3(0.7f, 0.5f, 0.5f)));
     scene->addRectangle("Light 2",
                         glm::vec3(0.2,-0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4),
                         std::make_shared<LightData>(light));
