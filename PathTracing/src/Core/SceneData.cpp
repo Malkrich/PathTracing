@@ -20,6 +20,7 @@ std::shared_ptr<PrimitiveData> PrimitiveData::create(SceneObjectPrimitive primit
         case SceneObjectPrimitive::plane:       return std::make_shared<PlaneData>();
         case SceneObjectPrimitive::rectangle:   return std::make_shared<RectangleData>();
         case SceneObjectPrimitive::sphere:      return std::make_shared<SphereData>();
+        case SceneObjectPrimitive::box:      return std::make_shared<BoxData>();
     }
 }
 
@@ -30,6 +31,7 @@ std::shared_ptr<PrimitiveData> PrimitiveData::copy(const std::shared_ptr<Primiti
         case SceneObjectPrimitive::plane:       return std::make_shared<PlaneData>(static_cast<const PlaneData&>(*primitive));
         case SceneObjectPrimitive::rectangle:   return std::make_shared<RectangleData>(static_cast<const RectangleData&>(*primitive));
         case SceneObjectPrimitive::sphere:      return std::make_shared<SphereData>(static_cast<const SphereData&>(*primitive));
+        case SceneObjectPrimitive::box:      return std::make_shared<BoxData>(static_cast<const BoxData&>(*primitive));
     }
 }
 
@@ -80,6 +82,18 @@ bool SphereData::isEqual(const PrimitiveData& other) const
 
     auto sphere = static_cast<const SphereData&>(other);
     if(this->m_radius != sphere.m_radius)
+        return false;
+
+    return PrimitiveData::isEqual(other);
+}
+
+bool BoxData::isEqual(const PrimitiveData& other) const
+{
+    if(typeid(*this) != typeid(other))
+        return false;
+
+    auto box = static_cast<const BoxData&>(other);
+    if(this->m_p2 != box.m_p2)
         return false;
 
     return PrimitiveData::isEqual(other);
@@ -202,6 +216,15 @@ void SceneData::addSphere(const std::string& name,
 {
     std::shared_ptr<SphereData> sphere = std::make_shared<SphereData>(position, radius);
     addObject(name, sphere, material);
+}
+
+
+void SceneData::addBox(const std::string& name,
+                          const glm::vec3& p1, const glm::vec3& p2,
+                          std::shared_ptr<MaterialData> material)
+{
+    std::shared_ptr<BoxData> box = std::make_shared<BoxData>(p1, p2);
+    addObject(name, box, material);
 }
 
 bool operator==(const SceneData& scene1, const SceneData& scene2)

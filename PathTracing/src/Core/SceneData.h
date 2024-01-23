@@ -10,6 +10,7 @@
 #include "Renderer/Primitives/Rectangle.h"
 #include "Renderer/Primitives/Plane.h"
 #include "Renderer/Primitives/Sphere.h"
+#include "Renderer/Primitives/Box.h"
 #include "Renderer/PathTracing/Materials/Material.h"
 #include "Renderer/PathTracing/Materials/Lambertian.h"
 #include "Renderer/PathTracing/Materials/Light.h"
@@ -42,7 +43,8 @@ enum class SceneObjectPrimitive
 {
     plane = 0,
     rectangle,
-    sphere
+    sphere,
+    box
 };
 
 class PrimitiveData
@@ -151,6 +153,32 @@ protected:
 
 private:
     float m_radius;
+};
+
+class BoxData : public PrimitiveData
+{
+public:
+    BoxData()
+        : BoxData(glm::vec3(0,0,0), glm::vec3(1,1,1))
+    {}
+
+    BoxData(const glm::vec3& p1, const glm::vec3& p2)
+        : PrimitiveData(SceneObjectPrimitive::box, p1)
+        , m_p2(p2)
+    {}
+
+    const glm::vec3& getP2() const { return m_p2; }
+
+    virtual std::shared_ptr<Primitive> createPrimitive() const override
+    {
+        return std::make_shared<Box>(m_position, m_p2);
+    }
+
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const override;
+
+private:
+    glm::vec3 m_p2;
 };
 
 //////////////////////////////////////////////////////
@@ -342,6 +370,9 @@ public:
                       std::shared_ptr<MaterialData> material);
     void addSphere(const std::string& name,
                    const glm::vec3& position, float radius,
+                   std::shared_ptr<MaterialData> material);
+    void addBox(const std::string& name,
+                   const glm::vec3& p1, const glm::vec3& p2,
                    std::shared_ptr<MaterialData> material);
 
     void setRenderSettings(const RenderSettings& renderSettings) { m_renderSettings = renderSettings; }

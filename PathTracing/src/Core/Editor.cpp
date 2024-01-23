@@ -14,6 +14,7 @@
 #include "Renderer/Primitives/Plane.h"
 #include "Renderer/Primitives/Rectangle.h"
 #include "Renderer/Primitives/Sphere.h"
+#include "Renderer/Primitives/Box.h"
 #include "Renderer/PathTracing/Materials/Lambertian.h"
 #include "Renderer/PathTracing/Materials/Light.h"
 #include "Renderer/Camera.h"
@@ -48,7 +49,7 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
                         std::make_shared<LambertianData>(white));
     scene->addRectangle("Blue Rectangle",
                         glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0),
-                        std::make_shared<MirrorData>(one));
+                        std::make_shared<LambertianData>(blue));
 //    scene->addSphere("Sphere",
 //                     glm::vec3(0.0f, 0.3f, 0.7f), 0.3f,
 //                     std::make_shared<LambertianData>(red));
@@ -58,6 +59,9 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
 //    scene->addRectangle("Mirror",
 //                        glm::vec3(0.500,-0.0,0.666),glm::vec3(-0.4,0,0.4),glm::vec3(0,0.5,0.0),
 //                        std::make_shared<MirrorData>(white));
+    scene->addBox("box",
+                            glm::vec3(0.5,0.8,0.7),glm::vec3(0.5,0.8,0.7)+glm::vec3(0.3,0.3,0.3),
+                            std::make_shared<LambertianData>(red));
 
     RenderSettings renderSettings;
     renderSettings.samplePerPixel = 1;
@@ -153,8 +157,9 @@ void Editor::makeGuiForSceneObject(SceneObjectData& sceneObject)
     // Primitive
     static const char* primitiveItems[] = { "Plane",
                                             "Rectangle",
-                                            "Sphere"};
-    static const unsigned int primitiveItemCount = 3;
+                                            "Sphere",
+                                          "Box"};
+    static const unsigned int primitiveItemCount = 4;
     {
         int currentItem = (int)sceneObject.primitive->getPrimitiveType();
         ImGui::Text("Primitive :");
@@ -213,6 +218,13 @@ void Editor::makeGuiForPrimitive(const std::string& name, std::shared_ptr<Primit
             std::shared_ptr<SphereData> sphere = std::static_pointer_cast<SphereData>(primitiveData);
             std::string radiusName = name + "_radius";
             makeSlider1("Radius :", radiusName, (float*)&sphere->getRadius(), 0.0f, 5.0f);
+            break;
+        }
+        case SceneObjectPrimitive::box:
+        {
+            std::shared_ptr<BoxData> box = std::static_pointer_cast<BoxData>(primitiveData);
+            std::string p2Name = name + "_p2";
+            makeSlider3("P2 :", p2Name, box->getP2(), -5.0f, 5.0f);
             break;
         }
     }
