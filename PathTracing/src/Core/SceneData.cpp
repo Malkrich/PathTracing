@@ -1,5 +1,8 @@
 #include "SceneData.h"
 
+#define COPY_PTR(type) std::make_shared<type>(static_cast<const type&>(*other))
+#define CREATE_PTR(type) std::make_shared<type>()
+
 namespace PathTracing
 {
 
@@ -17,19 +20,19 @@ std::shared_ptr<PrimitiveData> PrimitiveData::create(SceneObjectPrimitive primit
 {
     switch(primitive)
     {
-        case SceneObjectPrimitive::plane:       return std::make_shared<PlaneData>();
-        case SceneObjectPrimitive::rectangle:   return std::make_shared<RectangleData>();
-        case SceneObjectPrimitive::sphere:      return std::make_shared<SphereData>();
+        case SceneObjectPrimitive::plane:       return CREATE_PTR(PlaneData);
+        case SceneObjectPrimitive::rectangle:   return CREATE_PTR(RectangleData);
+        case SceneObjectPrimitive::sphere:      return CREATE_PTR(SphereData);
     }
 }
 
-std::shared_ptr<PrimitiveData> PrimitiveData::copy(const std::shared_ptr<PrimitiveData>& primitive)
+std::shared_ptr<PrimitiveData> PrimitiveData::copy(const std::shared_ptr<PrimitiveData>& other)
 {
-    switch(primitive->getPrimitiveType())
+    switch(other->getPrimitiveType())
     {
-        case SceneObjectPrimitive::plane:       return std::make_shared<PlaneData>(static_cast<const PlaneData&>(*primitive));
-        case SceneObjectPrimitive::rectangle:   return std::make_shared<RectangleData>(static_cast<const RectangleData&>(*primitive));
-        case SceneObjectPrimitive::sphere:      return std::make_shared<SphereData>(static_cast<const SphereData&>(*primitive));
+        case SceneObjectPrimitive::plane:       return COPY_PTR(PlaneData);
+        case SceneObjectPrimitive::rectangle:   return COPY_PTR(RectangleData);
+        case SceneObjectPrimitive::sphere:      return COPY_PTR(SphereData);
     }
 }
 
@@ -110,8 +113,8 @@ std::shared_ptr<MaterialData> MaterialData::create(SceneObjectMaterial material)
 {
     switch(material)
     {
-        case SceneObjectMaterial::lambertian:   return std::make_shared<LambertianData>();
-        case SceneObjectMaterial::light:        return std::make_shared<LightData>();
+        case SceneObjectMaterial::lambertian:   return CREATE_PTR(LambertianData);
+        case SceneObjectMaterial::light:        return CREATE_PTR(LightData);
     }
 }
 
@@ -119,8 +122,8 @@ std::shared_ptr<MaterialData> MaterialData::copy(const std::shared_ptr<MaterialD
 {
     switch(other->getMaterialType())
     {
-        case SceneObjectMaterial::lambertian:   return std::make_shared<LambertianData>(static_cast<const LambertianData&>(*other));
-        case SceneObjectMaterial::light:        return std::make_shared<LightData>(static_cast<const LightData&>(*other));
+        case SceneObjectMaterial::lambertian:   return COPY_PTR(LambertianData);
+        case SceneObjectMaterial::light:        return COPY_PTR(LightData);
     }
 }
 
