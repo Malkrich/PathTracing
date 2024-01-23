@@ -128,6 +128,21 @@ void Editor::makeInputInt1(const std::string& name, const std::string& inputIntN
     ImGui::PopItemWidth();
 }
 
+void Editor::makeCombo(const std::string& name, const std::string& comboName,
+                       const std::vector<const char*>& itemList, int currentItem,
+                       void (*comboboxCallback)(int, SceneObjectData&), SceneObjectData& sceneObject)
+{
+    const int itemCount = itemList.size();
+    float width = ImGui::GetContentRegionAvail().x;
+
+    ImGui::Text("%s", name.c_str());
+    ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
+    ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
+    if(ImGui::Combo(comboName.c_str(), &currentItem, itemList.data(), itemCount))
+        comboboxCallback(currentItem, sceneObject);
+    ImGui::PopItemWidth();
+}
+
 void Editor::makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&))
 {
     std::string fullName = "Reset##" + name;
@@ -147,33 +162,26 @@ void Editor::makeGuiForSceneObject(SceneObjectData& sceneObject)
     float width = ImGui::GetContentRegionAvail().x;
 
     // Primitive
-    static const char* primitiveItems[] = { "Plane",
-                                            "Rectangle",
-                                            "Sphere"};
-    static const unsigned int primitiveItemCount = 3;
     {
         int currentItem = (int)sceneObject.primitive->getPrimitiveType();
-        ImGui::Text("Primitive :");
-        ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
-        ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
-        if(ImGui::Combo(primitiveHiddenName.c_str(), &currentItem, primitiveItems, primitiveItemCount))
+        makeCombo("Primitive :", primitiveHiddenName,
+                  {"Plane", "Rectangle", "Sphere"}, currentItem,
+                  [](int currentItem, SceneObjectData& sceneObject)
+        {
             sceneObject.primitive = PrimitiveData::create( (SceneObjectPrimitive)currentItem );
-        ImGui::PopItemWidth();
+        }, sceneObject);
     }
     makeGuiForPrimitive(name, sceneObject.primitive);
 
     // Material
-    static const char* materialItems[] = { "Lambertian",
-                                            "Light"};
-    static const unsigned int materialItemCount = 2;
     {
         int currentItem = (int)sceneObject.material->getMaterialType();
-        ImGui::Text("Material :");
-        ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
-        ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
-        if(ImGui::Combo(materialHiddenName.c_str(), &currentItem, materialItems, materialItemCount))
+        makeCombo("Material :", materialHiddenName,
+                  {"Lambertian", "Light"}, currentItem,
+                  [](int currentItem, SceneObjectData& sceneObject)
+        {
             sceneObject.material = MaterialData::create( (SceneObjectMaterial)currentItem );
-        ImGui::PopItemWidth();
+        }, sceneObject);
     }
     makeColorPicker3("Color :", sceneObject.name, sceneObject.material->getColor());
 }

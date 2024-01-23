@@ -27,6 +27,9 @@ private:
     void makeSlider3(const std::string& name, const std::string& sliderName, const glm::vec3& value, float min, float max);
     void makeColorPicker3(const std::string& name, const std::string& colorPickerName, const glm::vec3& value);
     void makeInputInt1(const std::string& name, const std::string& inputIntName, int* value);
+    void makeCombo(const std::string& name, const std::string& comboName,
+                   const std::vector<const char*>& itemList, int currentItem,
+                   void(*comboboxCallback)(int, SceneObjectData&), SceneObjectData& sceneObject);
 
     void makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&));
     void makeGuiForSceneObject(SceneObjectData& sceneObject);
