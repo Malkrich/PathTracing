@@ -65,7 +65,7 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
 
     RenderSettings renderSettings;
     renderSettings.samplePerPixel = 1;
-    renderSettings.maxDepth = 3;
+    renderSettings.maxDepth = 10;
     scene->setRenderSettings(renderSettings);
 }
 

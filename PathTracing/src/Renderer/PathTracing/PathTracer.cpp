@@ -32,6 +32,7 @@ void PathTracer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> 
                 glm::vec3 color = threshold1(getValue(ray, *scene));
 
                 current_color = current_color + color;
+
             }
 
             //current_color = static_cast<float>((1.0f / scene->getRenderSettings().samplePerPixel)) * current_color;
