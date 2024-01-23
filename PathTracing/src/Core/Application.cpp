@@ -43,6 +43,7 @@ void Application::run()
             m_sceneRenderingController->startRenderingThread();
         }
         m_viewport->setViewportImage(m_sceneRenderingController->getImage());
+        m_editor->setRenderDuration(m_sceneRenderingController->getCurrentRenderDuration());
 
         // GUI RENDER
         m_imGuiRenderer->OnNewFrame();

@@ -21,6 +21,8 @@ public:
 
     void onGuiRender();
 
+    void setRenderDuration(float renderDuration) { m_renderDuration = renderDuration; }
+
 private:
     void makeSlider1(const std::string& name, const std::string& sliderName, float* value, float min, float max);
     void makeSlider2(const std::string& name, const std::string& sliderName, const glm::vec2& value, float min, float max);
@@ -46,7 +48,8 @@ private:
     };
 
 private:
-    float m_deltaTime = 0.0f;
+    // render time in second
+    float m_renderDuration = 0.0f;
 
     std::shared_ptr<SceneData> m_sceneData;
 

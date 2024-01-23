@@ -159,7 +159,6 @@ void Editor::makeGuiForSceneObject(SceneObjectData& sceneObject)
     const std::string primitiveHiddenName   = "##" + name + "_primitive";
     const std::string materialHiddenName    = "##" + name + "_material";
     ImGui::Text("%s", name.c_str());
-    float width = ImGui::GetContentRegionAvail().x;
 
     // Primitive
     {
@@ -253,6 +252,8 @@ void Editor::onGuiRender()
     });
     makeInputInt1("Sample Per Pixel :", "SamplePerPixel", (int*)&m_sceneData->getRenderSettings().samplePerPixel);
     makeInputInt1("Maximum Depth :", "MaxDepth", (int*)&m_sceneData->getRenderSettings().maxDepth);
+    ImGui::SeparatorText("Statistic :");
+    ImGui::Text("Render duration : %.3f s", m_renderDuration);
     ImGui::End();
 }
 
