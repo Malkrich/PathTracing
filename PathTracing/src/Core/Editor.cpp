@@ -50,9 +50,9 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
     scene->addRectangle("Blue Rectangle",
                         glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0),
                         std::make_shared<LambertianData>(blue));
-//    scene->addSphere("Sphere",
-//                     glm::vec3(0.0f, 0.3f, 0.7f), 0.3f,
-//                     std::make_shared<LambertianData>(red));
+    scene->addSphere("Sphere",
+                     glm::vec3(0.0f, 0.3f, 0.7f), 0.3f,
+                     std::make_shared<LambertianData>(red));
     scene->addRectangle("Light 2",
                         glm::vec3(0.2,-0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4),
                         std::make_shared<LightData>(light));
@@ -136,6 +136,21 @@ void Editor::makeInputInt1(const std::string& name, const std::string& inputIntN
     ImGui::PopItemWidth();
 }
 
+void Editor::makeCombo(const std::string& name, const std::string& comboName,
+                       const std::vector<const char*>& itemList, int currentItem,
+                       void (*comboboxCallback)(int, SceneObjectData&), SceneObjectData& sceneObject)
+{
+    const int itemCount = itemList.size();
+    float width = ImGui::GetContentRegionAvail().x;
+
+    ImGui::Text("%s", name.c_str());
+    ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
+    ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
+    if(ImGui::Combo(comboName.c_str(), &currentItem, itemList.data(), itemCount))
+        comboboxCallback(currentItem, sceneObject);
+    ImGui::PopItemWidth();
+}
+
 void Editor::makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&))
 {
     std::string fullName = "Reset##" + name;
@@ -152,38 +167,28 @@ void Editor::makeGuiForSceneObject(SceneObjectData& sceneObject)
     const std::string primitiveHiddenName   = "##" + name + "_primitive";
     const std::string materialHiddenName    = "##" + name + "_material";
     ImGui::Text("%s", name.c_str());
-    float width = ImGui::GetContentRegionAvail().x;
 
     // Primitive
-    static const char* primitiveItems[] = { "Plane",
-                                            "Rectangle",
-                                            "Sphere",
-                                          "Box"};
-    static const unsigned int primitiveItemCount = 4;
     {
         int currentItem = (int)sceneObject.primitive->getPrimitiveType();
-        ImGui::Text("Primitive :");
-        ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
-        ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
-        if(ImGui::Combo(primitiveHiddenName.c_str(), &currentItem, primitiveItems, primitiveItemCount))
+        makeCombo("Primitive :", primitiveHiddenName,
+                  {"Plane", "Rectangle", "Sphere", "Box"}, currentItem,
+                  [](int currentItem, SceneObjectData& sceneObject)
+        {
             sceneObject.primitive = PrimitiveData::create( (SceneObjectPrimitive)currentItem );
-        ImGui::PopItemWidth();
+        }, sceneObject);
     }
     makeGuiForPrimitive(name, sceneObject.primitive);
 
     // Material
-    static const char* materialItems[] = { "Lambertian",
-                                            "Light",
-                                         "Mirror"};
-    static const unsigned int materialItemCount = 3;
     {
         int currentItem = (int)sceneObject.material->getMaterialType();
-        ImGui::Text("Material :");
-        ImGui::SameLine(width - m_guiLayoutSettings.comboWidth);
-        ImGui::PushItemWidth(m_guiLayoutSettings.comboWidth);
-        if(ImGui::Combo(materialHiddenName.c_str(), &currentItem, materialItems, materialItemCount))
+        makeCombo("Material :", materialHiddenName,
+                  {"Lambertian", "Light", "Mirror"}, currentItem,
+                  [](int currentItem, SceneObjectData& sceneObject)
+        {
             sceneObject.material = MaterialData::create( (SceneObjectMaterial)currentItem );
-        ImGui::PopItemWidth();
+        }, sceneObject);
     }
     makeColorPicker3("Color :", sceneObject.name, sceneObject.material->getColor());
 }
@@ -262,6 +267,8 @@ void Editor::onGuiRender()
     });
     makeInputInt1("Sample Per Pixel :", "SamplePerPixel", (int*)&m_sceneData->getRenderSettings().samplePerPixel);
     makeInputInt1("Maximum Depth :", "MaxDepth", (int*)&m_sceneData->getRenderSettings().maxDepth);
+    ImGui::SeparatorText("Statistic :");
+    ImGui::Text("Render duration : %.3f s", m_renderDuration);
     ImGui::End();
 }
 

@@ -2,6 +2,7 @@
 
 #include <thread>
 #include <functional>
+#include <chrono>
 
 #include "Renderer/PathTracing/PathTracer.h"
 #include "Renderer/Renderer.h"
@@ -75,9 +76,13 @@ void SceneRenderingController::renderThread()
 {
     m_isRendering = true;
 
+    auto tStart = std::chrono::steady_clock::now();
     PathTracer::pathTrace(m_image, m_scene);
+    auto tEnd = std::chrono::steady_clock::now();
 
     m_isRendering = false;
+
+    m_renderDuration = (float)std::chrono::duration_cast<std::chrono::milliseconds>(tEnd - tStart).count() / 1000.0f;
 }
 
 void SceneRenderingController::startRenderingThread()

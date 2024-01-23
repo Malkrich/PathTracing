@@ -56,7 +56,7 @@ public:
     {}
 
     static std::shared_ptr<PrimitiveData> create(SceneObjectPrimitive primitive);
-    static std::shared_ptr<PrimitiveData> copy(const std::shared_ptr<PrimitiveData>& primitive);
+    static std::shared_ptr<PrimitiveData> copy(const std::shared_ptr<PrimitiveData>& other);
 
     const glm::vec3& getPosition() const { return m_position; }
 
