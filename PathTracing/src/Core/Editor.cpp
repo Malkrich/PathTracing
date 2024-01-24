@@ -30,7 +30,6 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
     glm::vec3 light = glm::vec3(50,50,50);
     glm::vec3 white = glm::vec3(.73,.73,.73)*10.0f;
     glm::vec3 blue = glm::vec3(.05,.05,1);
-//    glm::vec3 one = glm::vec3(1.0f, 1.0f, 1.0f);
 
     scene->addRectangle("Green Rectangle",
                         glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0),
@@ -50,18 +49,15 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
     scene->addRectangle("Blue Rectangle",
                         glm::vec3(1,-1,1),glm::vec3(-2,0,0),glm::vec3(0,2,0),
                         std::make_shared<LambertianData>(blue));
-    scene->addSphere("Sphere",
-                     glm::vec3(0.0f, 0.0f, 0.7f), 0.5f,
+    scene->addSphere("Sphere 1",
+                     glm::vec3(0.0f, 0.0f, 0.7f), 0.35f,
                      std::make_shared<LambertianData>(glm::vec3(0.7f, 0.5f, 0.5f)));
+    scene->addSphere("Sphere 2",
+                     glm::vec3(0.7f, 0.7f, 0.7f), 0.2f,
+                     std::make_shared<LambertianData>(red));
     scene->addRectangle("Light 2",
                         glm::vec3(0.2,-0.99,0.3),glm::vec3(-0.4,0,0),glm::vec3(0,0,0.4),
                         std::make_shared<LightData>(light));
-//    scene->addRectangle("Mirror",
-//                        glm::vec3(0.500,-0.0,0.666),glm::vec3(-0.4,0,0.4),glm::vec3(0,0.5,0.0),
-//                        std::make_shared<MirrorData>(white));
-    scene->addBox("box",
-                            glm::vec3(0.5,0.8,0.7),glm::vec3(0.5,0.8,0.7)+glm::vec3(0.3,0.3,0.3),
-                            std::make_shared<LambertianData>(red));
 
     RenderSettings renderSettings;
     renderSettings.samplePerPixel = 1;
