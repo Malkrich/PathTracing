@@ -1,5 +1,7 @@
 #include "SceneData.h"
 
+#include "Base.h"
+
 #define COPY_PTR(type)      std::make_shared<type>(static_cast<const type&>(*other))
 #define CREATE_PTR(type)    std::make_shared<type>()
 
@@ -26,6 +28,7 @@ std::shared_ptr<PrimitiveData> PrimitiveData::create(SceneObjectPrimitive primit
         case SceneObjectPrimitive::box:         return CREATE_PTR(BoxData);
     }
 
+    PT_ASSERT(false, "Primitive type doesn't exist !");
     return nullptr;
 }
 
@@ -39,6 +42,7 @@ std::shared_ptr<PrimitiveData> PrimitiveData::copy(const std::shared_ptr<Primiti
         case SceneObjectPrimitive::box:         return COPY_PTR(BoxData);
     }
 
+    PT_ASSERT(false, "Primitive type doesn't exist !");
     return nullptr;
 }
 
@@ -136,6 +140,7 @@ std::shared_ptr<MaterialData> MaterialData::create(SceneObjectMaterial material)
         case SceneObjectMaterial::mirror:       return CREATE_PTR(MirrorData);
     }
 
+    PT_ASSERT(false, "Material type doesn't exist !");
     return nullptr;
 }
 
@@ -148,6 +153,7 @@ std::shared_ptr<MaterialData> MaterialData::copy(const std::shared_ptr<MaterialD
         case SceneObjectMaterial::mirror:       return COPY_PTR(MirrorData);
     }
 
+    PT_ASSERT(false, "Material type doesn't exist !");
     return nullptr;
 }
 
