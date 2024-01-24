@@ -17,11 +17,4 @@ std::shared_ptr<Pdf> Light::createPdf(const std::vector<std::shared_ptr<SceneObj
     return pdf;
 }
 
-
-int Light::test() const
-{
-    ;// = std::make_shared<CosinePdf>(normal);
-    return 3;
-}
-
 }

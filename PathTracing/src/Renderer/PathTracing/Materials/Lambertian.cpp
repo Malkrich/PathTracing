@@ -30,10 +30,4 @@ std::shared_ptr<Pdf> Lambertian::createPdf(const std::vector<std::shared_ptr<Sce
     return pdf;
 }
 
-int Lambertian::test() const
-{
-//    int pdf = std::make_shared<CosinePdf>(normal);
-    return 3;
-}
-
 }

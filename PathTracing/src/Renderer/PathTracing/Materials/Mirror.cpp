@@ -19,9 +19,4 @@ std::shared_ptr<Pdf> Mirror::createPdf(const std::vector<std::shared_ptr<SceneOb
     return pdf;
 }
 
-int Mirror::test() const
-{
-    return 2;
-}
-
 }

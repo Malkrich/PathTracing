@@ -24,7 +24,6 @@ public:
 //    }
     virtual std::shared_ptr<Pdf> createPdf(const std::vector<std::shared_ptr<SceneObject>>& lights,
                                            const glm::vec3& position, const glm::vec3& normal) override;
-    virtual int test() const override;
 };
 
 }
