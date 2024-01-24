@@ -269,7 +269,8 @@ void Editor::onGuiRender()
     makeInputInt1("Maximum Depth :", "MaxDepth", (int*)&m_sceneData->getRenderSettings().maxDepth);
     ImGui::SeparatorText("Statistic :");
     ImGui::Text("Render duration : %.3f s", m_renderDuration);
-    ImGui::Text("FPS : %.3f", 1.0f / m_renderDuration);
+    float fps = m_renderDuration == 0.0f ? 0.0f : 1.0f / m_renderDuration;
+    ImGui::Text("FPS : %.3f", fps);
     ImGui::End();
 }
 
