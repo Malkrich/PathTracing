@@ -4,6 +4,7 @@
 
 namespace PathTracing
 {
+
 Material::Material()
     : m_color(glm::vec3(0,0,0))
 {}
@@ -17,6 +18,5 @@ Material::Material(const glm::vec3& color):
     std::shared_ptr<Pdf> pdf = std::make_shared<CosinePdf>(normal);
     return pdf;
 }*/
-
 
 }
