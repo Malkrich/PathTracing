@@ -5,15 +5,21 @@
 #include <cmath>
 namespace PathTracing
 {
-class MirrorPdf : public Pdf {
-public:
-    MirrorPdf(const glm::vec3& normal_param):m_normal(normal_param) {};
 
-    double value(const glm::vec3& direction) const override {
-        return 1;
+class MirrorPdf : public Pdf
+{
+public:
+    MirrorPdf(const glm::vec3& normal_param)
+        : m_normal(normal_param)
+    {}
+
+    virtual double value(const glm::vec3&) const override
+    {
+        return 1.0;
     }
 
-    glm::vec3 generate(Ray r_in) const override {
+    virtual glm::vec3 generate(const Ray& r_in) const override
+    {
         //std::cout<<m_normal.y<<std::endl;
         float b = glm::dot(r_in.u(),m_normal);
         //float b = glm::dot(m_normal,r_in.u());
@@ -25,6 +31,7 @@ private:
     glm::vec3 m_normal;
 
 };
+
 }
 
 

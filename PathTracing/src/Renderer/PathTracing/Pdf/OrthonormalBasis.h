@@ -5,20 +5,21 @@
 
 namespace PathTracing {
 
-class OrthonormalBasis {
-  public:
-    OrthonormalBasis() {}
+class OrthonormalBasis
+{
+public:
+    OrthonormalBasis() = default;
 
     const glm::vec3& operator[](int i) const { return axis[i]; }
     glm::vec3& operator[](int i) { return axis[i]; }
 
-    const glm::vec3& u() const { return axis[0]; }
-    const glm::vec3& v() const { return axis[1]; }
-    const glm::vec3& w() const { return axis[2]; }
+    const glm::vec3& getU() const { return axis[0]; }
+    const glm::vec3& getV() const { return axis[1]; }
+    const glm::vec3& getW() const { return axis[2]; }
 
     glm::vec3 local(float a, float b, float c) const
     {
-        return a*u() + b*v() + c*w();
+        return a*getU() + b*getV() + c*getW();
     }
 
     glm::vec3 local(const glm::vec3& a) const
@@ -26,7 +27,8 @@ class OrthonormalBasis {
         return local(a.x, a.y, a.z);
     }
 
-    void build_from_w(const glm::vec3& w) {
+    void buildFromW(const glm::vec3& w)
+    {
         glm::vec3 unit_w = glm::normalize(w);
         glm::vec3 a = (fabs(unit_w.x) > 0.9) ? glm::vec3(0,1,0) : glm::vec3(1,0,0);
         glm::vec3 v = glm::normalize(cross(unit_w, a));
@@ -36,7 +38,7 @@ class OrthonormalBasis {
         axis[2] = unit_w;
     }
 
-  public:
+public:
     glm::vec3 axis[3];
 };
 
