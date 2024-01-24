@@ -29,13 +29,13 @@ public:
 
     void buildFromW(const glm::vec3& w)
     {
-        glm::vec3 unit_w = glm::normalize(w);
-        glm::vec3 a = (fabs(unit_w.x) > 0.9) ? glm::vec3(0,1,0) : glm::vec3(1,0,0);
-        glm::vec3 v = glm::normalize(cross(unit_w, a));
-        glm::vec3 u = cross(unit_w, v);
+        glm::vec3 unitW = glm::normalize(w);
+        glm::vec3 a = (fabs(unitW.x) > 0.9f) ? glm::vec3(0.0f, 1.0f, 0.0f) : glm::vec3(1.0f, 0.0f, 0.0f);
+        glm::vec3 v = glm::normalize(cross(unitW, a));
+        glm::vec3 u = cross(unitW, v);
         axis[0] = u;
         axis[1] = v;
-        axis[2] = unit_w;
+        axis[2] = unitW;
     }
 
 public:

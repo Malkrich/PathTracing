@@ -9,7 +9,7 @@ namespace PathTracing
 class Sphere : public Primitive
 {
 public:
-    Sphere(glm::vec3 const& center_param, float radius_param);
+    Sphere(glm::vec3 const& center, float radius);
 
     /** Center of the Sphere */
     glm::vec3 const& center() const;
@@ -17,7 +17,7 @@ public:
     float radius() const;
 
     /** Intersection computation with a ray */
-    virtual bool intersect(Ray const& ray_param, IntersectData& intersection) const override;
+    virtual bool intersect(Ray const& ray, IntersectData& intersection) const override;
     virtual glm::vec3& getPosition() override { return m_center; }
     virtual const glm::vec3& getPosition() const override { return m_center; }
     virtual void rotate(const glm::quat&) override {}

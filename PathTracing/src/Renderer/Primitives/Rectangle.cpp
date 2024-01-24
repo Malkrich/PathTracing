@@ -22,8 +22,8 @@ bool Rectangle::intersect(const Ray& ray_param, IntersectData& intersection) con
 {
 
     //Le code suivant est arbitraire est doit etre modifie
-    glm::vec3 xs        = ray_param.p0();
-    const glm::vec3& u  = ray_param.u();
+    glm::vec3 xs        = ray_param.getP0();
+    const glm::vec3& u  = ray_param.getU();
     const glm::vec3& np = m_normal;
     glm::vec3 xp        = m_p;
 
@@ -56,7 +56,7 @@ double Rectangle::pdf_value(const glm::vec3 &o,const glm::vec3 &n, const glm::ve
     bool is_intersected = intersect(ray,intersection);
     if (is_intersected)
     {
-        auto distance_squared = intersection.relative * intersection.relative; // * v.length_squared();
+        auto distance_squared = intersection.m_relative * intersection.m_relative; // * v.length_squared();
         //std::cout<<"Relative : "<<intersection.relative<<"      Distance_squared : "<<distance_squared<<std::endl;
         //std::cout<<"Longueur v : "<<v.length()<<"      Longueur v2 : "<<v.length()*v.length()<<std::endl;
         auto cosine = fabs(dot(v, n));// / v.length());

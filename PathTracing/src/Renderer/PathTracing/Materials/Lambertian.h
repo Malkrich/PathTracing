@@ -14,9 +14,9 @@ public:
     Lambertian();
     Lambertian(const glm::vec3& color);
 
-    virtual float brdf(const glm::vec3&, float, float theta_in, float) const override
+    virtual float brdf(const glm::vec3&, float, float thetaIn, float) const override
     {
-        return glm::cos(theta_in) / M_PI;
+        return glm::cos(thetaIn) / M_PI;
     }
 
     virtual std::shared_ptr<Pdf> createPdf(const std::vector<std::shared_ptr<SceneObject>>& lights,

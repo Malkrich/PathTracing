@@ -29,12 +29,12 @@ Sphere::Sphere(const glm::vec3& center, float radius)
     , m_radius(radius)
 {}
 
-bool Sphere::intersect(Ray const& ray_param, IntersectData& intersection) const
+bool Sphere::intersect(Ray const& ray, IntersectData& intersection) const
 {
-    const glm::vec3& u  = ray_param.u();
+    const glm::vec3& u  = ray.getU();
     const glm::vec3& x0 = m_center;
     const float r       = m_radius;
-    const glm::vec3& xs = ray_param.p0();
+    const glm::vec3& xs = ray.getP0();
 
     float a = pow(glm::length(u), 2);
     float b = 2*dot(xs - x0, u);

@@ -9,8 +9,8 @@ Material::Material()
     : m_color(glm::vec3(0,0,0))
 {}
 
-Material::Material(const glm::vec3& color):
-    m_color(color)
+Material::Material(const glm::vec3& color)
+    : m_color(color)
 {}
 
 /*std::shared_ptr<Pdf> Material::createPdf(std::vector<std::shared_ptr<SceneObject>> lights,glm::vec3 position,glm::vec3 normal)

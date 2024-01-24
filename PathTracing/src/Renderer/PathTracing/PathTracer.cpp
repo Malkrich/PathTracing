@@ -77,7 +77,7 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         if(is_intersection)
         {
             found_intersection = true;
-            float new_relative = intersection.relative;
+            float new_relative = intersection.m_relative;
             if (new_relative <= t) {
                 index_intersected_primitive = k;
                 t = new_relative;
@@ -92,7 +92,7 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
 
         std::shared_ptr<Primitive> primitive = scene.getPrimitive(index_intersected_primitive);
         primitive->intersect(r, intersection);
-        glm::vec3 n = intersection.normal;
+        glm::vec3 n = intersection.m_normal;
 
 
         std::vector<int> listIndexLight = scene.getListIndexLight();
@@ -112,12 +112,12 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
 
         for (std::shared_ptr<SceneObject> light : lights)
         {
-            std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.position,n);
+            std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.m_position,n);
             listPdf.push_back(pdfLight);
         }
 
         std::shared_ptr<SceneObject> light = scene.getSceneObject(2);
-        std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.position,n);
+        std::shared_ptr<Pdf> pdfLight = std::make_shared<HittablePdf>(*light,intersection.m_position,n);
 
 //        std::shared_ptr<SceneObject> light2 = scene.getSceneObject(7);
 //        std::shared_ptr<Pdf> pdfLight2 = std::make_shared<HittablePdf>(*light2,intersection.position,n);
@@ -129,7 +129,7 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         //std::shared_ptr<Pdf> pdf = std::make_shared<MixturePdf>(listPdf);
         //std::shared_ptr<Pdf> pdf = intersection.material->createPdf(lights,intersection.position,n);
         //std::cout<<"Coucou : "<<index_intersected_primitive<<std::endl;
-        std::shared_ptr<Pdf> pdf = obj->material->createPdf(lights,intersection.position,n);
+        std::shared_ptr<Pdf> pdf = obj->material->createPdf(lights,intersection.m_position,n);
         //std::cout<<obj->material->test()<<std::endl;
 
 
@@ -150,25 +150,25 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
 
     if(is_intersected)
     {
-        if (intersection.material->CanEmit())
+        if (intersection.m_material->CanEmit())
         {
-            return intersection.material->emitted();
+            return intersection.m_material->emitted();
         }
-        else if (r.depth() + 1 < scene.getRenderSettings().maxDepth)
+        else if (r.getDepth() + 1 < scene.getRenderSettings().maxDepth)
         {
-            Ray new_r = intersection.create_ray(r,r.depth());
+            Ray newR = intersection.create_ray(r, r.getDepth());
             int count = 0;
-            while (dot(new_r.u(),intersection.normal) < 0 &&(count<10)) {
-                new_r = intersection.create_ray(r,r.depth());
+            while (dot(newR.getU(),intersection.m_normal) < 0 &&(count<10)) {
+                newR = intersection.create_ray(r, r.getDepth());
                 count++;
             }
-            if (dot(new_r.u(),intersection.normal) < 0)
+            if (dot(newR.getU(),intersection.m_normal) < 0)
             {
                 return glm::vec3(0,0,0);
             }
-            glm::vec3 L_in = getValue(new_r,scene);
+            glm::vec3 L_in = getValue(newR, scene);
             //std::cout<<"L_in : "<<L_in.x<<"  "<<L_in.y<<"  "<<L_in.z<<std::endl;
-            glm::vec3 value = intersection.getValue(r,new_r);
+            glm::vec3 value = intersection.getValue(r, newR);
             //if (intersected_primitive == 0) {
                 //std::cout<<value.x<<"   "<<value.y<<"   "<<value.z<<std::endl;
                 //return glm::vec3(0,0,0);

@@ -29,10 +29,10 @@ public:
         //return 0.5 * pdf1->value(direction) + 0.5 *pdf2->value(direction);
     }
 
-    virtual glm::vec3 generate(const Ray& r_in) const override
+    virtual glm::vec3 generate(const Ray& rIn) const override
     {
-        int random_index = Utils::random_int(0,m_listPdf.size()-1);
-        return m_listPdf[random_index]->generate(r_in);
+        int random_index = Utils::random_int(0, m_listPdf.size()-1);
+        return m_listPdf[random_index]->generate(rIn);
         /*if (Utils::random_double() < 0.5)
             return pdf1->generate();
         else

@@ -9,7 +9,7 @@ namespace PathTracing
 class Rectangle : public Primitive
 {
 public:
-    Rectangle(const glm::vec3& p_param, const glm::vec3& v1_param, const glm::vec3& v2_param);
+    Rectangle(const glm::vec3& p, const glm::vec3& v1, const glm::vec3& v2);
 
     /*Return the point of the Rectangle*/
     const glm::vec3& p() const { return m_p; }

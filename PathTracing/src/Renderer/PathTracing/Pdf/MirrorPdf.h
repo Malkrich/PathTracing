@@ -9,8 +9,8 @@ namespace PathTracing
 class MirrorPdf : public Pdf
 {
 public:
-    MirrorPdf(const glm::vec3& normal_param)
-        : m_normal(normal_param)
+    MirrorPdf(const glm::vec3& normal)
+        : m_normal(normal)
     {}
 
     virtual double value(const glm::vec3&) const override
@@ -18,12 +18,12 @@ public:
         return 1.0;
     }
 
-    virtual glm::vec3 generate(const Ray& r_in) const override
+    virtual glm::vec3 generate(const Ray& rIn) const override
     {
         //std::cout<<m_normal.y<<std::endl;
-        float b = glm::dot(r_in.u(),m_normal);
+        float b = glm::dot(rIn.getU(), m_normal);
         //float b = glm::dot(m_normal,r_in.u());
-        glm::vec3 reflected_ray = r_in.u()+2.0f*b;
+        glm::vec3 reflected_ray = rIn.getU() + 2.0f*b;
         return reflected_ray;
     }
 

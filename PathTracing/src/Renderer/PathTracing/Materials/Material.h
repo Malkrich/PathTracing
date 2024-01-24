@@ -19,7 +19,7 @@ public:
     Material();
     Material(const glm::vec3& color);
 
-    virtual float brdf(const glm::vec3& x, float theta_out, float theta_in, float lambda) const = 0;
+    virtual float brdf(const glm::vec3& x, float thetaOut, float thetaIn, float lambda) const = 0;
     virtual const glm::vec3& getAlbedo() const { return m_color; }
     virtual glm::vec3& getAlbedo() { return m_color; }
     virtual const glm::vec3& getAlbedo(const glm::vec3&, float, float, float)
