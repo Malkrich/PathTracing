@@ -30,7 +30,7 @@ void createCornellBoxScene(std::shared_ptr<SceneData> scene)
     glm::vec3 light = glm::vec3(50,50,50);
     glm::vec3 white = glm::vec3(.73,.73,.73)*10.0f;
     glm::vec3 blue = glm::vec3(.05,.05,1);
-    glm::vec3 one = glm::vec3(1,1,1);
+//    glm::vec3 one = glm::vec3(1.0f, 1.0f, 1.0f);
 
     scene->addRectangle("Green Rectangle",
                         glm::vec3(1.0f,-1.0f,0.0f), glm::vec3(0,0,1), glm::vec3(0,2,0),

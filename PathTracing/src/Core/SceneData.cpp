@@ -25,6 +25,8 @@ std::shared_ptr<PrimitiveData> PrimitiveData::create(SceneObjectPrimitive primit
         case SceneObjectPrimitive::sphere:      return CREATE_PTR(SphereData);
         case SceneObjectPrimitive::box:         return CREATE_PTR(BoxData);
     }
+
+    return nullptr;
 }
 
 std::shared_ptr<PrimitiveData> PrimitiveData::copy(const std::shared_ptr<PrimitiveData>& other)
@@ -36,6 +38,8 @@ std::shared_ptr<PrimitiveData> PrimitiveData::copy(const std::shared_ptr<Primiti
         case SceneObjectPrimitive::sphere:      return COPY_PTR(SphereData);
         case SceneObjectPrimitive::box:         return COPY_PTR(BoxData);
     }
+
+    return nullptr;
 }
 
 bool PrimitiveData::operator==(const PrimitiveData& other)
@@ -131,6 +135,8 @@ std::shared_ptr<MaterialData> MaterialData::create(SceneObjectMaterial material)
         case SceneObjectMaterial::light:        return CREATE_PTR(LightData);
         case SceneObjectMaterial::mirror:       return CREATE_PTR(MirrorData);
     }
+
+    return nullptr;
 }
 
 std::shared_ptr<MaterialData> MaterialData::copy(const std::shared_ptr<MaterialData>& other)
@@ -141,6 +147,8 @@ std::shared_ptr<MaterialData> MaterialData::copy(const std::shared_ptr<MaterialD
         case SceneObjectMaterial::light:        return COPY_PTR(LightData);
         case SceneObjectMaterial::mirror:       return COPY_PTR(MirrorData);
     }
+
+    return nullptr;
 }
 
 bool MaterialData::operator==(const MaterialData& other) const
