@@ -20,7 +20,7 @@ public:
     /** Direction */
     const glm::vec3& u() const { return m_u; }
 
-    int depth() const { return m_depth; }
+    unsigned int depth() const { return m_depth; }
 
     /** Evaluate 3D position at x0+t*u */
     glm::vec3 operator()(float t) const;
@@ -35,7 +35,7 @@ private:
     /** Internal direction of the Ray */
     glm::vec3 m_u;
 
-    int m_depth;
+    unsigned int m_depth;
 };
 
 /** Exporting Ray data */
