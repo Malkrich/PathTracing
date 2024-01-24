@@ -45,6 +45,8 @@ make
 ./PathTracing
 ```
 
+__Note :__ When running the program, the GUI display might not be good looking in the beginning. In the _helper/_ there is _.ini_ file that will fix this issue. This file has to be copied and passed in the root directory, before running the program.
+
 ### Windows
 
 The program can also be built on __Windows__ using __Premake__ and __Visual Studio__. To build the project, double click on _Build_Windows.bat_. This will create a solution file (_.sln_) that can be then opened to run the program.

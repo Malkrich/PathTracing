@@ -3,6 +3,7 @@
 
 # IMGUI ini file
 *.ini
+!helper/*.ini
 
 # build files
 build/
