@@ -2,6 +2,7 @@
 
 #include <thread>
 #include <functional>
+#include <chrono>
 
 #include "Renderer/PathTracing/PathTracer.h"
 #include "Renderer/Renderer.h"
@@ -17,19 +18,10 @@ namespace PathTracing
 namespace Utils
 {
 
-static std::shared_ptr<Material> createMaterial(const SceneObjectData& sceneObject)
-{
-    switch(sceneObject.material)
-    {
-        case SceneObjectMaterial::lambertien:   return std::make_shared<Lambertian>(sceneObject.color);
-        case SceneObjectMaterial::light:        return std::make_shared<Light>(sceneObject.color);
-    }
-}
-
 static std::shared_ptr<SceneObject> createSceneObject(const SceneObjectData& sceneObject)
 {
     std::shared_ptr<Primitive> primitive = sceneObject.primitive->createPrimitive();
-    std::shared_ptr<Material> material = createMaterial(sceneObject);
+    std::shared_ptr<Material> material = sceneObject.material->createMaterial();
 
     return std::make_shared<SceneObject>(primitive, material, sceneObject.name);
 }
@@ -84,9 +76,13 @@ void SceneRenderingController::renderThread()
 {
     m_isRendering = true;
 
+    auto tStart = std::chrono::steady_clock::now();
     PathTracer::pathTrace(m_image, m_scene);
+    auto tEnd = std::chrono::steady_clock::now();
 
     m_isRendering = false;
+
+    m_renderDuration = (float)std::chrono::duration_cast<std::chrono::milliseconds>(tEnd - tStart).count() / 1000.0f;
 }
 
 void SceneRenderingController::startRenderingThread()

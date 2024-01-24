@@ -7,11 +7,14 @@
 
 namespace PathTracing
 {
-class SpherePdf : public Pdf {
-  public:
-    SpherePdf() { }
 
-    double value(const glm::vec3& direction) const override {
+class SpherePdf : public Pdf
+{
+public:
+    SpherePdf() = default;
+
+    double value(const glm::vec3&) const override
+    {
         return 1/ (4 * M_PI);
     }
 
@@ -19,6 +22,7 @@ class SpherePdf : public Pdf {
         return random_unit_vector();
     }*/
 };
+
 }
 
 

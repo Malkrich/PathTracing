@@ -16,16 +16,16 @@ public:
     Ray(const glm::vec3& p0, const glm::vec3& u,int depth);
 
     /** Starting point */
-    const glm::vec3& p0() const { return m_p0; }
+    const glm::vec3& getP0() const { return m_p0; }
     /** Direction */
-    const glm::vec3& u() const { return m_u; }
+    const glm::vec3& getU() const { return m_u; }
 
-    int depth() const { return m_depth; }
+    unsigned int getDepth() const { return m_depth; }
 
     /** Evaluate 3D position at x0+t*u */
     glm::vec3 operator()(float t) const;
     /** Offset the Ray by epsilon in the direction of the Ray */
-    void offset(float const epsilon = 1e-3f);
+    void addOffset(float const epsilon = 1e-3f);
 
     glm::vec3 getValue();
 
@@ -35,7 +35,7 @@ private:
     /** Internal direction of the Ray */
     glm::vec3 m_u;
 
-    int m_depth;
+    unsigned int m_depth;
 };
 
 /** Exporting Ray data */

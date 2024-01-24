@@ -41,7 +41,7 @@ glm::vec3 Ray::operator()(float t) const
     return m_p0 + t*m_u;
 }
 
-void Ray::offset(float epsilon)
+void Ray::addOffset(float epsilon)
 {
     m_p0 += epsilon * m_u;
 }

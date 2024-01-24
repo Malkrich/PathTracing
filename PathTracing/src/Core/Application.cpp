@@ -33,6 +33,8 @@ void Application::run()
 {
     while(m_running)
     {
+        Renderer::clear(m_clearColor);
+
         if(!m_sceneRenderingController->isRendering())
         {
             auto sceneData = m_editor->getSceneData();
@@ -40,8 +42,8 @@ void Application::run()
             m_sceneRenderingController->resizeImage(m_viewport->getWidth(), m_viewport->getHeight());
             m_sceneRenderingController->startRenderingThread();
         }
-        Renderer::clear(m_clearColor);
         m_viewport->setViewportImage(m_sceneRenderingController->getImage());
+        m_editor->setRenderDuration(m_sceneRenderingController->getCurrentRenderDuration());
 
         // GUI RENDER
         m_imGuiRenderer->OnNewFrame();

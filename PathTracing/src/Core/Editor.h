@@ -21,12 +21,17 @@ public:
 
     void onGuiRender();
 
+    void setRenderDuration(float renderDuration) { m_renderDuration = renderDuration; }
+
 private:
     void makeSlider1(const std::string& name, const std::string& sliderName, float* value, float min, float max);
     void makeSlider2(const std::string& name, const std::string& sliderName, const glm::vec2& value, float min, float max);
     void makeSlider3(const std::string& name, const std::string& sliderName, const glm::vec3& value, float min, float max);
     void makeColorPicker3(const std::string& name, const std::string& colorPickerName, const glm::vec3& value);
     void makeInputInt1(const std::string& name, const std::string& inputIntName, int* value);
+    void makeCombo(const std::string& name, const std::string& comboName,
+                   const std::vector<const char*>& itemList, int currentItem,
+                   void(*comboboxCallback)(int, SceneObjectData&), SceneObjectData& sceneObject);
 
     void makeGuiForResetButton(const std::string& name, void(*resetFunction)(SceneData&));
     void makeGuiForSceneObject(SceneObjectData& sceneObject);
@@ -43,7 +48,8 @@ private:
     };
 
 private:
-    float m_deltaTime = 0.0f;
+    // render time in second
+    float m_renderDuration = 0.0f;
 
     std::shared_ptr<SceneData> m_sceneData;
 

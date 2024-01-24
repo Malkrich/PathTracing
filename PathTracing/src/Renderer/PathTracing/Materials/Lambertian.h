@@ -2,6 +2,7 @@
 #define LAMBERTIAN_H
 
 #include <cmath>
+
 #include "Material.h"
 
 namespace PathTracing
@@ -13,11 +14,13 @@ public:
     Lambertian();
     Lambertian(const glm::vec3& color);
 
-    float brdf(const glm::vec3&, float, float, float) const override
+    virtual float brdf(const glm::vec3&, float, float thetaIn, float) const override
     {
-        return 1/M_PI;
+        return glm::cos(thetaIn) / M_PI;
     }
 
+    virtual std::shared_ptr<Pdf> createPdf(const std::vector<std::shared_ptr<SceneObject>>& lights,
+                                           const glm::vec3& position, const glm::vec3& normal) override;
 };
 
 }

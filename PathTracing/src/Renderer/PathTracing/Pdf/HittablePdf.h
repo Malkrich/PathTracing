@@ -8,24 +8,29 @@
 namespace PathTracing
 {
 
-class HittablePdf : public Pdf {
-  public:
-    HittablePdf(const SceneObject& obj, const glm::vec3& origin, const glm::vec3& normal_param)
-      : objects(obj), origin(origin),normal(normal_param)
+class HittablePdf : public Pdf
+{
+public:
+    HittablePdf(const SceneObject& obj, const glm::vec3& origin, const glm::vec3& normal)
+        : m_objects(obj)
+        , m_origin(origin)
+        , m_normal(normal)
     {}
 
-    double value(const glm::vec3& direction) const override {
-        return objects.pdf_value(origin,normal, direction);
+    virtual double value(const glm::vec3& direction) const override
+    {
+        return m_objects.pdf_value(m_origin, m_normal, direction);
     }
 
-    glm::vec3 generate() const override {
-        return objects.random(origin);
+    virtual glm::vec3 generate(const Ray&) const override
+    {
+        return m_objects.random(m_origin);
     }
 
-  private:
-    const SceneObject& objects; //Objet que l'on vise, par exemple la lumiere
-    glm::vec3 origin; //Point de l'intersection (pas la lumiere)
-    glm::vec3 normal; //Normal de l'intersection (pas la lumiere)
+private:
+    const SceneObject m_objects; //Objet que l'on vise, par exemple la lumiere
+    glm::vec3 m_origin; //Point de l'intersection (pas la lumiere)
+    glm::vec3 m_normal; //Normal de l'intersection (pas la lumiere)
 };
 
 

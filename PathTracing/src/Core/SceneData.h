@@ -10,6 +10,11 @@
 #include "Renderer/Primitives/Rectangle.h"
 #include "Renderer/Primitives/Plane.h"
 #include "Renderer/Primitives/Sphere.h"
+#include "Renderer/Primitives/Box.h"
+#include "Renderer/PathTracing/Materials/Material.h"
+#include "Renderer/PathTracing/Materials/Lambertian.h"
+#include "Renderer/PathTracing/Materials/Light.h"
+#include "Renderer/PathTracing/Materials/Mirror.h"
 
 namespace PathTracing
 {
@@ -38,7 +43,8 @@ enum class SceneObjectPrimitive
 {
     plane = 0,
     rectangle,
-    sphere
+    sphere,
+    box
 };
 
 class PrimitiveData
@@ -50,7 +56,7 @@ public:
     {}
 
     static std::shared_ptr<PrimitiveData> create(SceneObjectPrimitive primitive);
-    static std::shared_ptr<PrimitiveData> copy(const std::shared_ptr<PrimitiveData>& primitive);
+    static std::shared_ptr<PrimitiveData> copy(const std::shared_ptr<PrimitiveData>& other);
 
     const glm::vec3& getPosition() const { return m_position; }
 
@@ -149,13 +155,126 @@ private:
     float m_radius;
 };
 
+class BoxData : public PrimitiveData
+{
+public:
+    BoxData()
+        : BoxData(glm::vec3(0,0,0), glm::vec3(1,1,1))
+    {}
+
+    BoxData(const glm::vec3& p1, const glm::vec3& p2)
+        : PrimitiveData(SceneObjectPrimitive::box, p1)
+        , m_p2(p2)
+    {}
+
+    const glm::vec3& getP2() const { return m_p2; }
+
+    virtual std::shared_ptr<Primitive> createPrimitive() const override
+    {
+        return std::make_shared<Box>(m_position, m_p2);
+    }
+
+protected:
+    virtual bool isEqual(const PrimitiveData& other) const override;
+
+private:
+    glm::vec3 m_p2;
+};
+
 //////////////////////////////////////////////////////
 ///////////////// MATERIAL ///////////////////////////
 //////////////////////////////////////////////////////
 enum class SceneObjectMaterial
 {
-    lambertien = 0,
-    light
+    lambertian = 0,
+    light,
+    mirror
+};
+
+class MaterialData
+{
+public:
+    MaterialData(SceneObjectMaterial material, const glm::vec3& color)
+        : m_material(material)
+        , m_color(color)
+    {}
+
+    static std::shared_ptr<MaterialData> create(SceneObjectMaterial material);
+    static std::shared_ptr<MaterialData> copy(const std::shared_ptr<MaterialData>& other);
+
+    SceneObjectMaterial getMaterialType() const { return m_material; }
+    const glm::vec3& getColor() const { return m_color; }
+
+    virtual std::shared_ptr<Material> createMaterial() const = 0;
+
+    bool operator==(const MaterialData& other) const;
+
+protected:
+    virtual bool isEqual(const MaterialData& other) const;
+
+protected:
+    SceneObjectMaterial m_material;
+    glm::vec3 m_color;
+};
+
+class LambertianData : public MaterialData
+{
+public:
+    LambertianData()
+        : MaterialData(SceneObjectMaterial::lambertian, glm::vec3(0.2f, 0.2f, 0.2f))
+    {}
+
+    LambertianData(const glm::vec3& color)
+        : MaterialData(SceneObjectMaterial::lambertian, color)
+    {}
+
+    virtual std::shared_ptr<Material> createMaterial() const override
+    {
+        return std::make_shared<Lambertian>(m_color);
+    }
+
+protected:
+    virtual bool isEqual(const MaterialData& other) const override;
+};
+
+class LightData : public MaterialData
+{
+public:
+    LightData()
+        : MaterialData(SceneObjectMaterial::light, glm::vec3(1.0f, 1.0f, 1.0f))
+    {}
+
+    LightData(const glm::vec3& color)
+        : MaterialData(SceneObjectMaterial::light, color)
+    {}
+
+    virtual std::shared_ptr<Material> createMaterial() const override
+    {
+        return std::make_shared<Light>(m_color);
+    }
+
+protected:
+    virtual bool isEqual(const MaterialData& other) const override;
+};
+
+class MirrorData : public MaterialData
+{
+public:
+    MirrorData()
+        : MaterialData(SceneObjectMaterial::mirror, glm::vec3(1.0f, 1.0f, 1.0f))
+    {}
+
+    MirrorData(const glm::vec3& color)
+        : MaterialData(SceneObjectMaterial::mirror, color)
+    {}
+
+    virtual std::shared_ptr<Material> createMaterial() const override
+    {
+        return std::make_shared<Mirror>(m_color);
+    }
+
+protected:
+    virtual bool isEqual(const MaterialData& other) const override;
 };
 
 
@@ -169,21 +288,23 @@ struct SceneObjectData
                           std::make_shared<RectangleData>(glm::vec3(0.0f, 0.0f, 0.0f),
                                                           glm::vec3(0.0f, 1.0f, 0.0f),
                                                           glm::vec3(1.0f, 0.0f, 0.0f)),
-                          SceneObjectMaterial::lambertien,
-                          glm::vec3(0.0f))
+                          std::make_shared<LambertianData>(glm::vec3(0.2f, 0.2f, 0.2f)))
     {}
 
     SceneObjectData(const std::string& name,
                     std::shared_ptr<PrimitiveData> primitive,
-                    SceneObjectMaterial material,
-                    const glm::vec3& color)
+                    std::shared_ptr<MaterialData> material)
         : name(name)
         , primitive(primitive)
         , material(material)
-        , color(color)
     {}
 
-    SceneObjectData(const SceneObjectData& other);
+    SceneObjectData(const SceneObjectData& other)
+        : name(other.name)
+    {
+        primitive   = PrimitiveData::copy(other.primitive);
+        material    = MaterialData::copy(other.material);
+    }
 
     // global data
     std::string name;
@@ -192,9 +313,7 @@ struct SceneObjectData
     std::shared_ptr<PrimitiveData> primitive;
 
     // material data
-    SceneObjectMaterial material;
-    glm::vec3 color;
-//    std::shared_ptr<MaterialParameter> materialParameter;
+    std::shared_ptr<MaterialData> material;
 };
 
 bool operator==(const SceneObjectData& object1, const SceneObjectData& object2);
@@ -242,16 +361,19 @@ public:
     void addObject(const SceneObjectData& object);
     void addObject(const std::string& name,
                    std::shared_ptr<PrimitiveData> primitive,
-                   SceneObjectMaterial material, const glm::vec3& color);
+                   std::shared_ptr<MaterialData> material);
     void addPlane(const std::string& name,
                   const glm::vec3& position, const glm::vec3& normal,
-                  SceneObjectMaterial material, const glm::vec3& color);
+                  std::shared_ptr<MaterialData> material);
     void addRectangle(const std::string& name,
                       const glm::vec3& position, const glm::vec3& v1, const glm::vec3& v2,
-                      SceneObjectMaterial material, const glm::vec3& color);
+                      std::shared_ptr<MaterialData> material);
     void addSphere(const std::string& name,
                    const glm::vec3& position, float radius,
-                   SceneObjectMaterial material, const glm::vec3& color);
+                   std::shared_ptr<MaterialData> material);
+    void addBox(const std::string& name,
+                   const glm::vec3& p1, const glm::vec3& p2,
+                   std::shared_ptr<MaterialData> material);
 
     void setRenderSettings(const RenderSettings& renderSettings) { m_renderSettings = renderSettings; }
 

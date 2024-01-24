@@ -13,6 +13,8 @@ double random_double();
 
 double random_double(double min, double max);
 
+int random_int(double min, double max);
+
 }
 
 }
