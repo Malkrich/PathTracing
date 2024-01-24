@@ -38,7 +38,7 @@ Box::Box(const glm::vec3& p1_param,const glm::vec3& p2_param):m_p1(p1_param),m_p
 bool Box::intersect(Ray const& ray,IntersectData& intersection) const
 {
     bool found_intersection = false;
-    int index_intersected_primitive;
+    int index_intersected_primitive = 0;
     unsigned int k = 0;
     float t = std::numeric_limits<float>::max();
     while(k < 6)
@@ -62,11 +62,6 @@ bool Box::intersect(Ray const& ray,IntersectData& intersection) const
         rectangle->intersect(ray, intersection);
     }
     return found_intersection;
-}
-
-void Box::rotate(const glm::quat& rotation)
-{
-
 }
 
 }

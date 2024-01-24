@@ -10,11 +10,6 @@ Plane::Plane(glm::vec3 const& position, glm::vec3 const& normal)
     , m_normal(normal)
 {}
 
-void Plane::rotate(const glm::quat& rotation)
-{
-
-}
-
 bool Plane::intersect(Ray const& ray_param,IntersectData& intersection) const
 {
     //Le code suivant est arbitraire est doit etre modifie

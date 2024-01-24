@@ -14,6 +14,7 @@ namespace PathTracing
 
 struct IntersectData
 {
+public:
     IntersectData();
     IntersectData(const glm::vec3& position_param,
                   const glm::vec3& normal_param,
@@ -35,7 +36,7 @@ struct IntersectData
     //float getValue(Ray outray, Ray inray);
     glm::vec3 getValue(Ray outray, Ray inray);
 
-
+public:
     /** 3D position of the intersection */
     glm::vec3 position;
     /** Normal of the shape at the intersection point */

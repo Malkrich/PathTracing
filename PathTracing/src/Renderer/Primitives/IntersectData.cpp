@@ -60,7 +60,7 @@ glm::vec3 IntersectData::getValue(Ray ray_out,Ray ray_in)
 
     //glm::vec3 L_in = ray_in.getValue();
 
-    float lambda;
+    float lambda = 0.0f;
     float theta_out = acos(dot(normalize(normal), normalize(u_out)));
     float theta_in = acos(dot(normalize(normal), normalize(u_in)));
     float fr = material->brdf(position, theta_out, theta_in, lambda);

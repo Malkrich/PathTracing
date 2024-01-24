@@ -17,7 +17,7 @@ public:
     virtual bool intersect(Ray const& ray_param, IntersectData& intersection) const override;
     virtual glm::vec3& getPosition() override { return m_position; }
     virtual const glm::vec3& getPosition() const override { return m_position; }
-    virtual void rotate(const glm::quat& roatation);
+    virtual void rotate(const glm::quat&) override {}
 
 private:
     glm::vec3 m_position;

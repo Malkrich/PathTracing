@@ -14,13 +14,8 @@ Rectangle::Rectangle(const glm::vec3& p, const glm::vec3& v1, const glm::vec3& v
     , m_v1(v1)
     , m_v2(v2)
 {
-    m_normal = glm::normalize(glm::cross(v1, v2));
-    m_area = glm::length(m_v1)*glm::length(m_v2);
-}
-
-void Rectangle::rotate(const glm::quat& rotation)
-{
-
+    m_normal    = glm::normalize(glm::cross(v1, v2));
+    m_area      = glm::length(m_v1)*glm::length(m_v2);
 }
 
 bool Rectangle::intersect(const Ray& ray_param, IntersectData& intersection) const

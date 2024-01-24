@@ -13,11 +13,10 @@ class Box : public Primitive
 public:
     Box(const glm::vec3& p1_param, const glm::vec3& p2_param);
 
-
     virtual bool intersect(Ray const& ray_param,IntersectData& intersection) const override;
     virtual glm::vec3& getPosition() override { return m_p1; }
     virtual const glm::vec3& getPosition() const override { return m_p1; }
-    virtual void rotate(const glm::quat& rotation) override;
+    virtual void rotate(const glm::quat&) override {}
 
 private:
     glm::vec3 m_p1;
