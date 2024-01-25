@@ -4,14 +4,17 @@
 #include "Renderer/PathTracing/Pdf/HittablePdf.h"
 #include "Renderer/PathTracing/Pdf/MixturePdf.h"
 
+#define BLACK glm::vec3(0.0f, 0.0f, 0.0f)
 
 namespace PathTracing
 {
 static unsigned int s_accumalationCount = 0;
 
-static glm::vec3 threshold1(glm::vec3 v)
+static glm::vec3 threshold1(const glm::vec3& v)
 {
-        return glm::vec3(std::min(v.x, 1.0f),std::min(v.y, 1.0f),std::min(v.z, 1.0f));
+    return glm::vec3(glm::min(v.x, 1.0f),
+                     glm::min(v.y, 1.0f),
+                     glm::min(v.z, 1.0f));
 }
 
 void PathTracer::pathTrace(std::shared_ptr<Image> image, std::shared_ptr<Scene> scene)
@@ -152,9 +155,8 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
     if(is_intersected)
     {
         if (intersection.m_material->CanEmit())
-        {
             return intersection.m_material->emitted();
-        }
+
         else if (r.getDepth() + 1 < scene.getRenderSettings().maxDepth)
         {
             Ray newR = intersection.create_ray(r, r.getDepth());
@@ -164,10 +166,10 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
                 newR = intersection.create_ray(r, r.getDepth());
                 count++;
             }
+
             if (dot(newR.getU(),intersection.m_normal) < 0)
-            {
-                return glm::vec3(0,0,0);
-            }
+                return BLACK;
+
             newR.addOffset();
             glm::vec3 L_in = getValue(newR, scene);
             //std::cout<<"L_in : "<<L_in.x<<"  "<<L_in.y<<"  "<<L_in.z<<std::endl;
@@ -179,13 +181,8 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
 
             return value*L_in;
         }
-        else
-        {
-            return glm::vec3(0,0,0);
-        }
-        //return intersection.material->getAlbedo();
     }
-    return glm::vec3(0,0,0);
+    return BLACK;
 }
 
 }
