@@ -1,8 +1,9 @@
 #ifndef HITTABLEPDF_H
 #define HITTABLEPDF_H
 
+#include <glm/glm.hpp>
+
 #include "Pdf.h"
-#include "glm/glm.hpp"
 #include "Renderer/Scene/SceneObject.h"
 
 namespace PathTracing

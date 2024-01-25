@@ -26,8 +26,8 @@ public:
 
     virtual glm::vec3 generate(const Ray&) const override
     {
-        auto r1 = Utils::random_double();
-        auto r2 = Utils::random_double();
+        auto r1 = Utils::randomDouble();
+        auto r2 = Utils::randomDouble();
 
         auto phi = 2.0f * glm::pi<float>() * r1;
         auto x = cos(phi)*sqrt(r2);
