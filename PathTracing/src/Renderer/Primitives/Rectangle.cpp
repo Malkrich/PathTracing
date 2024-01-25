@@ -72,7 +72,7 @@ double Rectangle::pdf_value(const glm::vec3 &o,const glm::vec3 &n, const glm::ve
 
 glm::vec3 Rectangle::random(const glm::vec3 &o) const
 {
-    glm::vec3 p = m_p + (static_cast<float>(Utils::random_double()) * m_v1) + (static_cast<float>(Utils::random_double()) * m_v2);
+    glm::vec3 p = m_p + (static_cast<float>(Utils::randomDouble()) * m_v1) + (static_cast<float>(Utils::randomDouble()) * m_v2);
     //std::cout<<"Le point en bas à gauche : "<<m_p.x<<"  "<<m_p.y<<"  "<<m_p.z<<std::endl;
     //std::cout<<"Point de la lumiere : "<<p.x<<"  "<<p.y<<"  "<<p.z<<std::endl;
     return p-o;
