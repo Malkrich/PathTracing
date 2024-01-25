@@ -1,7 +1,7 @@
 #ifndef LAMBERTIAN_H
 #define LAMBERTIAN_H
 
-#include <cmath>
+#include <glm/gtc/constants.hpp>
 
 #include "Material.h"
 
@@ -16,7 +16,7 @@ public:
 
     virtual float brdf(const glm::vec3&, float, float thetaIn, float) const override
     {
-        return glm::cos(thetaIn) / M_PI;
+        return glm::cos(thetaIn) / glm::pi<float>();
     }
 
     virtual std::shared_ptr<Pdf> createPdf(const std::vector<std::shared_ptr<SceneObject>>& lights,

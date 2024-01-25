@@ -1,8 +1,6 @@
 #ifndef RANDOMUTILS_H
 #define RANDOMUTILS_H
 
-#include <cstdlib>
-
 namespace PathTracing
 {
 

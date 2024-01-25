@@ -1,5 +1,7 @@
 #include "RandomUtils.h"
 
+#include <cstdlib>
+
 namespace PathTracing
 {
 
