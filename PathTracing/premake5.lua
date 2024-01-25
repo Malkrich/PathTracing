@@ -34,10 +34,17 @@ project "PathTracing"
     }
 
     filter "configurations:Debug"
-        --defines "PT_DEBUG"
+        defines
+        {
+            "PT_DEBUG",
+            "PT_GRAPHIC_DEBUG"
+        }
         runtime "Debug"
 
     filter "configurations:Release"
-        --defines "PT_RELEASE"
+        defines
+        {
+            "PT_RELEASE"
+        }
         runtime "Release"
         optimize "on"

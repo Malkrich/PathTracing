@@ -1,9 +1,10 @@
 #ifndef COSINEPDF_H
 #define COSINEPDF_H
 
+#include <glm/gtc/constants.hpp>
+
 #include "Pdf.h"
 #include "OrthonormalBasis.h"
-#include <cmath>
 #include "Utils/RandomUtils.h"
 
 namespace PathTracing
@@ -20,7 +21,7 @@ public:
     virtual double value(const glm::vec3& direction) const override
     {
         auto cosine_theta = dot(glm::normalize(direction), uvw.getW());
-        return fmax(0, cosine_theta/M_PI);
+        return fmax(0, cosine_theta/glm::pi<float>());
     }
 
     virtual glm::vec3 generate(const Ray&) const override
@@ -28,7 +29,7 @@ public:
         auto r1 = Utils::random_double();
         auto r2 = Utils::random_double();
 
-        auto phi = 2.0f * M_PI * r1;
+        auto phi = 2.0f * glm::pi<float>() * r1;
         auto x = cos(phi)*sqrt(r2);
         auto y = sin(phi)*sqrt(r2);
         auto z = sqrt(1-r2);
