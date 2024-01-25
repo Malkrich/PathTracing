@@ -78,7 +78,8 @@ bool PathTracer::compute_intersection(Ray const& r, Scene const& scene, Intersec
         {
             found_intersection = true;
             float new_relative = intersection.m_relative;
-            if (new_relative <= t) {
+            if (new_relative <= t)
+            {
                 index_intersected_primitive = k;
                 t = new_relative;
             }
@@ -158,7 +159,8 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
         {
             Ray newR = intersection.create_ray(r, r.getDepth());
             int count = 0;
-            while (dot(newR.getU(),intersection.m_normal) < 0 &&(count<10)) {
+            while (dot(newR.getU(),intersection.m_normal) < 0 &&(count<10))
+            {
                 newR = intersection.create_ray(r, r.getDepth());
                 count++;
             }
@@ -166,6 +168,7 @@ glm::vec3 PathTracer::getValue(const Ray& r, const Scene& scene)
             {
                 return glm::vec3(0,0,0);
             }
+            newR.addOffset();
             glm::vec3 L_in = getValue(newR, scene);
             //std::cout<<"L_in : "<<L_in.x<<"  "<<L_in.y<<"  "<<L_in.z<<std::endl;
             glm::vec3 value = intersection.getValue(r, newR);
