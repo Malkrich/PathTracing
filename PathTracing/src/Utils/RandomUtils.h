@@ -7,11 +7,11 @@ namespace PathTracing
 namespace Utils
 {
 
-double random_double();
+double randomDouble(double min, double max);
 
-double random_double(double min, double max);
+double randomDouble();
 
-int random_int(double min, double max);
+int randomInt(int min, int max);
 
 }
 
