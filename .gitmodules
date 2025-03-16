@@ -1,0 +1,3 @@
+[submodule "PathTracing/lib/imgui"]
+	path = PathTracing/lib/imgui
+	url = git@github.com:Malkrich/imgui.git
