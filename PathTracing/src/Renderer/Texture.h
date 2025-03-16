@@ -13,7 +13,7 @@ namespace PathTracing
 
         unsigned int getTextureId() const { return m_textureId; }
 
-        void setData(const std::shared_ptr<Image>& image);
+        void setData(uint32_t width, uint32_t height, const void* imageData);
 
         void bind() const;
 

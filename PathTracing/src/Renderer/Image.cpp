@@ -9,7 +9,7 @@ namespace PathTracing
         : m_width(width)
         , m_height(height)
     {
-        m_data = new uint32_t[width * height];
+        invalidate();
         clearData();
     }
 
@@ -56,9 +56,7 @@ namespace PathTracing
 
         m_width = width;
         m_height = height;
-
-        delete[] m_data;
-        m_data = new uint32_t[width * height];
+        invalidate();
     }
 
     void Image::setData(unsigned int x, unsigned int y, float r, float g, float b, float a)
@@ -78,6 +76,12 @@ namespace PathTracing
     {
         for (unsigned int i = 0; i < m_width * m_height; i++)
             m_data[i] = 0x000000ff;
+    }
+
+    void Image::invalidate()
+    {
+        delete[] m_data;
+        m_data = new uint32_t[m_width * m_height];
     }
 
 }

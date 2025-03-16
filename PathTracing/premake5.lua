@@ -1,13 +1,11 @@
 project "PathTracing"
     kind "ConsoleApp"
     language "C++"
-    cppdialect "C++17"
-    systemversion "latest"
+    cppdialect "C++20"
+    staticruntime "off"
 
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
     objdir("bin-int/" .. outputDir .. "/%{prj.name}")
-
-    debugdir "../"
 
     includedirs
     {
@@ -43,6 +41,7 @@ project "PathTracing"
             "PT_GRAPHIC_DEBUG"
         }
         runtime "Debug"
+        symbols "on"
 
     filter "configurations:Release"
         defines

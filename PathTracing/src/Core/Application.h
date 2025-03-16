@@ -2,10 +2,12 @@
 
 #include "Event.h"
 #include "Window.h"
-#include "Viewport.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/ImGuiRenderer.h"
 #include "Scene/Scene.h"
+
+#include "Panels/ViewportPanel.h"
+#include "Panels/RendererSettingsPanel.h"
 
 namespace PathTracing
 {
@@ -32,17 +34,20 @@ namespace PathTracing
     private:
         bool m_running = true;
 
-        float m_time = 0.0f;
+        float m_frameTime = 0.0f;
 
         // Path tracing renderer
         Renderer m_renderer;
         Scene m_scene;
         Camera m_camera;
 
+        // Panels
+        std::unique_ptr<ViewportPanel> m_viewportPanel = nullptr;
+        std::unique_ptr<RendererSettingsPanel> m_rendererSettingsPanel = nullptr;
+
         // Application
-        std::unique_ptr<Viewport> m_viewport;
-        std::shared_ptr<Window> m_window;
-        std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
+        std::shared_ptr<Window> m_window = nullptr;
+        std::unique_ptr<ImGuiRenderer> m_imGuiRenderer = nullptr;
 
         // singleton instance
         static Application* s_instance;

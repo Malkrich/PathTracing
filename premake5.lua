@@ -1,5 +1,5 @@
 workspace "PathTracing"
-    architecture "x86"
+    architecture "x64"
 
     configurations
     {

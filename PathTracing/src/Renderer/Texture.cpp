@@ -12,7 +12,7 @@ namespace PathTracing
     {
         glGenTextures(1, &m_textureId);
         glBindTexture(GL_TEXTURE_2D, m_textureId);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
@@ -21,12 +21,10 @@ namespace PathTracing
         glDeleteTextures(1, &m_textureId);
     }
 
-    void Texture::setData(const std::shared_ptr<Image>& image)
+    void Texture::setData(uint32_t width, uint32_t height, const void* imageData)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                     image->getWidth(), image->getHeight(),
-                     0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8,
-                     image->getData());                     CHECK_GL_ERROR();
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, imageData);
+        CHECK_GL_ERROR();
     }
 
     void Texture::bind() const

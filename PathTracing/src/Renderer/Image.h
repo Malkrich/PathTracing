@@ -28,6 +28,9 @@ namespace PathTracing
         void clearData();
 
     private:
+        void invalidate();
+
+    private:
         uint32_t m_width = 0;
         uint32_t m_height = 0;
         uint32_t* m_data = nullptr;

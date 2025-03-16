@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "Base.h"
+#include "Time.h"
 #include "Renderer/Image.h"
 
 #include <glm/glm.hpp>
@@ -28,18 +29,23 @@ namespace PathTracing
     {
         while(m_running)
         {
-            uint32_t viewportWidth = m_viewport->getWidth();
-            uint32_t viewportHeight = m_viewport->getHeight();
+            float time = Time::getTime();
+            float deltaTime = time - m_frameTime;
+            m_frameTime = time;
+            m_rendererSettingsPanel->onUpdate(deltaTime);
+
+            uint32_t viewportWidth = m_viewportPanel->getWidth();
+            uint32_t viewportHeight = m_viewportPanel->getHeight();
             m_renderer.onResize(viewportWidth, viewportHeight);
 
             m_renderer.renderScene(m_camera, m_scene);
-            auto rendererResult = m_renderer.getImage();
-            m_viewport->setViewportImage(rendererResult);
+            const void* imageData = m_renderer.getFinalImageData();
+            m_viewportPanel->setViewportImageData(imageData);
 
             // Panels render
             m_imGuiRenderer->OnNewFrame();
-            //m_editor->onGuiRender();
-            m_viewport->onViewportRender();
+            m_viewportPanel->onGuiRender();
+            m_rendererSettingsPanel->onGuiRender();
             m_imGuiRenderer->onRender();
 
             m_window->onUpdate();
@@ -68,8 +74,11 @@ namespace PathTracing
         m_window = std::make_shared<Window>(windowSpecs);
         m_window->setEventCallbackFunction(BIND_EVENT_FN(Application::onEvent));
 
-        m_viewport = std::make_unique<Viewport>();
         m_imGuiRenderer = std::make_unique<ImGuiRenderer>();
+
+        // Panels
+        m_viewportPanel = std::make_unique<ViewportPanel>();
+        m_rendererSettingsPanel = std::make_unique<RendererSettingsPanel>();
     }
 
 }
