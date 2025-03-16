@@ -1,5 +1,6 @@
-#include "Camera.h"
+#include "Pch.h"
 
+#include "Camera.h"
 
 namespace PathTracing
 {

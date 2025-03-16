@@ -1,4 +1,6 @@
-﻿#include "IntersectData.h"
+﻿#include "Pch.h"
+
+#include "IntersectData.h"
 
 namespace PathTracing
 {

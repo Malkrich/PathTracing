@@ -16,8 +16,9 @@
 **    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "Pch.h"
+
 #include "Ray.h"
-#include <cmath>
 
 namespace PathTracing
 {

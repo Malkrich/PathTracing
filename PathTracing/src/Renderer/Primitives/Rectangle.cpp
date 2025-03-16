@@ -1,10 +1,8 @@
+#include "Pch.h"
+
 #include "Rectangle.h"
 #include "Utils/RandomUtils.h"
-
-
 #include "Renderer/PathTracing/Ray.h"
-
-#include <cmath>
 
 namespace PathTracing
 {

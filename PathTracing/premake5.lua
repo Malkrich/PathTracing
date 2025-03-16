@@ -26,6 +26,9 @@ project "PathTracing"
         "lib/glm/**.inl"
     }
 
+    pchheader "Pch.h"
+    pchsource "src/Pch.cpp"
+
     links
     {
         "GLFW",

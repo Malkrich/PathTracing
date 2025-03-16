@@ -1,23 +1,19 @@
 #pragma once
 
-#include <memory>
-
-#include <glm/glm.hpp>
-
-#include "Image.h"
-#include "PathTracing/Ray.h"
-#include "Renderer/Scene/Scene.h"
-#include "Renderer/Primitives/IntersectData.h"
-#include "Camera.h"
-#include "PathTracing/Ray.h"
-
 namespace PathTracing
 {
 
-class Renderer
-{
-public:
-    static void clear(const glm::vec3& clearColor);
-};
+	class Renderer
+	{
+	public:
+		Renderer();
+
+		void onResize(uint32_t width, uint32_t height);
+
+		void Render();
+
+	private:
+
+	};
 
 }

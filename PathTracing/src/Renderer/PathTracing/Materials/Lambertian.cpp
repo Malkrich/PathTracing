@@ -1,5 +1,6 @@
-#include "Lambertian.h"
+#include "Pch.h"
 
+#include "Lambertian.h"
 #include "Renderer/PathTracing/Pdf/CosinePdf.h"
 #include "Renderer/PathTracing/Pdf/HittablePdf.h"
 #include "Renderer/PathTracing/Pdf/MixturePdf.h"

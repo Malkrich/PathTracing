@@ -1,3 +1,5 @@
+#include "Pch.h"
+
 #include "Light.h"
 #include "Renderer/PathTracing/Pdf/CosinePdf.h"
 

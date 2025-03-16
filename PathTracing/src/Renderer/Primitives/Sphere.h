@@ -1,34 +1,31 @@
-#ifndef Sphere_HPP
-#define Sphere_HPP
+#pragma once
 
 #include "Primitive.h"
 
 namespace PathTracing
 {
 
-class Sphere : public Primitive
-{
-public:
-    Sphere(glm::vec3 const& center, float radius);
+    class Sphere : public Primitive
+    {
+    public:
+        Sphere(glm::vec3 const& center, float radius);
 
-    /** Center of the Sphere */
-    glm::vec3 const& center() const;
-    /** Radius of the Sphere */
-    float radius() const;
+        /** Center of the Sphere */
+        glm::vec3 const& center() const;
+        /** Radius of the Sphere */
+        float radius() const;
 
-    /** Intersection computation with a ray */
-    virtual bool intersect(Ray const& ray, IntersectData& intersection) const override;
-    virtual glm::vec3& getPosition() override { return m_center; }
-    virtual const glm::vec3& getPosition() const override { return m_center; }
-    virtual void rotate(const glm::quat&) override {}
+        /** Intersection computation with a ray */
+        virtual bool intersect(Ray const& ray, IntersectData& intersection) const override;
+        virtual glm::vec3& getPosition() override { return m_center; }
+        virtual const glm::vec3& getPosition() const override { return m_center; }
+        virtual void rotate(const glm::quat&) override {}
 
-private:
-    /** Center of the Sphere */
-    glm::vec3 m_center;
-    /** Radius of the Sphere */
-    float m_radius;
-};
+    private:
+        /** Center of the Sphere */
+        glm::vec3 m_center;
+        /** Radius of the Sphere */
+        float m_radius;
+    };
 
 }
-
-#endif

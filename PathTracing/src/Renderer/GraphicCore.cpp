@@ -1,6 +1,6 @@
-#include "GraphicCore.h"
+#include "Pch.h"
 
-#include <iostream>
+#include "GraphicCore.h"
 
 #include <glad/glad.h>
 

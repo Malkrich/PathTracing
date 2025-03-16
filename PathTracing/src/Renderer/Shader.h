@@ -1,19 +1,17 @@
 #pragma once
 
-#include <string>
-
 namespace PathTracing
 {
 
-class Shader
-{
-public:
-    Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+    class Shader
+    {
+    public:
+        Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 
-    void bind() const;
+        void bind() const;
 
-private:
-    unsigned int m_programId;
-};
+    private:
+        unsigned int m_programId;
+    };
 
 }

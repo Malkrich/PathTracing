@@ -1,20 +1,17 @@
-#ifndef RANDOMUTILS_H
-#define RANDOMUTILS_H
+#pragma once
 
 namespace PathTracing
 {
 
-namespace Utils
-{
+	namespace Utils
+	{
 
-double randomDouble(double min, double max);
+	double randomDouble(double min, double max);
 
-double randomDouble();
+	double randomDouble();
 
-int randomInt(int min, int max);
+	int randomInt(int min, int max);
+
+	}
 
 }
-
-}
-
-#endif // RANDOMUTILS_H

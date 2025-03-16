@@ -1,28 +1,25 @@
-#ifndef LAMBERTIAN_H
-#define LAMBERTIAN_H
-
-#include <glm/gtc/constants.hpp>
+#pragma once
 
 #include "Material.h"
+
+#include <glm/gtc/constants.hpp>
 
 namespace PathTracing
 {
 
-class Lambertian : public Material
-{
-public:
-    Lambertian();
-    Lambertian(const glm::vec3& color);
-
-    virtual float brdf(const glm::vec3&, float, float thetaIn, float) const override
+    class Lambertian : public Material
     {
-        return glm::cos(thetaIn) / glm::pi<float>();
-    }
+    public:
+        Lambertian();
+        Lambertian(const glm::vec3& color);
 
-    virtual std::shared_ptr<Pdf> createPdf(const std::vector<std::shared_ptr<SceneObject>>& lights,
-                                           const glm::vec3& position, const glm::vec3& normal) override;
-};
+        virtual float brdf(const glm::vec3&, float, float thetaIn, float) const override
+        {
+            return glm::cos(thetaIn) / glm::pi<float>();
+        }
+
+        virtual std::shared_ptr<Pdf> createPdf(const std::vector<std::shared_ptr<SceneObject>>& lights,
+                                               const glm::vec3& position, const glm::vec3& normal) override;
+    };
 
 }
-
-#endif // LAMBERTIAN_H

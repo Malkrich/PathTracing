@@ -1,3 +1,5 @@
+#include "Pch.h"
+
 #include "Mirror.h"
 #include "Renderer/PathTracing/Pdf/MirrorPdf.h"
 

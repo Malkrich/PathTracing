@@ -1,37 +1,35 @@
-#ifndef LIGHT_H
-#define LIGHT_H
+#pragma once
 
-#include "glm/glm.hpp"
 #include "Material.h"
+
+#include <glm/glm.hpp>
 
 namespace PathTracing
 {
 
-class Light : public Material
-{
-public:
-    Light();
-    Light(glm::vec3 color_param);
-
-    virtual bool CanEmit() override
+    class Light : public Material
     {
-        return true;
-    }
-    virtual glm::vec3 emitted() const override
-    {
-        //return glm::vec3(1.0f,1.0f,1.0f);
-        return m_color;
-    }
+    public:
+        Light();
+        Light(glm::vec3 color_param);
 
-    virtual float brdf(const glm::vec3&, float, float, float) const override
-    {
-        return 0.0f;
-    }
+        virtual bool CanEmit() override
+        {
+            return true;
+        }
+        virtual glm::vec3 emitted() const override
+        {
+            //return glm::vec3(1.0f,1.0f,1.0f);
+            return m_color;
+        }
 
-    virtual std::shared_ptr<Pdf> createPdf(const std::vector<std::shared_ptr<SceneObject>>& lights,
-                                           const glm::vec3& position, const glm::vec3& normal) override;
-};
+        virtual float brdf(const glm::vec3&, float, float, float) const override
+        {
+            return 0.0f;
+        }
+
+        virtual std::shared_ptr<Pdf> createPdf(const std::vector<std::shared_ptr<SceneObject>>& lights,
+                                               const glm::vec3& position, const glm::vec3& normal) override;
+    };
 
 }
-
-#endif // LIGHT_H
