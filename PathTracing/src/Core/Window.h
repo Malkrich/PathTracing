@@ -8,18 +8,20 @@ struct GLFWwindow;
 namespace PathTracing
 {
 
+    struct WindowSpecifications
+    {
+        uint32_t Width = 1280;
+        uint32_t Height = 720;
+        std::string Name = "Unknown Window";
+        EventDispatcher::EventCallbackFn callbackFn;
+
+        WindowSpecifications() = default;
+    };
+
     class Window
     {
     public:
-        struct WindowSpec
-        {
-            unsigned int Width, Height;
-            std::string name;
-            EventDispatcher::EventCallbackFn callbackFn;
-        };
-
-    public:
-        Window(const WindowSpec& windowSpec);
+        Window(const WindowSpecifications& windowSpec);
         ~Window();
 
         unsigned int getWidth() const { return m_windowData.Width; }
@@ -38,9 +40,9 @@ namespace PathTracing
         void initialize();
 
     private:
-        GLFWwindow* m_window;
+        GLFWwindow* m_window = nullptr;
 
-        WindowSpec m_windowData;
+        WindowSpecifications m_windowData;
     };
 
 }

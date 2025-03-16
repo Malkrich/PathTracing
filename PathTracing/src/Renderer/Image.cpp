@@ -51,6 +51,9 @@ namespace PathTracing
 
     void Image::resize(unsigned int width, unsigned int height)
     {
+        if (m_width == width && m_height == height)
+            return;
+
         m_width = width;
         m_height = height;
 

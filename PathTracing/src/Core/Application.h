@@ -2,10 +2,10 @@
 
 #include "Event.h"
 #include "Window.h"
-#include "Editor.h"
 #include "Viewport.h"
-#include "SceneRenderingController.h"
+#include "Renderer/Renderer.h"
 #include "Renderer/ImGuiRenderer.h"
+#include "Scene/Scene.h"
 
 namespace PathTracing
 {
@@ -33,13 +33,15 @@ namespace PathTracing
         bool m_running = true;
 
         float m_time = 0.0f;
-        const glm::vec3 m_clearColor = { 0.2f, 0.2f, 0.2f };
+
+        Renderer m_renderer;
+        Viewport m_viewport;
+        Scene m_scene;
+        Camera m_camera;
+
+        ImGuiRenderer m_imGuiRenderer;
 
         std::shared_ptr<Window> m_window;
-        std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
-        std::unique_ptr<Editor> m_editor;
-        std::unique_ptr<Viewport> m_viewport;
-        std::unique_ptr<SceneRenderingController> m_sceneRenderingController;
 
         // singleton instance
         static Application* s_instance;

@@ -7,7 +7,7 @@
 namespace PathTracing
 {
 
-    Window::Window(const WindowSpec& windowSpec)
+    Window::Window(const WindowSpecifications& windowSpec)
         : m_windowData(windowSpec)
     {
         initialize();
@@ -34,7 +34,7 @@ namespace PathTracing
             return;
 
         m_window = glfwCreateWindow(m_windowData.Width, m_windowData.Height,
-                                    m_windowData.name.c_str(),
+                                    m_windowData.Name.c_str(),
                                     NULL, NULL);
         if(!m_window)
         {
@@ -55,7 +55,7 @@ namespace PathTracing
 
         glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
         {
-            WindowSpec* wSpec = (WindowSpec*)glfwGetWindowUserPointer(window);
+            WindowSpecifications* wSpec = (WindowSpecifications*)glfwGetWindowUserPointer(window);
 
             WindowCloseEvent e;
             wSpec->callbackFn(e);
@@ -63,7 +63,7 @@ namespace PathTracing
 
         glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
         {
-            WindowSpec* wSpec = (WindowSpec*)glfwGetWindowUserPointer(window);
+            WindowSpecifications* wSpec = (WindowSpecifications*)glfwGetWindowUserPointer(window);
 
             wSpec->Width = width;
             wSpec->Height = height;

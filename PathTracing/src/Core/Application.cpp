@@ -3,7 +3,6 @@
 #include "Application.h"
 #include "Base.h"
 #include "Renderer/Image.h"
-#include "Renderer/Renderer.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -14,12 +13,11 @@ namespace PathTracing
     Application* Application::s_instance = nullptr;
 
     Application::Application(const std::string& appName)
+        : m_camera(1280, 720)
     {
         s_instance = this;
 
         initialize(appName);
-
-        m_window->setEventCallbackFunction(BIND_EVENT_FN(Application::onEvent));
     }
 
     Application::~Application()
@@ -30,21 +28,15 @@ namespace PathTracing
     {
         while(m_running)
         {
-            //if(!m_sceneRenderingController->isRendering())
-            //{
-            //    auto sceneData = m_editor->getSceneData();
-            //    m_sceneRenderingController->setSceneData(sceneData);
-            //    m_sceneRenderingController->resizeImage(m_viewport->getWidth(), m_viewport->getHeight());
-            //    m_sceneRenderingController->startRenderingThread();
-            //}
-            //m_viewport->setViewportImage(m_sceneRenderingController->getImage());
-            //m_editor->setRenderDuration(m_sceneRenderingController->getCurrentRenderDuration());
+            m_renderer.renderScene(m_camera, m_scene);
+            auto rendererResult = m_renderer.getImage();
+            m_viewport.setViewportImage(rendererResult);
 
             // Panels render
-            m_imGuiRenderer->OnNewFrame();
-            m_editor->onGuiRender();
-            m_viewport->onViewportRender();
-            m_imGuiRenderer->onRender();
+            m_imGuiRenderer.OnNewFrame();
+            //m_editor->onGuiRender();
+            m_viewport.onViewportRender();
+            m_imGuiRenderer.onRender();
 
             m_window->onUpdate();
         }
@@ -65,19 +57,12 @@ namespace PathTracing
     void Application::initialize(const std::string& appName)
     {
         // Window handler
-        Window::WindowSpec windowSpec;
-        windowSpec.name     = appName;
-        windowSpec.Width    = 1280;
-        windowSpec.Height   = 720;
-        m_window.reset(new Window(windowSpec));
-
-        // GUI / Editor
-        m_editor.reset(new Editor());
-        m_sceneRenderingController.reset(new SceneRenderingController());
-        m_imGuiRenderer.reset(new ImGuiRenderer());
-
-        // Viewport
-        m_viewport.reset(new Viewport());
+        WindowSpecifications windowSpecs;
+        windowSpecs.Name     = appName;
+        windowSpecs.Width    = 1280;
+        windowSpecs.Height   = 720;
+        m_window = std::make_shared<Window>(windowSpecs);
+        m_window->setEventCallbackFunction(BIND_EVENT_FN(Application::onEvent));
     }
 
 }
