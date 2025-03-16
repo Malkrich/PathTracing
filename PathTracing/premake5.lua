@@ -12,7 +12,7 @@ project "PathTracing"
     includedirs
     {
         "src",
-        "lib/glfw/include",
+        "lib/GLFW/glfw-3.3.8/include",
         "lib/glad/include",
         "lib/imgui",
         "lib/glm"
