@@ -9,6 +9,7 @@ namespace PathTracing
     class Image
     {
     public:
+        Image() = default;
         Image(unsigned int width, unsigned int height);
         ~Image();
 
@@ -27,7 +28,8 @@ namespace PathTracing
         void clearData();
 
     private:
-        unsigned int m_width, m_height;
+        uint32_t m_width = 0;
+        uint32_t m_height = 0;
         uint32_t* m_data = nullptr;
     };
 

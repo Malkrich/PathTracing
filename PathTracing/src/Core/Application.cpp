@@ -28,15 +28,19 @@ namespace PathTracing
     {
         while(m_running)
         {
+            uint32_t viewportWidth = m_viewport->getWidth();
+            uint32_t viewportHeight = m_viewport->getHeight();
+            m_renderer.onResize(viewportWidth, viewportHeight);
+
             m_renderer.renderScene(m_camera, m_scene);
             auto rendererResult = m_renderer.getImage();
-            m_viewport.setViewportImage(rendererResult);
+            m_viewport->setViewportImage(rendererResult);
 
             // Panels render
-            m_imGuiRenderer.OnNewFrame();
+            m_imGuiRenderer->OnNewFrame();
             //m_editor->onGuiRender();
-            m_viewport.onViewportRender();
-            m_imGuiRenderer.onRender();
+            m_viewport->onViewportRender();
+            m_imGuiRenderer->onRender();
 
             m_window->onUpdate();
         }
@@ -63,6 +67,9 @@ namespace PathTracing
         windowSpecs.Height   = 720;
         m_window = std::make_shared<Window>(windowSpecs);
         m_window->setEventCallbackFunction(BIND_EVENT_FN(Application::onEvent));
+
+        m_viewport = std::make_unique<Viewport>();
+        m_imGuiRenderer = std::make_unique<ImGuiRenderer>();
     }
 
 }

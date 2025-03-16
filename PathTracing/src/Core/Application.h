@@ -34,14 +34,15 @@ namespace PathTracing
 
         float m_time = 0.0f;
 
+        // Path tracing renderer
         Renderer m_renderer;
-        Viewport m_viewport;
         Scene m_scene;
         Camera m_camera;
 
-        ImGuiRenderer m_imGuiRenderer;
-
+        // Application
+        std::unique_ptr<Viewport> m_viewport;
         std::shared_ptr<Window> m_window;
+        std::unique_ptr<ImGuiRenderer> m_imGuiRenderer;
 
         // singleton instance
         static Application* s_instance;

@@ -7,6 +7,7 @@ namespace PathTracing
 
 	Renderer::Renderer()
 	{
+		m_viewportImage = std::make_shared<Image>();
 	}
 
 	void Renderer::onResize(uint32_t width, uint32_t height)

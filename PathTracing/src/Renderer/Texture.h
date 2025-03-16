@@ -18,7 +18,7 @@ namespace PathTracing
         void bind() const;
 
     private:
-        unsigned int m_textureId;
+        unsigned int m_textureId = 0;
     };
 
 }

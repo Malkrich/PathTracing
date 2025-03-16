@@ -12,7 +12,7 @@ namespace PathTracing
         : m_width(0)
         , m_height(0)
     {
-        m_viewportTexture.reset(new Texture());
+        m_viewportTexture = std::make_unique<Texture>();
     }
 
     void Viewport::setViewportImage(const std::shared_ptr<Image>& image)
