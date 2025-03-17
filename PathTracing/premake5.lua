@@ -41,7 +41,7 @@ project "PathTracing"
             "PT_GRAPHIC_DEBUG"
         }
         runtime "Debug"
-        symbols "on"
+        symbols "On"
 
     filter "configurations:Release"
         defines
@@ -49,4 +49,5 @@ project "PathTracing"
             "PT_RELEASE"
         }
         runtime "Release"
-        optimize "on"
+        symbols "On"
+        optimize "On"

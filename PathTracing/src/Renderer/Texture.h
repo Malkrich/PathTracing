@@ -8,17 +8,26 @@ namespace PathTracing
     class Texture
     {
     public:
-        Texture();
+        Texture(uint32_t width, uint32_t height);
         ~Texture();
 
-        unsigned int getTextureId() const { return m_textureId; }
+        uint32_t getTextureId() const { return m_textureID; }
+        uint32_t getWidth() const { return m_width; }
+        uint32_t getHeight() const { return m_height; }
 
-        void setData(uint32_t width, uint32_t height, const void* imageData);
+        void resize(uint32_t width, uint32_t height);
+
+        void setData(const void* imageData);
 
         void bind() const;
 
     private:
-        unsigned int m_textureId = 0;
+        void invalidate();
+
+    private:
+        uint32_t m_textureID = 0;
+
+        uint32_t m_width = 0, m_height = 0;
     };
 
 }

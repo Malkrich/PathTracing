@@ -8,17 +8,15 @@
 namespace PathTracing
 {
 
-    ViewportPanel::ViewportPanel()
-        : m_width(0)
-        , m_height(0)
+    ViewportPanel::ViewportPanel(uint32_t width, uint32_t height)
     {
-        m_viewportTexture = std::make_unique<Texture>();
+        m_viewportTexture = std::make_unique<Texture>(width, height);
     }
 
     void ViewportPanel::setViewportImageData(const void* imageData)
     {
         m_viewportTexture->bind();
-        m_viewportTexture->setData(m_width, m_height, imageData);
+        m_viewportTexture->setData(imageData);
     }
 
     void ViewportPanel::onGuiRender()
@@ -28,9 +26,12 @@ namespace PathTracing
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
         ImGui::Begin("Viewport", nullptr);
-        m_width     = ImGui::GetContentRegionAvail().x;
-        m_height    = ImGui::GetContentRegionAvail().y;
-        ImGui::Image((void*)m_viewportTexture->getTextureId(), ImVec2(m_width, m_height), ImVec2(0, 1), ImVec2(1, 0));
+        uint32_t width  = ImGui::GetContentRegionAvail().x;
+        uint32_t height = ImGui::GetContentRegionAvail().y;
+
+        ImGui::Image((void*)m_viewportTexture->getTextureId(), ImVec2(width, height), ImVec2(0, 1), ImVec2(1, 0));
+        m_viewportTexture->resize(width, height);
+
         ImGui::End();
 
         ImGui::PopStyleVar(3);

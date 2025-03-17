@@ -66,18 +66,21 @@ namespace PathTracing
 
     void Application::initialize(const std::string& appName)
     {
+        uint32_t initialWidth = 1280;
+        uint32_t initialHeight = 720;
+
         // Window handler
         WindowSpecifications windowSpecs;
         windowSpecs.Name     = appName;
-        windowSpecs.Width    = 1280;
-        windowSpecs.Height   = 720;
+        windowSpecs.Width    = initialWidth;
+        windowSpecs.Height   = initialHeight;
         m_window = std::make_shared<Window>(windowSpecs);
         m_window->setEventCallbackFunction(BIND_EVENT_FN(Application::onEvent));
 
         m_imGuiRenderer = std::make_unique<ImGuiRenderer>();
 
         // Panels
-        m_viewportPanel = std::make_unique<ViewportPanel>();
+        m_viewportPanel = std::make_unique<ViewportPanel>(initialWidth, initialHeight);
         m_rendererSettingsPanel = std::make_unique<RendererSettingsPanel>();
     }
 

@@ -9,18 +9,17 @@ namespace PathTracing
     class ViewportPanel
     {
     public:
-        ViewportPanel();
+        ViewportPanel(uint32_t width, uint32_t height);
 
-        unsigned int getWidth() const { return m_width; }
-        unsigned int getHeight() const { return m_height; }
+        uint32_t getWidth() const { return m_viewportTexture->getWidth(); }
+        uint32_t getHeight() const { return m_viewportTexture->getHeight(); }
 
         void setViewportImageData(const void* imageData);
 
         void onGuiRender();
 
     private:
-        std::unique_ptr<Texture> m_viewportTexture;
-        unsigned int m_width, m_height;
+        std::unique_ptr<Texture> m_viewportTexture = nullptr;
     };
 
 }
