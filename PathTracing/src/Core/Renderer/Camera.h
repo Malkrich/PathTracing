@@ -12,7 +12,7 @@ namespace PathTracing
         Camera(uint32_t width, uint32_t height);
 
         void onResize(uint32_t width, uint32_t height);
-        void onUpdate(float dt);
+        bool onUpdate(float dt);
 
         const glm::vec3& getPosition() const { return m_position; }
         const std::vector<glm::vec3>& getRayDirections() const { return m_rayDirections; }
@@ -32,11 +32,15 @@ namespace PathTracing
 
         glm::vec3 m_position{ 0.0f };
         glm::vec3 m_forwardDirection{ 0.0f };
+        glm::vec3 m_rightDirection{ 0.0f };
+        glm::vec3 m_upVector = { 0.0f, 1.0f, 0.0f };
 
         float m_fov = 45.0f;
         float m_nearClip = 0.1f, m_farClip = 1000.0f;
 
         uint32_t m_width = 0, m_height = 0;
+
+        float m_translationSpeed = 1.0f;
     };
 
 }

@@ -10,6 +10,23 @@ namespace PathTracing
 	class Renderer
 	{
 	public:
+		struct Ray
+		{
+			glm::vec3 Position{ 0.0f, 0.0f, 0.0f };
+			glm::vec3 Direction{ 0.0f, 0.0f, 0.0f };
+		};
+
+		struct HitPayload
+		{
+			float HitDistance = -1.0f;
+
+			glm::vec3 HitPosition{ 0.0f };
+			glm::vec3 HitNormal{ 0.0f };
+
+			int ObjectIndex = -1;
+		};
+
+	public:
 		Renderer();
 		~Renderer();
 
@@ -21,6 +38,8 @@ namespace PathTracing
 
 	private:
 		glm::vec4 perPixel(uint32_t x, uint32_t y);
+
+		HitPayload traceRay(const Ray& ray);
 
 	private:
 		const Scene* m_activeScene;

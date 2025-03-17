@@ -1,6 +1,8 @@
 #include "Pch.h"
 
 #include "Camera.h"
+#include "Core/Input.h"
+#include "Core/KeyCodes.h"
 
 #include <glm/gtx/transform.hpp>
 
@@ -14,6 +16,7 @@ namespace PathTracing
         // TEMP
         m_position = { 0.0f, 0.0f, 2.0f };
         m_forwardDirection = { 0.0f, 0.0f, -1.0f };
+        m_rightDirection = { 1.0f, 0.0f, 0.0f };
 
         recalculateViewMatrices();
         recalculateProjectionMatrices();
@@ -33,15 +36,43 @@ namespace PathTracing
     }
 
 
-    void Camera::onUpdate(float dt)
+    bool Camera::onUpdate(float dt)
     {
+        bool cameraMoved = false;
 
+        if (Input::isKeyPressed(PT_KEY_W))
+        {
+            m_position += m_forwardDirection * m_translationSpeed * dt;
+            cameraMoved = true;
+        }
+        if (Input::isKeyPressed(PT_KEY_S))
+        {
+            m_position -= m_forwardDirection * m_translationSpeed * dt;
+            cameraMoved = true;
+        }
+        if (Input::isKeyPressed(PT_KEY_A))
+        {
+            m_position -= m_rightDirection * m_translationSpeed * dt;
+            cameraMoved = true;
+        }
+        if (Input::isKeyPressed(PT_KEY_D))
+        {
+            m_position += m_rightDirection * m_translationSpeed * dt;
+            cameraMoved = true;
+        }
+
+        if (cameraMoved)
+        {
+            recalculateViewMatrices();
+            recalculateRayDirections();
+        }
+
+        return cameraMoved;
     }
 
     void Camera::recalculateViewMatrices()
     {
-        constexpr glm::vec3 upVector = { 0.0f, 1.0f, 0.0f };
-        m_viewMatrix = glm::lookAt(m_position, m_position + m_forwardDirection, upVector);
+        m_viewMatrix = glm::lookAt(m_position, m_position + m_forwardDirection, m_upVector);
         m_inverseViewMatrix = glm::inverse(m_viewMatrix);
     }
 

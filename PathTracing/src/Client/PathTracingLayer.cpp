@@ -27,9 +27,22 @@ namespace PathTracing
 
 		// Panels
 		m_viewportPanel = std::make_unique<ViewportPanel>(windowWidth, windowHeight);
-
-		Sphere sphere;
-		m_scene.Spheres.push_back(sphere);
+		
+		{
+			Sphere sphere;
+			sphere.Position = { 0.0f, 0.0f, -2.0f };
+			sphere.Radius = 2.0f;
+			Material material;
+			material.Albedo = { 1.0f, 1.0f, 1.0f };
+			m_scene.addSphere(sphere, material);
+		}		
+		{
+			Sphere sphere;
+			sphere.Position = { -0.1f, 0.0f, 0.0f };
+			Material material;
+			material.Albedo = { 1.0f, 0.0f, 0.0f };
+			m_scene.addSphere(sphere, material);
+		}
 	}
 
 	void PathTracingLayer::onDetach()
@@ -44,8 +57,9 @@ namespace PathTracing
 		uint32_t viewportWidth = m_viewportPanel->getWidth();
 		uint32_t viewportHeight = m_viewportPanel->getHeight();
 		m_camera.onResize(viewportWidth, viewportHeight);
-		m_renderer.onResize(viewportWidth, viewportHeight);
+		m_camera.onUpdate(dt);
 
+		m_renderer.onResize(viewportWidth, viewportHeight);
 		m_renderer.renderScene(m_camera, m_scene);
 		const void* imageData = m_renderer.getFinalImageData();
 		m_viewportPanel->setViewportImageData(imageData);

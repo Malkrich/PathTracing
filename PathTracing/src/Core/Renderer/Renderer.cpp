@@ -23,12 +23,6 @@ namespace PathTracing
 
 	}
 
-	struct Ray
-	{
-		glm::vec3 Position{ 0.0f, 0.0f, 0.0f };
-		glm::vec3 Direction{ 0.0f, 0.0f, 0.0f };
-	};
-
 	Renderer::Renderer()
 	{
 	}
@@ -75,78 +69,80 @@ namespace PathTracing
 	glm::vec4 Renderer::perPixel(uint32_t x, uint32_t y)
 	{
 		Ray ray;
-		//const glm::vec3& xs = ray.getP0();
-		//const glm::vec3& u = ray.getU();
+		// Init ray
 		ray.Position = m_activeCamera->getPosition();
 		ray.Direction = m_activeCamera->getRayDirections()[x + y * m_width];
 
-		for (const auto& sphere : m_activeScene->Spheres)
+		glm::vec3 finalColor{ 0.0f };
+
+		uint32_t totalBounces = 2;
+		for (uint32_t bounce = 0; bounce < totalBounces; bounce++)
 		{
-			//const glm::vec3& x0 = m_center;
-			//const float r = m_radius;
-			glm::vec3 position = sphere.Position;
-			float radius = sphere.Radius;
+			HitPayload payload = traceRay(ray);
 
-			// Local space origin
-			glm::vec3 origin = ray.Position - position;
+			if (payload.HitDistance < 0.0f)
+			{
+				glm::vec3 backgroundColor = { 0.1f, 0.1f, 0.1f };
+				finalColor += backgroundColor;
+				break;
+			}
 
-			//float a = pow(glm::length(u), 2);
-			//float b = 2 * dot(xs - x0, u);
-			//float c = pow(glm::length(xs - x0), 2) - pow(r, 2);
+			ray.Position = payload.HitPosition;
+			ray.Direction = glm::reflect(ray.Direction, payload.HitNormal);
+
+			const auto& objectMaterial = m_activeScene->getSphereMaterials()[payload.ObjectIndex];
+			finalColor += objectMaterial.Albedo;
+		}
+
+		return glm::vec4(finalColor, 1.0f);
+	}
+
+	Renderer::HitPayload Renderer::traceRay(const Ray& ray)
+	{
+		HitPayload payload;
+
+		int closestObjectIndex = -1;
+		float closestHitDistance = std::numeric_limits<float>::max();
+		for (size_t objectIndex = 0; objectIndex < m_activeScene->getSpheres().size(); objectIndex++)
+		{
+			const Sphere& sphere = m_activeScene->getSpheres()[objectIndex];
+
+			glm::vec3 sphereCenter = sphere.Position;
+			float sphereRadius = sphere.Radius;
+
+			// Ray origin relative to object position
+			glm::vec3 origin = ray.Position - sphereCenter;
+
 			float a = glm::dot(ray.Direction, ray.Direction);
 			float b = 2.0f * glm::dot(origin, ray.Direction);
-			float c = glm::dot(origin, origin) - radius * radius;
+			float c = glm::dot(origin, origin) - sphereRadius * sphereRadius;
 			float delta = b * b - 4 * a * c;
 
 			// Miss object
 			if (delta < 0.0f)
 				continue;
 
-			return glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-			//float t1 = (-b - glm::sqrt(delta)) / 2.0f * a;
+			float closestT = (-b - glm::sqrt(delta)) / 2.0f * a;
 
+			if (closestT > 0.0f && closestT < closestHitDistance)
+			{
+				closestHitDistance = closestT;
+				closestObjectIndex = (int)objectIndex;
+			}
 		}
 
-		//if (delta > 0.0f)
-		//{
-		//	float t1 = (-b - sqrt(delta)) / 2 * a;
-		//	float t2 = (-b + sqrt(delta)) / 2 * a;
+		if (closestObjectIndex < 0)
+			return payload;
 
-		//	if (t1 >= 0.0f)
-		//	{
-		//		glm::vec3 x_inter = xs + t1 * u;
-		//		glm::vec3 n = glm::normalize(x_inter - x0);
-		//		intersection.set(x_inter, n, t1);
-		//		return true;
-		//	}
-		//	else if (t2 >= 0.0f)
-		//	{
-		//		glm::vec3 x_inter = xs + t2 * u;
-		//		glm::vec3 n = glm::normalize(x_inter - x0);
-		//		intersection.set(x_inter, n, t2);
-		//		return true;
-		//	}
-		//	else
-		//		return false;
-		//}
-		//else if (delta == 0.0f)
-		//{
-		//	float t = -b / 2 * a;
-		//	if (t >= 0.0f)
-		//	{
-		//		glm::vec3 x_inter = xs + t * u;
-		//		glm::vec3 n = glm::normalize(x_inter - x0);
-		//		intersection.set(x_inter, n, t);
-		//		return true;
-		//	}
-		//	else
-		//		return false;
-		//}
-		//else
-		//	return false;
+		const Sphere& closestSphere = m_activeScene->getSpheres()[closestObjectIndex];
+		glm::vec3 origin = ray.Position - closestSphere.Position;
 
-		glm::vec3 backgroundColor = { 0.1f, 0.1f, 0.1f };
-		return glm::vec4(backgroundColor, 1.0f);
+		payload.HitDistance = closestHitDistance;
+		payload.HitPosition = ray.Position + ray.Direction * closestHitDistance;
+		glm::vec3 intersectionPosition = origin + ray.Direction * payload.HitDistance;
+		payload.HitNormal = glm::normalize(intersectionPosition);
+		payload.ObjectIndex = (int)closestObjectIndex;
+		return payload;
 	}
 
 }
