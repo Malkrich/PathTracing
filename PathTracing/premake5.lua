@@ -9,7 +9,9 @@ project "PathTracing"
 
     includedirs
     {
-        "src",
+        "src/",
+        "src/Core/",
+        "src/Client/",
         "lib/GLFW/glfw-3.3.8/include",
         "lib/glad/include",
         "lib/imgui",

@@ -1,12 +1,8 @@
 #include "Pch.h"
-
 #include "Application.h"
+
 #include "Base.h"
 #include "Time.h"
-#include "Renderer/Image.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 namespace PathTracing
 {
@@ -14,7 +10,6 @@ namespace PathTracing
     Application* Application::s_instance = nullptr;
 
     Application::Application(const std::string& appName)
-        : m_camera(1280, 720)
     {
         s_instance = this;
 
@@ -30,22 +25,15 @@ namespace PathTracing
         while(m_running)
         {
             float time = Time::getTime();
-            float deltaTime = time - m_frameTime;
+            float dt = time - m_frameTime;
             m_frameTime = time;
-            m_rendererSettingsPanel->onUpdate(deltaTime);
 
-            uint32_t viewportWidth = m_viewportPanel->getWidth();
-            uint32_t viewportHeight = m_viewportPanel->getHeight();
-            m_renderer.onResize(viewportWidth, viewportHeight);
+            for (auto layer : *m_layerStack)
+                layer->onUpdate(dt);
 
-            m_renderer.renderScene(m_camera, m_scene);
-            const void* imageData = m_renderer.getFinalImageData();
-            m_viewportPanel->setViewportImageData(imageData);
-
-            // Panels render
             m_imGuiRenderer->OnNewFrame();
-            m_viewportPanel->onGuiRender();
-            m_rendererSettingsPanel->onGuiRender();
+            for (auto layer : *m_layerStack)
+                layer->onGuiRender();
             m_imGuiRenderer->onRender();
 
             m_window->onUpdate();
@@ -54,6 +42,15 @@ namespace PathTracing
 
     void Application::onEvent(Event& e)
     {
+        for (auto it = m_layerStack->end(); it != m_layerStack->begin();)
+        {
+            if (e.isHandled())
+                break;
+
+            (*(--it))->onEvent(e);
+        }
+
+        // Internal events
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::onWindowClose));
     }
@@ -79,9 +76,7 @@ namespace PathTracing
 
         m_imGuiRenderer = std::make_unique<ImGuiRenderer>();
 
-        // Panels
-        m_viewportPanel = std::make_unique<ViewportPanel>(initialWidth, initialHeight);
-        m_rendererSettingsPanel = std::make_unique<RendererSettingsPanel>();
+        m_layerStack = std::make_unique<LayerStack>();
     }
 
 }

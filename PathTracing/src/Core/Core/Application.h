@@ -2,12 +2,9 @@
 
 #include "Event.h"
 #include "Window.h"
-#include "Renderer/Renderer.h"
 #include "Renderer/ImGuiRenderer.h"
-#include "Scene/Scene.h"
-
-#include "Panels/ViewportPanel.h"
-#include "Panels/RendererSettingsPanel.h"
+#include "Layer/LayerStack.h"
+#include "Layer/Layer.h"
 
 namespace PathTracing
 {
@@ -19,6 +16,12 @@ namespace PathTracing
         ~Application();
 
         static Application* get() { return s_instance; }
+
+        template<typename T>
+        void pushLayer()
+        {
+            m_layerStack->pushLayer<T>();
+        }
 
         const std::shared_ptr<Window> getWindow() const { return m_window; }
 
@@ -36,21 +39,17 @@ namespace PathTracing
 
         float m_frameTime = 0.0f;
 
-        // Path tracing renderer
-        Renderer m_renderer;
-        Scene m_scene;
-        Camera m_camera;
-
-        // Panels
-        std::unique_ptr<ViewportPanel> m_viewportPanel = nullptr;
-        std::unique_ptr<RendererSettingsPanel> m_rendererSettingsPanel = nullptr;
-
         // Application
         std::shared_ptr<Window> m_window = nullptr;
         std::unique_ptr<ImGuiRenderer> m_imGuiRenderer = nullptr;
 
+        // Layers
+        std::unique_ptr<LayerStack> m_layerStack = nullptr;
+
         // singleton instance
         static Application* s_instance;
     };
+
+    Application* createApplication();
 
 }
