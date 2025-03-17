@@ -5,61 +5,38 @@
 namespace PathTracing
 {
 
-    /** Storage of a camera and screen parameters */
+    // From: https://github.com/TheCherno/RayTracing/blob/master/RayTracing/src/Camera.cpp
     class Camera
     {
     public:
+        Camera(uint32_t width, uint32_t height);
 
-        // ********************************************* //
-        //  Constructor
-        // ********************************************* //
+        void onResize(uint32_t width, uint32_t height);
+        void onUpdate(float dt);
 
-        Camera(unsigned int width, unsigned int height);
-
-        /** Camera parameterized by its center, its main direction, and its up direction,
-                the distance between the screen and the center, and the length of the screen */
-        Camera(glm::vec3 const& center_param,
-               glm::vec3 const& direction_param,
-               glm::vec3 const& up_param,
-               float distance_screen_param,
-               unsigned int width, unsigned int height);
-
-        // ********************************************* //
-        //  Access parameters
-        // ********************************************* //
-
-        /** Get the center of the camera */
-        glm::vec3 const& center() const;
-        /** Get the direction value */
-        glm::vec3 const& direction() const;
-        /** Get the up direction value */
-        glm::vec3 const& up() const;
-
-        glm::vec3 const& right() const;
-
-        /** Get the dist_screen value */
-        float distance_screen() const;
-
-        float getAspectRatio() const;
-        void resize(unsigned int width, unsigned int height);
+        const glm::vec3& getPosition() const { return m_position; }
+        const std::vector<glm::vec3>& getRayDirections() const { return m_rayDirections; }
 
     private:
+        void recalculateViewMatrices();
+        void recalculateProjectionMatrices();
+        void recalculateRayDirections();
 
-        /** Internal camera center */
-        glm::vec3 m_center;
-        /** Direction of pointing camera */
-        glm::vec3 m_direction;
-        /** Up direction of the camera */
-        glm::vec3 m_up;
-        /** Right vector of the camera */
-        glm::vec3 m_right;
-        /** Internal screen distance to the center */
-        float m_screenDistance;
-        /** aspect ration of the screen */
-        float m_aspectRatio;
+    private:
+        glm::mat4 m_viewMatrix{ 1.0f };
+        glm::mat4 m_inverseViewMatrix{ 1.0f };
+        glm::mat4 m_projectionMatrix{ 1.0f };
+        glm::mat4 m_inverseProjectionMatrix{ 1.0f };
+
+        std::vector<glm::vec3> m_rayDirections;
+
+        glm::vec3 m_position{ 0.0f };
+        glm::vec3 m_forwardDirection{ 0.0f };
+
+        float m_fov = 45.0f;
+        float m_nearClip = 0.1f, m_farClip = 1000.0f;
+
+        uint32_t m_width = 0, m_height = 0;
     };
-
-    /** Compute the 3D position of the pixel parameterized by (u,v), where (u,v) is in [0,1] on the screen of the camera */
-    glm::vec3 screen_position(Camera const& cam, float u, float v);
 
 }

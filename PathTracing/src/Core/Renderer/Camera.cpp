@@ -2,54 +2,75 @@
 
 #include "Camera.h"
 
+#include <glm/gtx/transform.hpp>
+
 namespace PathTracing
 {
 
-Camera::Camera(unsigned int width, unsigned int height)
-    : Camera(glm::vec3(0.0f,0.0f,-2.0f),
-             glm::vec3(0.0f,0.0f,1.0f),
-             glm::vec3(0.0f,1.0f,0.0f),
-             2.0f,
-             width, height)
-{}
+    Camera::Camera(uint32_t width, uint32_t height)
+        : m_width(width)
+        , m_height(height)
+    {
+        // TEMP
+        m_position = { 0.0f, 0.0f, 2.0f };
+        m_forwardDirection = { 0.0f, 0.0f, -1.0f };
 
-Camera::Camera(glm::vec3 const& center_param,
-               glm::vec3 const& direction_param,
-               glm::vec3 const& up_param,
-               float const distance_screen_param,
-               unsigned int width, unsigned int height)
-    : m_center(center_param)
-    , m_direction(direction_param)
-    , m_up(glm::normalize(up_param))
-    , m_right(glm::normalize(cross(m_direction, m_up)))
-    , m_screenDistance(distance_screen_param)
-{
-    resize(width, height);
-}
+        recalculateViewMatrices();
+        recalculateProjectionMatrices();
+        recalculateRayDirections();
+    }
 
-glm::vec3 const& Camera::center() const {return m_center;}
-glm::vec3 const& Camera::direction() const {return m_direction;}
-glm::vec3 const& Camera::up() const {return m_up;}
-glm::vec3 const& Camera::right() const {return m_right;}
+    void Camera::onResize(uint32_t width, uint32_t height)
+    {
+        if (m_width == width && m_height == height)
+            return;
 
-float Camera::distance_screen() const {return m_screenDistance;}
+        m_width = width;
+        m_height = height;
 
-float Camera::getAspectRatio() const { return m_aspectRatio; }
-void Camera::resize(unsigned int width, unsigned int height)
-{
-    m_aspectRatio = (float)width / (float)height;
-}
+        recalculateProjectionMatrices();
+        recalculateRayDirections();
+    }
 
-glm::vec3 screen_position(Camera const& cam, float u, float v)
-{
-    glm::vec3 const p0    = cam.center() + cam.direction() * cam.distance_screen();
 
-    glm::vec3 const translate_right = cam.right() * (u-0.5f)*2.0f*cam.getAspectRatio();
-    glm::vec3 const translate_up    = cam.up() * (v-0.5f)*2.0f;
+    void Camera::onUpdate(float dt)
+    {
 
-    glm::vec3 const current = p0+translate_right+translate_up;
+    }
 
-    return current;
-}
+    void Camera::recalculateViewMatrices()
+    {
+        constexpr glm::vec3 upVector = { 0.0f, 1.0f, 0.0f };
+        m_viewMatrix = glm::lookAt(m_position, m_position + m_forwardDirection, upVector);
+        m_inverseViewMatrix = glm::inverse(m_viewMatrix);
+    }
+
+    void Camera::recalculateProjectionMatrices()
+    {
+        m_projectionMatrix = glm::perspectiveFov(glm::radians(m_fov), (float)m_width, (float)m_height, m_nearClip, m_farClip);
+        m_inverseProjectionMatrix = glm::inverse(m_projectionMatrix);
+    }
+
+    void Camera::recalculateRayDirections()
+    {
+        m_rayDirections.resize(m_width * m_height);
+
+        for (uint32_t y = 0; y < m_height; y++)
+        {
+            for (uint32_t x = 0; x < m_width; x++)
+            {
+                // Pixel coord from 0.0 to 1.0
+                glm::vec2 coord = { (float)x / (float)m_width, (float)y / (float)m_height };
+                // Pixel coord from -1.0f to 1.0
+                coord = coord * 2.0f - 1.0f;
+
+                // Transform ray direction from screen space to view space
+                glm::vec4 target = m_inverseProjectionMatrix * glm::vec4(coord.x, coord.y, 1, 1);
+                // Transform ray direction from view space to world space
+                glm::vec3 rayDirection = glm::vec3(m_inverseViewMatrix * glm::vec4(glm::normalize(glm::vec3(target) / target.w), 0)); // World space
+                m_rayDirections[x + y * m_width] = rayDirection;
+            }
+        }
+    }
 
 }

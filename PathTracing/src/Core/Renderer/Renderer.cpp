@@ -23,6 +23,12 @@ namespace PathTracing
 
 	}
 
+	struct Ray
+	{
+		glm::vec3 Position{ 0.0f, 0.0f, 0.0f };
+		glm::vec3 Direction{ 0.0f, 0.0f, 0.0f };
+	};
+
 	Renderer::Renderer()
 	{
 	}
@@ -68,7 +74,79 @@ namespace PathTracing
 
 	glm::vec4 Renderer::perPixel(uint32_t x, uint32_t y)
 	{
-		return glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		Ray ray;
+		//const glm::vec3& xs = ray.getP0();
+		//const glm::vec3& u = ray.getU();
+		ray.Position = m_activeCamera->getPosition();
+		ray.Direction = m_activeCamera->getRayDirections()[x + y * m_width];
+
+		for (const auto& sphere : m_activeScene->Spheres)
+		{
+			//const glm::vec3& x0 = m_center;
+			//const float r = m_radius;
+			glm::vec3 position = sphere.Position;
+			float radius = sphere.Radius;
+
+			// Local space origin
+			glm::vec3 origin = ray.Position - position;
+
+			//float a = pow(glm::length(u), 2);
+			//float b = 2 * dot(xs - x0, u);
+			//float c = pow(glm::length(xs - x0), 2) - pow(r, 2);
+			float a = glm::dot(ray.Direction, ray.Direction);
+			float b = 2.0f * glm::dot(origin, ray.Direction);
+			float c = glm::dot(origin, origin) - radius * radius;
+			float delta = b * b - 4 * a * c;
+
+			// Miss object
+			if (delta < 0.0f)
+				continue;
+
+			return glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+			//float t1 = (-b - glm::sqrt(delta)) / 2.0f * a;
+
+		}
+
+		//if (delta > 0.0f)
+		//{
+		//	float t1 = (-b - sqrt(delta)) / 2 * a;
+		//	float t2 = (-b + sqrt(delta)) / 2 * a;
+
+		//	if (t1 >= 0.0f)
+		//	{
+		//		glm::vec3 x_inter = xs + t1 * u;
+		//		glm::vec3 n = glm::normalize(x_inter - x0);
+		//		intersection.set(x_inter, n, t1);
+		//		return true;
+		//	}
+		//	else if (t2 >= 0.0f)
+		//	{
+		//		glm::vec3 x_inter = xs + t2 * u;
+		//		glm::vec3 n = glm::normalize(x_inter - x0);
+		//		intersection.set(x_inter, n, t2);
+		//		return true;
+		//	}
+		//	else
+		//		return false;
+		//}
+		//else if (delta == 0.0f)
+		//{
+		//	float t = -b / 2 * a;
+		//	if (t >= 0.0f)
+		//	{
+		//		glm::vec3 x_inter = xs + t * u;
+		//		glm::vec3 n = glm::normalize(x_inter - x0);
+		//		intersection.set(x_inter, n, t);
+		//		return true;
+		//	}
+		//	else
+		//		return false;
+		//}
+		//else
+		//	return false;
+
+		glm::vec3 backgroundColor = { 0.1f, 0.1f, 0.1f };
+		return glm::vec4(backgroundColor, 1.0f);
 	}
 
 }
