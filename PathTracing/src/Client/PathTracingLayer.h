@@ -6,6 +6,7 @@
 #include "Scene/Scene.h"
 
 #include "Panels/ViewportPanel.h"
+#include "Panels/SceneControlPanel.h"
 
 namespace PathTracing
 {
@@ -31,6 +32,7 @@ namespace PathTracing
 
 		// Panels
 		std::unique_ptr<ViewportPanel> m_viewportPanel = nullptr;
+		std::unique_ptr<SceneControlPanel> m_sceneControlPanel = nullptr;
 
 		// Time
 		float m_deltaTime = 0.0f;

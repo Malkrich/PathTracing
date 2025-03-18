@@ -1,8 +1,7 @@
 #include "Pch.h"
 
 #include "Renderer.h"
-
-#include <glm/glm.hpp>
+#include "Utils/Random.h"
 
 namespace PathTracing
 {
@@ -29,19 +28,24 @@ namespace PathTracing
 
 	Renderer::~Renderer()
 	{
+		delete[] m_accumulatedImage;
 		delete[] m_finalImageData;
 	}
 
 	void Renderer::onResize(uint32_t width, uint32_t height)
 	{
-		if (m_width != width || m_height != height)
-		{
-			m_width = width;
-			m_height = height;
+		if (m_width == width && m_height == height)
+			return;
 
-			delete[] m_finalImageData;
-			m_finalImageData = new uint32_t[m_width * m_height];
-		}
+		m_width = width;
+		m_height = height;
+
+		delete[] m_accumulatedImage;
+		m_accumulatedImage = new glm::vec4[m_width * m_height];
+		delete[] m_finalImageData;
+		m_finalImageData = new uint32_t[m_width * m_height];
+
+		resetAccumulation();
 	}
 
 	void Renderer::renderScene(const Camera& camera, const Scene& scene)
@@ -58,12 +62,24 @@ namespace PathTracing
 			{
 				glm::vec4 color = perPixel(x, y);
 
-				color = glm::clamp(color, glm::vec4(0.0f), glm::vec4(1.0f));
+				m_accumulatedImage[x + m_width * y] += color;
 
-				uint32_t pixelData = Utils::float4ColorToUint32Color(color);
+				glm::vec4 finalColor = m_accumulatedImage[x + m_width * y];
+				finalColor /= (float)m_frameCount;
+				finalColor = glm::clamp(finalColor, glm::vec4(0.0f), glm::vec4(1.0f));
+
+				uint32_t pixelData = Utils::float4ColorToUint32Color(finalColor);
 				m_finalImageData[y * m_width + x] = pixelData;
 			}
 		}
+
+		m_frameCount++;
+	}
+
+	void Renderer::resetAccumulation()
+	{
+		m_frameCount = 0;
+		memset(m_accumulatedImage, 0, m_width * m_height * sizeof(glm::vec4));
 	}
 
 	glm::vec4 Renderer::perPixel(uint32_t x, uint32_t y)
@@ -74,6 +90,7 @@ namespace PathTracing
 		ray.Direction = m_activeCamera->getRayDirections()[x + y * m_width];
 
 		glm::vec3 finalColor{ 0.0f };
+		glm::vec3 rayColor{ 1.0f };
 
 		for (uint32_t bounce = 0; bounce < m_renderSettings.BounceCount; bounce++)
 		{
@@ -81,22 +98,17 @@ namespace PathTracing
 
 			if (payload.HitDistance < 0.0f)
 			{
-				glm::vec3 backgroundColor = { 0.1f, 0.1f, 0.1f };
-				finalColor += backgroundColor;
+				glm::vec3 skyColor = { 0.6f, 0.7f, 0.9f };
+				finalColor += skyColor * rayColor;
 				break;
 			}
 
 			ray.Position = payload.HitPosition + 0.000001f * payload.HitNormal;
-			ray.Direction = glm::reflect(ray.Direction, payload.HitNormal);
+			ray.Direction = glm::normalize(payload.HitNormal + Random::unitSphereVector());
 
-			const Material* material = nullptr;
-			if (payload.Object == ObjectType::Sphere)
-				material = &(m_activeScene->getSphereMaterials()[payload.ObjectIndex]);
-			if (payload.Object == ObjectType::Sphere)
-				material = &(m_activeScene->getPlaneMaterials()[payload.ObjectIndex]);
-
-			if (material)
-				finalColor = material->Albedo;
+			const Material& objectMaterial = m_activeScene->getMaterial(payload.Object, payload.ObjectIndex);
+			rayColor *= objectMaterial.Albedo;
+			finalColor += objectMaterial.getEmission();
 		}
 
 		return glm::vec4(finalColor, 1.0f);
@@ -110,7 +122,7 @@ namespace PathTracing
 
 		// Spheres pass
 		{
-			const auto& spheres = m_activeScene->getSpheres();
+			const auto& spheres = m_activeScene->Spheres;
 			for (size_t objectIndex = 0; objectIndex < spheres.size(); objectIndex++)
 			{
 				const Sphere& sphere = spheres[objectIndex];
@@ -143,7 +155,7 @@ namespace PathTracing
 
 		// Plane pass
 		{
-			const auto& planes = m_activeScene->getPlanes();
+			const auto& planes = m_activeScene->Planes;
 			for (size_t objectIndex = 0; objectIndex < planes.size(); objectIndex++)
 			{
 				const Plane& plane = planes[objectIndex];
@@ -171,6 +183,7 @@ namespace PathTracing
 	Renderer::HitPayload Renderer::miss(const Ray& ray)
 	{
 		HitPayload payload;
+
 		return payload;
 	}
 
@@ -179,7 +192,6 @@ namespace PathTracing
 		HitPayload payload;
 
 		payload.HitDistance = hitDistance;
-		payload.HitPosition = ray.Position + ray.Direction * hitDistance;
 		payload.Object = object;
 		payload.ObjectIndex = (int)objectIndex;
 
@@ -187,15 +199,19 @@ namespace PathTracing
 		{
 			case ObjectType::Sphere:
 			{
-				const Sphere& closestSphere = m_activeScene->getSpheres()[objectIndex];
+				const Sphere& closestSphere = m_activeScene->Spheres[objectIndex];
+
 				glm::vec3 origin = ray.Position - closestSphere.Position;
-				glm::vec3 intersectionPosition = origin + ray.Direction * payload.HitDistance;
-				payload.HitNormal = glm::normalize(intersectionPosition);
+				glm::vec3 hitLocalPosition = origin + ray.Direction * hitDistance;
+				payload.HitNormal = glm::normalize(hitLocalPosition);
+				payload.HitPosition = closestSphere.Position + hitLocalPosition;
 				break;
 			}
 			case ObjectType::Plane:
 			{
-				const Plane& closestPlane = m_activeScene->getPlanes()[objectIndex];
+				const Plane& closestPlane = m_activeScene->Planes[objectIndex];
+
+				payload.HitPosition = ray.Position + ray.Direction * hitDistance;
 				payload.HitNormal = closestPlane.Normal;
 				break;
 			}

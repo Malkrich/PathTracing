@@ -2,7 +2,7 @@
 
 // Assertions
 #ifdef PT_DEBUG
-    #define PT_ASSERT(condition, message) if(!condition) { std::cout << message << std::endl; assert(false); }
+    #define PT_ASSERT(condition, message) if(!(condition)) { std::cout << message << std::endl; __debugbreak(); }
 #endif
 #ifdef PT_RELEASE
     #define PT_ASSERT(condition, message)

@@ -33,14 +33,22 @@ namespace PathTracing
 			sphere.Position = { 0.0f, 0.0f, -2.0f };
 			sphere.Radius = 2.0f;
 			Material material;
-			material.Albedo = { 1.0f, 1.0f, 1.0f };
+			material.Albedo = { 0.7f, 0.9f, 0.6f };
 			m_scene.addSphere(sphere, material);
 		}
 		{
 			Sphere sphere;
-			sphere.Position = { -0.1f, 0.0f, 0.0f };
+			sphere.Position = { -0.5f, 0.0f, 0.0f };
 			Material material;
 			material.Albedo = { 1.0f, 0.0f, 0.0f };
+			m_scene.addSphere(sphere, material);
+		}
+		{
+			Sphere sphere;
+			sphere.Position = { 0.0f, 2.0f, 0.0f };
+			Material material;
+			material.EmissionColor = { 0.7f, 1.0f, 0.3f };
+			material.EmissionStrength = 1.0f;
 			m_scene.addSphere(sphere, material);
 		}
 		{
@@ -48,6 +56,8 @@ namespace PathTracing
 			Material material;
 			m_scene.addPlane(plane, material);
 		}
+
+		m_sceneControlPanel = std::make_unique<SceneControlPanel>(&m_scene);
 	}
 
 	void PathTracingLayer::onDetach()
@@ -62,7 +72,8 @@ namespace PathTracing
 		uint32_t viewportWidth = m_viewportPanel->getWidth();
 		uint32_t viewportHeight = m_viewportPanel->getHeight();
 		m_camera.onResize(viewportWidth, viewportHeight);
-		m_camera.onUpdate(dt);
+		if (m_camera.onUpdate(dt))
+			m_renderer.resetAccumulation();
 
 		m_renderer.onResize(viewportWidth, viewportHeight);
 		m_renderer.renderScene(m_camera, m_scene);
@@ -73,13 +84,17 @@ namespace PathTracing
 	void PathTracingLayer::onGuiRender()
 	{
 		m_viewportPanel->onGuiRender();
+		m_sceneControlPanel->onGuiRender();
 
 		Renderer::Settings& renderSettings = m_renderer.getRenderSettings();
 		ImGui::Begin("Renderer Settings");
 		ImGui::Text("%.3f ms", m_deltaTime * 1000.0f);
 		int bounceCount = renderSettings.BounceCount;
 		if (ImGui::SliderInt("Bounce count", &bounceCount, 1, 5))
+		{
 			renderSettings.BounceCount = bounceCount;
+			m_renderer.resetAccumulation();
+		}
 		ImGui::End();
 	}
 

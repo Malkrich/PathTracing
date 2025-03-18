@@ -12,20 +12,13 @@ namespace PathTracing
 	public:
 		struct Settings
 		{
-			uint32_t BounceCount = 1;
+			uint32_t BounceCount = 2;
 		};
 
 		struct Ray
 		{
 			glm::vec3 Position{ 0.0f, 0.0f, 0.0f };
 			glm::vec3 Direction{ 0.0f, 0.0f, 0.0f };
-		};
-
-		enum class ObjectType
-		{
-			None = 0,
-			Sphere,
-			Plane
 		};
 
 		struct HitPayload
@@ -45,10 +38,13 @@ namespace PathTracing
 
 		Settings& getRenderSettings() { return m_renderSettings; }
 
+
 		void onResize(uint32_t width, uint32_t height);
 		void renderScene(const Camera& camera, const Scene& scene);
 
 		const uint32_t* getFinalImageData() const { return m_finalImageData; }
+
+		void resetAccumulation();
 
 	private:
 		glm::vec4 perPixel(uint32_t x, uint32_t y);
@@ -65,6 +61,8 @@ namespace PathTracing
 
 		uint32_t m_width = 0;
 		uint32_t m_height = 0;
+		uint32_t m_frameCount = 0;
+		glm::vec4* m_accumulatedImage = nullptr;
 		uint32_t* m_finalImageData = nullptr;
 	};
 
