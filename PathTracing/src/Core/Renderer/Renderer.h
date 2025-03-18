@@ -10,10 +10,22 @@ namespace PathTracing
 	class Renderer
 	{
 	public:
+		struct Settings
+		{
+			uint32_t BounceCount = 1;
+		};
+
 		struct Ray
 		{
 			glm::vec3 Position{ 0.0f, 0.0f, 0.0f };
 			glm::vec3 Direction{ 0.0f, 0.0f, 0.0f };
+		};
+
+		enum class ObjectType
+		{
+			None = 0,
+			Sphere,
+			Plane
 		};
 
 		struct HitPayload
@@ -24,14 +36,16 @@ namespace PathTracing
 			glm::vec3 HitNormal{ 0.0f };
 
 			int ObjectIndex = -1;
+			ObjectType Object = ObjectType::None;
 		};
 
 	public:
 		Renderer();
 		~Renderer();
 
-		void onResize(uint32_t width, uint32_t height);
+		Settings& getRenderSettings() { return m_renderSettings; }
 
+		void onResize(uint32_t width, uint32_t height);
 		void renderScene(const Camera& camera, const Scene& scene);
 
 		const uint32_t* getFinalImageData() const { return m_finalImageData; }
@@ -40,8 +54,12 @@ namespace PathTracing
 		glm::vec4 perPixel(uint32_t x, uint32_t y);
 
 		HitPayload traceRay(const Ray& ray);
+		HitPayload miss(const Ray& ray);
+		HitPayload hit(const Ray& ray, ObjectType object, int objectIndex, const float hitDistance);
 
 	private:
+		Settings m_renderSettings;
+
 		const Scene* m_activeScene;
 		const Camera* m_activeCamera;
 

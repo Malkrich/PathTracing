@@ -11,4 +11,10 @@ namespace PathTracing
 		m_sphereMaterials.push_back(material);
 	}
 
+	void Scene::addPlane(const Plane& plane, const Material& material)
+	{
+		m_planes.push_back(plane);
+		m_planeMaterials.push_back(material);
+	}
+
 }

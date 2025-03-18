@@ -60,6 +60,16 @@ namespace PathTracing
             m_position += m_rightDirection * m_translationSpeed * dt;
             cameraMoved = true;
         }
+        if (Input::isKeyPressed(PT_KEY_SPACE))
+        {
+            m_position += m_upDirection * m_translationSpeed * dt;
+            cameraMoved = true;
+        }
+        if (Input::isKeyPressed(PT_KEY_LEFT_SHIFT))
+        {
+            m_position -= m_upDirection * m_translationSpeed * dt;
+            cameraMoved = true;
+        }
 
         if (cameraMoved)
         {
@@ -72,7 +82,7 @@ namespace PathTracing
 
     void Camera::recalculateViewMatrices()
     {
-        m_viewMatrix = glm::lookAt(m_position, m_position + m_forwardDirection, m_upVector);
+        m_viewMatrix = glm::lookAt(m_position, m_position + m_forwardDirection, m_upDirection);
         m_inverseViewMatrix = glm::inverse(m_viewMatrix);
     }
 

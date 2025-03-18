@@ -33,7 +33,7 @@ namespace PathTracing
         glm::vec3 m_position{ 0.0f };
         glm::vec3 m_forwardDirection{ 0.0f };
         glm::vec3 m_rightDirection{ 0.0f };
-        glm::vec3 m_upVector = { 0.0f, 1.0f, 0.0f };
+        glm::vec3 m_upDirection = { 0.0f, 1.0f, 0.0f };
 
         float m_fov = 45.0f;
         float m_nearClip = 0.1f, m_farClip = 1000.0f;

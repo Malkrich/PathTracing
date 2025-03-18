@@ -35,13 +35,18 @@ namespace PathTracing
 			Material material;
 			material.Albedo = { 1.0f, 1.0f, 1.0f };
 			m_scene.addSphere(sphere, material);
-		}		
+		}
 		{
 			Sphere sphere;
 			sphere.Position = { -0.1f, 0.0f, 0.0f };
 			Material material;
 			material.Albedo = { 1.0f, 0.0f, 0.0f };
 			m_scene.addSphere(sphere, material);
+		}
+		{
+			Plane plane;
+			Material material;
+			m_scene.addPlane(plane, material);
 		}
 	}
 
@@ -69,8 +74,12 @@ namespace PathTracing
 	{
 		m_viewportPanel->onGuiRender();
 
+		Renderer::Settings& renderSettings = m_renderer.getRenderSettings();
 		ImGui::Begin("Renderer Settings");
 		ImGui::Text("%.3f ms", m_deltaTime * 1000.0f);
+		int bounceCount = renderSettings.BounceCount;
+		if (ImGui::SliderInt("Bounce count", &bounceCount, 1, 5))
+			renderSettings.BounceCount = bounceCount;
 		ImGui::End();
 	}
 

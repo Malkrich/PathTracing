@@ -75,8 +75,7 @@ namespace PathTracing
 
 		glm::vec3 finalColor{ 0.0f };
 
-		uint32_t totalBounces = 2;
-		for (uint32_t bounce = 0; bounce < totalBounces; bounce++)
+		for (uint32_t bounce = 0; bounce < m_renderSettings.BounceCount; bounce++)
 		{
 			HitPayload payload = traceRay(ray);
 
@@ -87,11 +86,17 @@ namespace PathTracing
 				break;
 			}
 
-			ray.Position = payload.HitPosition;
+			ray.Position = payload.HitPosition + 0.000001f * payload.HitNormal;
 			ray.Direction = glm::reflect(ray.Direction, payload.HitNormal);
 
-			const auto& objectMaterial = m_activeScene->getSphereMaterials()[payload.ObjectIndex];
-			finalColor += objectMaterial.Albedo;
+			const Material* material = nullptr;
+			if (payload.Object == ObjectType::Sphere)
+				material = &(m_activeScene->getSphereMaterials()[payload.ObjectIndex]);
+			if (payload.Object == ObjectType::Sphere)
+				material = &(m_activeScene->getPlaneMaterials()[payload.ObjectIndex]);
+
+			if (material)
+				finalColor = material->Albedo;
 		}
 
 		return glm::vec4(finalColor, 1.0f);
@@ -99,49 +104,103 @@ namespace PathTracing
 
 	Renderer::HitPayload Renderer::traceRay(const Ray& ray)
 	{
-		HitPayload payload;
-
 		int closestObjectIndex = -1;
+		ObjectType closestObject = ObjectType::None;
 		float closestHitDistance = std::numeric_limits<float>::max();
-		for (size_t objectIndex = 0; objectIndex < m_activeScene->getSpheres().size(); objectIndex++)
+
+		// Spheres pass
 		{
-			const Sphere& sphere = m_activeScene->getSpheres()[objectIndex];
-
-			glm::vec3 sphereCenter = sphere.Position;
-			float sphereRadius = sphere.Radius;
-
-			// Ray origin relative to object position
-			glm::vec3 origin = ray.Position - sphereCenter;
-
-			float a = glm::dot(ray.Direction, ray.Direction);
-			float b = 2.0f * glm::dot(origin, ray.Direction);
-			float c = glm::dot(origin, origin) - sphereRadius * sphereRadius;
-			float delta = b * b - 4 * a * c;
-
-			// Miss object
-			if (delta < 0.0f)
-				continue;
-
-			float closestT = (-b - glm::sqrt(delta)) / 2.0f * a;
-
-			if (closestT > 0.0f && closestT < closestHitDistance)
+			const auto& spheres = m_activeScene->getSpheres();
+			for (size_t objectIndex = 0; objectIndex < spheres.size(); objectIndex++)
 			{
-				closestHitDistance = closestT;
-				closestObjectIndex = (int)objectIndex;
+				const Sphere& sphere = spheres[objectIndex];
+
+				glm::vec3 sphereCenter = sphere.Position;
+				float sphereRadius = sphere.Radius;
+
+				// Ray origin relative to object position
+				glm::vec3 origin = ray.Position - sphereCenter;
+
+				float a = glm::dot(ray.Direction, ray.Direction);
+				float b = 2.0f * glm::dot(origin, ray.Direction);
+				float c = glm::dot(origin, origin) - sphereRadius * sphereRadius;
+				float delta = b * b - 4 * a * c;
+
+				// Miss object
+				if (delta < 0.0f)
+					continue;
+
+				float closestT = (-b - glm::sqrt(delta)) / 2.0f * a;
+
+				if (closestT > 0.0f && closestT < closestHitDistance)
+				{
+					closestObject = ObjectType::Sphere;
+					closestHitDistance = closestT;
+					closestObjectIndex = (int)objectIndex;
+				}
+			}
+		}
+
+		// Plane pass
+		{
+			const auto& planes = m_activeScene->getPlanes();
+			for (size_t objectIndex = 0; objectIndex < planes.size(); objectIndex++)
+			{
+				const Plane& plane = planes[objectIndex];
+
+				float t = -1.0f * glm::dot(ray.Position - plane.Position, plane.Normal) / glm::dot(ray.Direction, plane.Normal);
+
+				if (t < 0.0f)
+					continue;
+
+				if (t < closestHitDistance)
+				{
+					closestObject = ObjectType::Plane;
+					closestHitDistance = t;
+					closestObjectIndex = (int)objectIndex;
+				}
 			}
 		}
 
 		if (closestObjectIndex < 0)
-			return payload;
+			return miss(ray);
 
-		const Sphere& closestSphere = m_activeScene->getSpheres()[closestObjectIndex];
-		glm::vec3 origin = ray.Position - closestSphere.Position;
+		return hit(ray, closestObject, closestObjectIndex, closestHitDistance);
+	}
 
-		payload.HitDistance = closestHitDistance;
-		payload.HitPosition = ray.Position + ray.Direction * closestHitDistance;
-		glm::vec3 intersectionPosition = origin + ray.Direction * payload.HitDistance;
-		payload.HitNormal = glm::normalize(intersectionPosition);
-		payload.ObjectIndex = (int)closestObjectIndex;
+	Renderer::HitPayload Renderer::miss(const Ray& ray)
+	{
+		HitPayload payload;
+		return payload;
+	}
+
+	Renderer::HitPayload Renderer::hit(const Ray& ray, ObjectType object, int objectIndex, const float hitDistance)
+	{
+		HitPayload payload;
+
+		payload.HitDistance = hitDistance;
+		payload.HitPosition = ray.Position + ray.Direction * hitDistance;
+		payload.Object = object;
+		payload.ObjectIndex = (int)objectIndex;
+
+		switch (object)
+		{
+			case ObjectType::Sphere:
+			{
+				const Sphere& closestSphere = m_activeScene->getSpheres()[objectIndex];
+				glm::vec3 origin = ray.Position - closestSphere.Position;
+				glm::vec3 intersectionPosition = origin + ray.Direction * payload.HitDistance;
+				payload.HitNormal = glm::normalize(intersectionPosition);
+				break;
+			}
+			case ObjectType::Plane:
+			{
+				const Plane& closestPlane = m_activeScene->getPlanes()[objectIndex];
+				payload.HitNormal = closestPlane.Normal;
+				break;
+			}
+		}
+
 		return payload;
 	}
 
