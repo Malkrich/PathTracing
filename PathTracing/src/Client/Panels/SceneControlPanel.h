@@ -16,6 +16,7 @@ namespace PathTracing
 
 	private:
 		void drawSphereGui(Sphere& sphere);
+		void drawPlaneGui(Plane& plane);
 
 	private:
 		Scene* m_activeScene = nullptr;

@@ -47,16 +47,11 @@ namespace PathTracing
 		}
 		{
 			Sphere sphere;
-			sphere.Position = { 0.0f, 2.0f, 0.0f };
+			sphere.Position = { 0.0f, 3.5f, 0.0f };
 			Material material;
 			material.EmissionColor = { 0.7f, 1.0f, 0.3f };
 			material.EmissionStrength = 1.0f;
 			m_scene.addSphere(sphere, material);
-		}
-		{
-			Plane plane;
-			Material material;
-			m_scene.addPlane(plane, material);
 		}
 	}
 

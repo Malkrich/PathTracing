@@ -2,8 +2,6 @@
 
 #include "SceneElements.h"
 
-#include <vector>
-
 namespace PathTracing
 {
 
