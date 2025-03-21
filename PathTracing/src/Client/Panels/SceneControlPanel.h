@@ -12,10 +12,15 @@ namespace PathTracing
 
 		void setScene(Scene* scene);
 
-		void onGuiRender();
+		bool onGuiRender();
 
 	private:
-		Scene* m_activeScene;
+		void drawSphereGui(Sphere& sphere);
+
+	private:
+		Scene* m_activeScene = nullptr;
+
+		bool m_guiModified = false;
 	};
 
 }

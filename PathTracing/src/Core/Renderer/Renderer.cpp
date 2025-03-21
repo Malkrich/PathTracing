@@ -78,7 +78,7 @@ namespace PathTracing
 
 	void Renderer::resetAccumulation()
 	{
-		m_frameCount = 0;
+		m_frameCount = 1;
 		memset(m_accumulatedImage, 0, m_width * m_height * sizeof(glm::vec4));
 	}
 

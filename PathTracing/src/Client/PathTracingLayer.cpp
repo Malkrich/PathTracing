@@ -24,10 +24,12 @@ namespace PathTracing
 	{
 		uint32_t windowWidth = Application::get()->getWindow()->getWidth();
 		uint32_t windowHeight = Application::get()->getWindow()->getHeight();
-
+		
 		// Panels
 		m_viewportPanel = std::make_unique<ViewportPanel>(windowWidth, windowHeight);
-		
+		m_sceneControlPanel = std::make_unique<SceneControlPanel>(&m_scene);
+
+		// Scene
 		{
 			Sphere sphere;
 			sphere.Position = { 0.0f, 0.0f, -2.0f };
@@ -56,8 +58,6 @@ namespace PathTracing
 			Material material;
 			m_scene.addPlane(plane, material);
 		}
-
-		m_sceneControlPanel = std::make_unique<SceneControlPanel>(&m_scene);
 	}
 
 	void PathTracingLayer::onDetach()
@@ -84,7 +84,8 @@ namespace PathTracing
 	void PathTracingLayer::onGuiRender()
 	{
 		m_viewportPanel->onGuiRender();
-		m_sceneControlPanel->onGuiRender();
+		if (m_sceneControlPanel->onGuiRender())
+			m_renderer.resetAccumulation();
 
 		Renderer::Settings& renderSettings = m_renderer.getRenderSettings();
 		ImGui::Begin("Renderer Settings");

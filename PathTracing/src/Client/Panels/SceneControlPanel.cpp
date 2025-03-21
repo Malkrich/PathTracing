@@ -17,10 +17,12 @@ namespace PathTracing
 		m_activeScene = scene;
 	}
 
-	void SceneControlPanel::onGuiRender()
+	bool SceneControlPanel::onGuiRender()
 	{
 		if (!m_activeScene)
-			return;
+			return false;
+
+		m_guiModified = false;
 
 		ImGui::Begin("Scene");
 		// Spheres
@@ -28,14 +30,21 @@ namespace PathTracing
 			auto& spheres = m_activeScene->Spheres;
 			for (size_t i = 0; i < spheres.size(); i++)
 			{
-				auto& s = spheres[i];
 				ImGui::PushID(i);
-				ImGui::DragFloat3("Position", (float*)glm::value_ptr(s.Position), 0.05f);
-				ImGui::DragFloat("Radius", &s.Radius, 0.05f);
+				auto& s = spheres[i];
+				drawSphereGui(s);
 				ImGui::PopID();
 			}
 		}
 		ImGui::End();
+
+		return m_guiModified;
+	}
+
+	void SceneControlPanel::drawSphereGui(Sphere& sphere)
+	{
+		m_guiModified |= ImGui::DragFloat3("Position", (float*)glm::value_ptr(sphere.Position), 0.05f);
+		m_guiModified |= ImGui::DragFloat("Radius", &sphere.Radius, 0.05f, 0.0f, std::numeric_limits<float>::max());
 	}
 
 }

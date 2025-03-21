@@ -61,7 +61,7 @@ namespace PathTracing
 
 		uint32_t m_width = 0;
 		uint32_t m_height = 0;
-		uint32_t m_frameCount = 0;
+		uint32_t m_frameCount = 1;
 		glm::vec4* m_accumulatedImage = nullptr;
 		uint32_t* m_finalImageData = nullptr;
 	};
