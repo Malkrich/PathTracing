@@ -106,7 +106,9 @@ namespace PathTracing
 			const Material& objectMaterial = m_activeScene->getMaterial(payload.Object, payload.ObjectIndex);
 
 			ray.Position = payload.HitPosition + 0.000001f * payload.HitNormal;
-			ray.Direction = glm::normalize(payload.HitNormal + objectMaterial.Roughness * Random::unitSphereVector());
+			glm::vec3 rayDiffuseDirection = glm::normalize(payload.HitNormal + Random::unitSphereVector());
+			glm::vec3 raySpecularDirection = glm::reflect(ray.Direction, payload.HitNormal);
+			ray.Direction = glm::mix(raySpecularDirection, rayDiffuseDirection, objectMaterial.Roughness);
 
 			rayColor *= objectMaterial.Albedo;
 			finalColor += objectMaterial.getEmission();
