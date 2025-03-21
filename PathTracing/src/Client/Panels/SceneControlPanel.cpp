@@ -34,7 +34,9 @@ namespace PathTracing
 				ImGui::PushID(i);
 				ImGui::SeparatorText("Sphere");
 				Sphere& s = spheres[i];
+				Material& mat = m_activeScene->SphereMaterials[i];
 				drawSphereGui(s);
+				drawMaterial(mat);
 				ImGui::PopID();
 			}
 		}
@@ -47,9 +49,11 @@ namespace PathTracing
 			for (size_t i = 0; i < planes.size(); i++)
 			{
 				ImGui::PushID(i);
-				Plane& p = planes[i];
 				ImGui::SeparatorText("Plane");
+				Plane& p = planes[i];
+				Material& mat = m_activeScene->PlaneMaterials[i];
 				drawPlaneGui(p);
+				drawMaterial(mat);
 				ImGui::PopID();
 			}
 		}
@@ -68,7 +72,15 @@ namespace PathTracing
 
 	void SceneControlPanel::drawPlaneGui(Plane& plane)
 	{
-		m_guiModified = ImGui::DragFloat("Position", (float*)&plane.Position.y, 0.05f);
+		m_guiModified |= ImGui::DragFloat("Position", (float*)&plane.Position.y, 0.05f);
+	}
+
+	void SceneControlPanel::drawMaterial(Material& material)
+	{
+		m_guiModified |= ImGui::ColorEdit3("Albedo", (float*)glm::value_ptr(material.Albedo));
+		m_guiModified |= ImGui::SliderFloat("Roughness", &material.Roughness, 0.0f, 1.0f);
+		m_guiModified |= ImGui::ColorEdit3("Emission Color", (float*)glm::value_ptr(material.EmissionColor));
+		m_guiModified |= ImGui::DragFloat("Emission Strength", (float*)&material.EmissionStrength, 0.1f, 0.0f, std::numeric_limits<float>::max());
 	}
 
 }
