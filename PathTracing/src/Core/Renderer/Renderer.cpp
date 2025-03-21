@@ -103,10 +103,11 @@ namespace PathTracing
 				break;
 			}
 
-			ray.Position = payload.HitPosition + 0.000001f * payload.HitNormal;
-			ray.Direction = glm::normalize(payload.HitNormal + Random::unitSphereVector());
-
 			const Material& objectMaterial = m_activeScene->getMaterial(payload.Object, payload.ObjectIndex);
+
+			ray.Position = payload.HitPosition + 0.000001f * payload.HitNormal;
+			ray.Direction = glm::normalize(payload.HitNormal + objectMaterial.Roughness * Random::unitSphereVector());
+
 			rayColor *= objectMaterial.Albedo;
 			finalColor += objectMaterial.getEmission();
 		}

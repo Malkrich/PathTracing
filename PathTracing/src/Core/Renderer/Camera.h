@@ -15,8 +15,8 @@ namespace PathTracing
         bool onUpdate(float dt);
 
         const glm::vec3& getPosition() const { return m_position; }
+        void setPosition(const glm::vec3& position) { m_position = position; }
         const std::vector<glm::vec3>& getRayDirections() const { return m_rayDirections; }
-
         void toggleCameraLocking();
 
     private:

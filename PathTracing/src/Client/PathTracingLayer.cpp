@@ -35,27 +35,40 @@ namespace PathTracing
 		// Scene
 		{
 			Sphere sphere;
-			sphere.Position = { 0.0f, 0.0f, -2.0f };
-			sphere.Radius = 2.0f;
+			sphere.Position = { 0.0f, -1.5f, 0.0f };
+			sphere.Radius = 2.3f;
 			Material material;
 			material.Albedo = { 0.7f, 0.9f, 0.6f };
 			m_scene.addSphere(sphere, material);
 		}
 		{
 			Sphere sphere;
-			sphere.Position = { -0.5f, 0.0f, 0.0f };
+			sphere.Position = { -0.3f, 1.1f, 0.0f };
+			sphere.Radius = 0.3f;
 			Material material;
 			material.Albedo = { 1.0f, 0.0f, 0.0f };
 			m_scene.addSphere(sphere, material);
 		}
 		{
 			Sphere sphere;
+			sphere.Position = { 0.3f, 1.1f, 0.0f };
+			sphere.Radius = 0.3f;
+			Material material;
+			material.Albedo = { 0.0f, 0.0f, 1.0f };
+			m_scene.addSphere(sphere, material);
+		}
+		{
+			Sphere sphere;
 			sphere.Position = { 0.0f, 3.5f, 0.0f };
+			sphere.Radius = 1.3f;
 			Material material;
 			material.EmissionColor = { 0.7f, 1.0f, 0.3f };
 			material.EmissionStrength = 1.0f;
 			m_scene.addSphere(sphere, material);
 		}
+
+		glm::vec3 cameraInitPosition{ 0.0f, 1.5f, 5.0f };
+		m_camera.setPosition(cameraInitPosition);
 	}
 
 	void PathTracingLayer::onDetach()
@@ -94,6 +107,7 @@ namespace PathTracing
 			renderSettings.BounceCount = bounceCount;
 			m_renderer.resetAccumulation();
 		}
+		ImGui::Text("Camera position: [ %.1f, %.1f, %.1f ]", m_camera.getPosition().x, m_camera.getPosition().y, m_camera.getPosition().z);
 		ImGui::End();
 	}
 
