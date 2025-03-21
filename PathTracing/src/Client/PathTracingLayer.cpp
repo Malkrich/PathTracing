@@ -1,7 +1,10 @@
 #include "Pch.h"
 #include "PathTracingLayer.h"
 
+#include "Core/Base.h"
 #include "Core/Application.h"
+#include "Core/Event.h"
+#include "Core/KeyCodes.h"
 #include "Renderer/Image.h"
 
 #include <glm/glm.hpp>
@@ -94,9 +97,18 @@ namespace PathTracing
 		ImGui::End();
 	}
 
-	void PathTracingLayer::onEvent(Event& event)
+	void PathTracingLayer::onEvent(Event& e)
 	{
+		EventDispatcher dispatcher(e);
+		dispatcher.dispatch<KeyPressedEvent>(BIND_EVENT_FN(PathTracingLayer::onKeyPressed));
+	}
 
+	bool PathTracingLayer::onKeyPressed(const KeyPressedEvent& e)
+	{
+		if (e.getKeyCode() == PT_KEY_ESCAPE)
+			m_camera.toggleCameraLocking();
+
+		return true;
 	}
 
 }

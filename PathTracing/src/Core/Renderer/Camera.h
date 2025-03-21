@@ -17,6 +17,8 @@ namespace PathTracing
         const glm::vec3& getPosition() const { return m_position; }
         const std::vector<glm::vec3>& getRayDirections() const { return m_rayDirections; }
 
+        void toggleCameraLocking();
+
     private:
         void recalculateViewMatrices();
         void recalculateProjectionMatrices();
@@ -32,7 +34,6 @@ namespace PathTracing
 
         glm::vec3 m_position{ 0.0f };
         glm::vec3 m_forwardDirection{ 0.0f };
-        glm::vec3 m_rightDirection{ 0.0f };
         glm::vec3 m_upDirection = { 0.0f, 1.0f, 0.0f };
 
         float m_fov = 45.0f;
@@ -40,7 +41,10 @@ namespace PathTracing
 
         uint32_t m_width = 0, m_height = 0;
 
+        bool m_cameraControlLocked = false;
+        glm::ivec2 m_mousePosition;
         float m_translationSpeed = 1.0f;
+        float m_rotationSpeed = 0.01f;
     };
 
 }

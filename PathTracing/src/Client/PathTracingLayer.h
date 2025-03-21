@@ -25,6 +25,9 @@ namespace PathTracing
 		virtual void onEvent(Event& event) override;
 
 	private:
+		bool onKeyPressed(const KeyPressedEvent& e);
+
+	private:
 		// Path tracing renderer
 		Renderer m_renderer;
 		Scene m_scene;

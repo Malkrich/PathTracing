@@ -9,6 +9,19 @@
 namespace PathTracing
 {
 
+	namespace Utils
+	{
+		static int internalCursorModeToGlfwCursorMode(CursorMode mode)
+		{
+			switch (mode)
+			{
+				case CursorMode::Normal: return GLFW_CURSOR_NORMAL;
+				case CursorMode::Hidden: return GLFW_CURSOR_HIDDEN;
+				case CursorMode::Locked: return GLFW_CURSOR_DISABLED;
+			}
+		}
+	}
+
 	bool Input::isKeyPressed(int32_t keyCode)
 	{
 		auto libWindow = (GLFWwindow*)Application::get()->getWindow()->getWindowPtr();
@@ -23,6 +36,13 @@ namespace PathTracing
 		int32_t state = glfwGetMouseButton(libWindow, button);
 
 		return state == GLFW_PRESS;
+	}
+
+	void Input::setCursorMode(CursorMode mode)
+	{
+		auto libWindow = (GLFWwindow*)Application::get()->getWindow()->getWindowPtr();
+		int glfwMode = Utils::internalCursorModeToGlfwCursorMode(mode);
+		glfwSetInputMode(libWindow, GLFW_CURSOR, glfwMode);
 	}
 
 	glm::ivec2 Input::getWindowSize()

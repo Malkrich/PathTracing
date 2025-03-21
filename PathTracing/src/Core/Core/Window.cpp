@@ -71,6 +71,27 @@ namespace PathTracing
             WindowResizeEvent e(width, height);
             wSpec->callbackFn(e);
         });
+
+        glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+        {
+            WindowSpecifications* wSpec = (WindowSpecifications*)glfwGetWindowUserPointer(window);
+
+            switch (action)
+            {
+                case GLFW_PRESS:
+                {
+                    KeyPressedEvent e(key);
+                    wSpec->callbackFn(e);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    KeyReleasedEvent e(key);
+                    wSpec->callbackFn(e);
+                    break;
+                }
+            }
+        });
     }
 
 }

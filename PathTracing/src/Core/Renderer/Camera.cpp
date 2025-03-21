@@ -5,6 +5,7 @@
 #include "Core/KeyCodes.h"
 
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace PathTracing
 {
@@ -12,11 +13,11 @@ namespace PathTracing
     Camera::Camera(uint32_t width, uint32_t height)
         : m_width(width)
         , m_height(height)
+        , m_mousePosition(Input::getMousePosition())
     {
         // TEMP
         m_position = { 0.0f, 0.0f, 2.0f };
         m_forwardDirection = { 0.0f, 0.0f, -1.0f };
-        m_rightDirection = { 1.0f, 0.0f, 0.0f };
 
         recalculateViewMatrices();
         recalculateProjectionMatrices();
@@ -36,9 +37,33 @@ namespace PathTracing
     }
 
 
+    void Camera::toggleCameraLocking()
+    {
+        m_cameraControlLocked = !m_cameraControlLocked;
+        Input::setCursorMode(m_cameraControlLocked ? CursorMode::Locked : CursorMode::Normal);
+    }
+
     bool Camera::onUpdate(float dt)
     {
         bool cameraMoved = false;
+
+        glm::vec3 rightDirection = glm::cross(m_forwardDirection, m_upDirection);
+
+        glm::ivec2 currentMousePos = Input::getMousePosition();
+        glm::ivec2 mouseOffset = currentMousePos - m_mousePosition;
+        m_mousePosition = currentMousePos;
+
+        if (m_cameraControlLocked && mouseOffset.x != 0 && mouseOffset.y != 0)
+        {
+            float pitchOffset = (float)mouseOffset.y * m_rotationSpeed;
+            float yawOffset   = (float)mouseOffset.x * m_rotationSpeed;
+
+            glm::quat q = glm::normalize(glm::cross(glm::angleAxis(-pitchOffset, rightDirection),
+                glm::angleAxis(-yawOffset, m_upDirection)));
+            m_forwardDirection = glm::rotate(q, m_forwardDirection);
+
+            cameraMoved = true;
+        }
 
         if (Input::isKeyPressed(PT_KEY_W))
         {
@@ -52,12 +77,12 @@ namespace PathTracing
         }
         if (Input::isKeyPressed(PT_KEY_A))
         {
-            m_position -= m_rightDirection * m_translationSpeed * dt;
+            m_position -= rightDirection * m_translationSpeed * dt;
             cameraMoved = true;
         }
         if (Input::isKeyPressed(PT_KEY_D))
         {
-            m_position += m_rightDirection * m_translationSpeed * dt;
+            m_position += rightDirection * m_translationSpeed * dt;
             cameraMoved = true;
         }
         if (Input::isKeyPressed(PT_KEY_SPACE))
